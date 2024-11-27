@@ -1,11 +1,11 @@
-package com.example.towtracker.fragments
+package com.mayantsev_vs.towtracker.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.towtracker.databinding.TracksBinding
+import com.mayantsev_vs.towtracker.databinding.TracksBinding
 
 class TracksFragment : Fragment() {
     private lateinit var binding: TracksBinding

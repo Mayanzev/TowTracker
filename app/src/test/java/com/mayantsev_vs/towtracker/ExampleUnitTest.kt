@@ -1,4 +1,4 @@
-package com.example.towtracker
+package com.mayantsev_vs.towtracker
 
 import org.junit.Test
 

@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.towtracker"
-    compileSdk = 34
+    namespace = "com.mayantsev_vs.towtracker"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.towtracker"
+        applicationId = "com.mayantsev_vs.towtracker"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -42,6 +42,9 @@ android {
 
 
 dependencies {
+    implementation(libs.osmdroid.android)
+    implementation(libs.osmbonuspack)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

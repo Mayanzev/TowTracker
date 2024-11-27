@@ -1,10 +1,10 @@
-package com.example.towtracker.fragments
+package com.mayantsev_vs.towtracker.fragments
 
 import android.graphics.Color
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.example.towtracker.R
+import com.mayantsev_vs.towtracker.R
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
