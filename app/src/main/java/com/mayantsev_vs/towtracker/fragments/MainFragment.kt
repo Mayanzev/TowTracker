@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
 import com.mayantsev_vs.towtracker.utils.DialogManager
+import com.mayantsev_vs.towtracker.utils.Listener
 import com.mayantsev_vs.towtracker.utils.checkPermission
 import com.mayantsev_vs.towtracker.utils.showToast
 import org.osmdroid.config.Configuration
@@ -41,6 +42,10 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerPermissions()
+    }
+
+    override fun onResume() {
+        super.onResume()
         checkLocPermission()
     }
 
@@ -163,7 +168,14 @@ class MainFragment : Fragment() {
         val lManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val isEnabled = lManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (!isEnabled) {
-            DialogManager.showLocEnableDialog(activity as AppCompatActivity)
+            DialogManager.showLocEnableDialog(
+                activity as AppCompatActivity,
+                object : Listener {
+                    override fun onClick() {
+                        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                    }
+                }
+            )
         } else {
             showToast("Location enabled")
         }
