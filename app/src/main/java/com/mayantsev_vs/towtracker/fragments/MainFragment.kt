@@ -3,6 +3,7 @@ package com.mayantsev_vs.towtracker.fragments
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -69,6 +70,7 @@ class MainFragment : Fragment() {
             if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true) {
                 initOSM()
+                checkLocationEnabled()
             } else {
                 showToast("Вы не дали разрешения на использование местоположения!")
             }
@@ -88,6 +90,7 @@ class MainFragment : Fragment() {
         if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
             checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             initOSM()
+            checkLocationEnabled()
             if (!checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
                 showBackgroundPermissionDialog()
             }
@@ -123,6 +126,7 @@ class MainFragment : Fragment() {
                     checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) &&
             checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
             initOSM()
+            checkLocationEnabled()
         } else {
             pLauncher.launch(
                 arrayOf(
@@ -138,6 +142,7 @@ class MainFragment : Fragment() {
         if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
             checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             initOSM()
+            checkLocationEnabled()
         } else {
             pLauncher.launch(
                 arrayOf(
@@ -147,6 +152,24 @@ class MainFragment : Fragment() {
             )
         }
     }
+
+
+
+
+
+    private fun checkLocationEnabled() {
+        val lManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val isEnabled = lManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (!isEnabled) {
+            showToast("Location not enabled")
+        } else {
+            showToast("Location enabled")
+        }
+    }
+
+
+
+
 
     companion object {
         @JvmStatic
