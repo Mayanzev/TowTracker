@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
+import com.mayantsev_vs.towtracker.location.LocationService
 import com.mayantsev_vs.towtracker.utils.DialogManager
 import com.mayantsev_vs.towtracker.utils.Listener
 import com.mayantsev_vs.towtracker.utils.checkPermission
@@ -42,6 +43,11 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerPermissions()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            activity?.startForegroundService(Intent(activity, LocationService::class.java))
+        } else {
+            activity?.startService(Intent(activity, LocationService::class.java))
+        }
     }
 
     override fun onResume() {
