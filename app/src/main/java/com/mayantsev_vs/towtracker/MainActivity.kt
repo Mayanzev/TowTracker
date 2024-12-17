@@ -56,10 +56,8 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == requestCodePostNotifications) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Разрешение получено
                 Toast.makeText(this, "Permission granted!", Toast.LENGTH_SHORT).show()
             } else {
-                // Разрешение отклонено
                 Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
             }
         }
