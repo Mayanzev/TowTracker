@@ -59,7 +59,7 @@ class MainFragment : Fragment() {
     }
 
     private fun initOSM() = with(binding) {
-        map.controller.setZoom(20.0)
+        map.controller.setZoom(15.0)
         val mLocProvider = GpsMyLocationProvider(activity)
         val mLocOverlay = MyLocationNewOverlay(mLocProvider, map)
         mLocOverlay.enableMyLocation()
@@ -95,12 +95,11 @@ class MainFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.R)
     private fun checkPermissionAfter11() {
         if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
-            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) {
             initOSM()
             checkLocationEnabled()
-            if (!checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-                showBackgroundPermissionDialog()
-            }
+            checkBackgroundPermission()
         } else {
             pLauncher.launch(
                 arrayOf(
@@ -111,21 +110,6 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun showBackgroundPermissionDialog() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
-        intent.data = uri
-        val dialog = android.app.AlertDialog.Builder(requireContext())
-            .setTitle("Разрешение на фоновое местоположение")
-            .setMessage("Для улучшения работы приложения нам нужно доступ к вашему местоположению даже в фоновом режиме. Пожалуйста, разрешите это в настройках приложения.")
-            .setPositiveButton("Перейти в настройки") { _, _ ->
-                startActivity(intent)
-            }
-            .setNegativeButton("Отмена", null)
-            .create()
-
-        dialog.show()
-    }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun checkPermissionAfter10() {
@@ -181,7 +165,21 @@ class MainFragment : Fragment() {
         }
     }
 
-
+    private fun checkBackgroundPermission() {
+        if (!checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+            DialogManager.showBackgroundPermissionDialog(
+                activity as AppCompatActivity,
+                object : Listener {
+                    override fun onClick() {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", requireActivity().packageName, null)
+                        }
+                        startActivity(intent)
+                    }
+                }
+            )
+        }
+    }
 
 
 
