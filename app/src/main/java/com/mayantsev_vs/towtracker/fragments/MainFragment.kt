@@ -130,9 +130,9 @@ class MainFragment : Fragment() {
 
     private fun checkLocPermission() {
         when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> checkPermissionAfter11() // Android 11 и выше
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.Q -> checkPermissionAfter10() // Android 10
-            else -> checkPermission10() // Android 9 и ниже
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> checkPermissionAfter11()
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.Q -> checkPermissionAfter10()
+            else -> checkPermission10()
         }
     }
 
