@@ -18,20 +18,27 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
 import com.mayantsev_vs.towtracker.location.LocationService
 import com.mayantsev_vs.towtracker.utils.DialogManager
 import com.mayantsev_vs.towtracker.utils.Listener
+import com.mayantsev_vs.towtracker.utils.TimeUtils
 import com.mayantsev_vs.towtracker.utils.checkPermission
 import com.mayantsev_vs.towtracker.utils.showToast
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import java.util.Timer
+import java.util.TimerTask
 
 class MainFragment : Fragment() {
     private lateinit var pLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var binding: FragmentMainBinding
     private var isServiceRunning = false
+    private var timer: Timer? = null
+    private var startTime = 0L
+    private val timeData = MutableLiveData<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +54,7 @@ class MainFragment : Fragment() {
         registerPermissions()
         setOnClicks()
         checkServiceState()
+        updateTime()
     }
 
     private fun setOnClicks() = with(binding) {
@@ -62,12 +70,36 @@ class MainFragment : Fragment() {
         }
     }
 
+    private fun updateTime() {
+        timeData.observe(viewLifecycleOwner) {
+            binding.tvTime.text = it
+        }
+    }
+
+    private fun startTimer() {
+        timer?.cancel()
+        timer = Timer()
+        startTime = System.currentTimeMillis()
+        timer?.schedule(object : TimerTask() {
+            override fun run() {
+               activity?.runOnUiThread {
+                   timeData.value = getCurrentTime()
+               }
+            }
+        }, 1000, 1000)
+    }
+
+    private fun getCurrentTime(): String {
+        return "Time: ${TimeUtils.getTime(System.currentTimeMillis() - startTime)}"
+    }
+
     private fun startStopService() {
         if (!isServiceRunning) {
             startLocService()
         } else {
             activity?.stopService(Intent(activity, LocationService::class.java))
             binding.fStartStop.setImageResource(R.drawable.ic_play)
+            timer?.cancel()
         }
         isServiceRunning = !isServiceRunning
     }
@@ -86,6 +118,7 @@ class MainFragment : Fragment() {
             activity?.startService(Intent(activity, LocationService::class.java))
         }
         binding.fStartStop.setImageResource(R.drawable.ic_stop)
+        startTimer()
     }
 
     override fun onResume() {
