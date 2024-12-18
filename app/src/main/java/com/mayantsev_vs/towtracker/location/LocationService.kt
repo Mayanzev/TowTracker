@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
@@ -26,6 +27,8 @@ import com.mayantsev_vs.towtracker.MainActivity
 class LocationService : Service() {
     private lateinit var locProvider: FusedLocationProviderClient
     private lateinit var locRequest: LocationRequest
+    private var lastLocation: Location? = null
+    private var distance = 0.0f
 
     override fun onBind(p0: Intent?): IBinder? {
         return null
@@ -82,7 +85,12 @@ class LocationService : Service() {
     private val locCallBack = object  : LocationCallback() {
         override fun onLocationResult(lResult: LocationResult) {
             super.onLocationResult(lResult)
-            Log.d("MyLog", "Location: ${lResult.lastLocation?.latitude}")
+            val currentLocation = lResult.lastLocation
+            if (lastLocation != null && currentLocation != null) {
+                if (currentLocation.speed > 0.2) distance += lastLocation!!.distanceTo(currentLocation)
+            }
+            lastLocation = currentLocation
+            Log.d("MyLog", "distance: ${distance}")
         }
     }
 
