@@ -34,6 +34,7 @@ import com.mayantsev_vs.towtracker.utils.TimeUtils
 import com.mayantsev_vs.towtracker.utils.checkPermission
 import com.mayantsev_vs.towtracker.utils.showToast
 import org.osmdroid.config.Configuration
+import org.osmdroid.util.Distance
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.util.Locale
@@ -83,9 +84,11 @@ class MainFragment : Fragment() {
     private fun locationUpdates() = with(binding) {
         model.locationUpdates.observe(viewLifecycleOwner) {
             val distance = "Distance: ${String.format(Locale.US, "%.1f", it.distance)} m"
-            val velocity = "Velocity: ${String.format(Locale.US, "%.1f", 3.6 * it.velocity)} km/h"
+            val velocity = "Velocity: ${String.format(Locale.US, "%.1f", 3.6f * it.velocity)} km/h"
+            val aVelocity = "Average Velocity: ${getAverageSpeed(it.distance)} km/h"
             tvDistance.text = distance
             tvVelocity.text = velocity
+            tvAverageVel.text = aVelocity
         }
     }
 
@@ -302,6 +305,10 @@ class MainFragment : Fragment() {
         val locFilter = IntentFilter(LocationService.LOC_MODEL_INTENT)
         LocalBroadcastManager.getInstance(activity as AppCompatActivity)
             .registerReceiver(receiver, locFilter)
+    }
+
+    private fun getAverageSpeed(distance: Float): String {
+        return String.format(Locale.US, "%.1f", 3.6f * (distance / ((System.currentTimeMillis() - startTime) / 1000.0f)))
     }
 
 
