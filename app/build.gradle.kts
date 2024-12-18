@@ -44,6 +44,7 @@ android {
 dependencies {
     implementation(libs.osmdroid.android)
     implementation(libs.osmbonuspack)
+    implementation (libs.play.services.location)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
