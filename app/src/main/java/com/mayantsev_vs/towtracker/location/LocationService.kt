@@ -103,7 +103,6 @@ class LocationService : Service() {
                 sendLocData(locModel)
             }
             lastLocation = currentLocation
-            Log.d("MyLog", "distance: ${distance}")
         }
     }
 

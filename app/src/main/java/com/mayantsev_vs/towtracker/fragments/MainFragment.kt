@@ -1,14 +1,17 @@
 package com.mayantsev_vs.towtracker.fragments
 
 import android.Manifest
+import android.content.BroadcastReceiver
 import com.mayantsev_vs.towtracker.R
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +22,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
+import com.mayantsev_vs.towtracker.location.LocationModel
 import com.mayantsev_vs.towtracker.location.LocationService
 import com.mayantsev_vs.towtracker.utils.DialogManager
 import com.mayantsev_vs.towtracker.utils.Listener
@@ -55,6 +60,7 @@ class MainFragment : Fragment() {
         setOnClicks()
         checkServiceState()
         updateTime()
+        registerLocReceiver()
     }
 
     private fun setOnClicks() = with(binding) {
@@ -258,6 +264,31 @@ class MainFragment : Fragment() {
                 }
             )
         }
+    }
+
+
+
+
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, i: Intent?) {
+            if (i?.action == LocationService.LOC_MODEL_INTENT) {
+
+                val locModel = if (Build.VERSION.SDK_INT < 33) {
+                    @Suppress("DEPRECATION")
+                    i.getSerializableExtra(LocationService.LOC_MODEL_INTENT) as LocationModel
+                } else {
+                    i.getSerializableExtra(LocationService.LOC_MODEL_INTENT, LocationModel::class.java)
+                }
+
+                Log.d("MyLog", "main distance: ${locModel?.distance}")
+            }
+        }
+    }
+
+    private fun registerLocReceiver() {
+        val locFilter = IntentFilter(LocationService.LOC_MODEL_INTENT)
+        LocalBroadcastManager.getInstance(activity as AppCompatActivity)
+            .registerReceiver(receiver, locFilter)
     }
 
 
