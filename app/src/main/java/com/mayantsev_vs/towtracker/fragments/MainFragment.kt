@@ -21,8 +21,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.mayantsev_vs.towtracker.MainViewModel
 import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
 import com.mayantsev_vs.towtracker.location.LocationModel
 import com.mayantsev_vs.towtracker.location.LocationService
@@ -34,6 +36,7 @@ import com.mayantsev_vs.towtracker.utils.showToast
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 
@@ -43,7 +46,7 @@ class MainFragment : Fragment() {
     private var isServiceRunning = false
     private var timer: Timer? = null
     private var startTime = 0L
-    private val timeData = MutableLiveData<String>()
+    private val model: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +64,7 @@ class MainFragment : Fragment() {
         checkServiceState()
         updateTime()
         registerLocReceiver()
+        locationUpdates()
     }
 
     private fun setOnClicks() = with(binding) {
@@ -76,8 +80,17 @@ class MainFragment : Fragment() {
         }
     }
 
+    private fun locationUpdates() = with(binding) {
+        model.locationUpdates.observe(viewLifecycleOwner) {
+            val distance = "Distance: ${String.format(Locale.US, "%.1f", it.distance)} m"
+            val velocity = "Velocity: ${String.format(Locale.US, "%.1f", 3.6 * it.velocity)} km/h"
+            tvDistance.text = distance
+            tvVelocity.text = velocity
+        }
+    }
+
     private fun updateTime() {
-        timeData.observe(viewLifecycleOwner) {
+        model.timeData.observe(viewLifecycleOwner) {
             binding.tvTime.text = it
         }
     }
@@ -89,7 +102,7 @@ class MainFragment : Fragment() {
         timer?.schedule(object : TimerTask() {
             override fun run() {
                activity?.runOnUiThread {
-                   timeData.value = getCurrentTime()
+                   model.timeData.value = getCurrentTime()
                }
             }
         }, 1000, 1000)
@@ -280,7 +293,7 @@ class MainFragment : Fragment() {
                     i.getSerializableExtra(LocationService.LOC_MODEL_INTENT, LocationModel::class.java)
                 }
 
-                Log.d("MyLog", "main distance: ${locModel?.distance}")
+                model.locationUpdates.value = locModel
             }
         }
     }
