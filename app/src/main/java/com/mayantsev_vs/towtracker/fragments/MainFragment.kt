@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.mayantsev_vs.towtracker.MainViewModel
 import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
@@ -35,7 +33,6 @@ import com.mayantsev_vs.towtracker.utils.TimeUtils
 import com.mayantsev_vs.towtracker.utils.checkPermission
 import com.mayantsev_vs.towtracker.utils.showToast
 import org.osmdroid.config.Configuration
-import org.osmdroid.util.Distance
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
@@ -154,6 +151,7 @@ class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         checkLocPermission()
+        firstStart = true
     }
 
     private fun settingsOsm() {
@@ -347,6 +345,8 @@ class MainFragment : Fragment() {
         LocalBroadcastManager.getInstance(activity as AppCompatActivity)
             .unregisterReceiver(receiver)
     }
+
+
 
 
 
