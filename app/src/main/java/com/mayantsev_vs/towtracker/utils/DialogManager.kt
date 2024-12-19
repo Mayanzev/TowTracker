@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.SaveDialogBinding
+import com.mayantsev_vs.towtracker.db.TrackItem
 
 object DialogManager {
     fun showLocEnableDialog(context: Context, listener: Listener) {
@@ -38,12 +39,21 @@ object DialogManager {
         dialog.show()
     }
 
-    fun showSaveDialog(context: Context, listener: Listener) {
+    fun showSaveDialog(context: Context, item: TrackItem?, listener: Listener) {
         val builder = AlertDialog.Builder(context)
         val binding = SaveDialogBinding.inflate(LayoutInflater.from(context), null, false)
         builder.setView(binding.root)
         val dialog = builder.create()
         binding.apply {
+
+            val time = "${item?.time}"
+            val velocity = "${item?.velocity} km/h"
+            val distance = "${item?.distance} km"
+
+            tvTime.text = time
+            tvSpeed.text = velocity
+            tvDistance.text = distance
+
             bSave.setOnClickListener {
                 listener.onClick()
                 dialog.dismiss()
@@ -51,6 +61,7 @@ object DialogManager {
             bCancel.setOnClickListener {
                 dialog.dismiss()
             }
+
         }
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()

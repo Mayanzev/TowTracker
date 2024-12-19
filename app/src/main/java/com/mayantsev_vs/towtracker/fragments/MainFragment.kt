@@ -25,6 +25,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.mayantsev_vs.towtracker.MainViewModel
 import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
+import com.mayantsev_vs.towtracker.db.TrackItem
 import com.mayantsev_vs.towtracker.location.LocationModel
 import com.mayantsev_vs.towtracker.location.LocationService
 import com.mayantsev_vs.towtracker.utils.DialogManager
@@ -50,6 +51,7 @@ class MainFragment : Fragment() {
     private val model: MainViewModel by activityViewModels()
     private var pl: Polyline? = null
     private var firstStart = true
+    private var trackItem: TrackItem? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,12 +87,20 @@ class MainFragment : Fragment() {
 
     private fun locationUpdates() = with(binding) {
         model.locationUpdates.observe(viewLifecycleOwner) {
-            val distance = "Distance: ${String.format(Locale.US, "%.1f", it.distance)} m"
+            val distance = "Distance: ${String.format(Locale.US, "%.1f", it.distance / 1000)} km"
             val velocity = "Velocity: ${String.format(Locale.US, "%.1f", 3.6f * it.velocity)} km/h"
             val aVelocity = "Average Velocity: ${getAverageSpeed(it.distance)} km/h"
             tvDistance.text = distance
             tvVelocity.text = velocity
             tvAverageVel.text = aVelocity
+            trackItem = TrackItem(
+                null,
+                getCurrentTime(),
+                TimeUtils.getDate(),
+                String.format(Locale.US, "%.1f", it.distance / 1000),
+                getAverageSpeed(it.distance),
+                ""
+            )
             updatePolyline(it.geoPointsList)
         }
     }
@@ -125,7 +135,9 @@ class MainFragment : Fragment() {
             activity?.stopService(Intent(activity, LocationService::class.java))
             binding.fStartStop.setImageResource(R.drawable.ic_play)
             timer?.cancel()
-            DialogManager.showSaveDialog(requireContext(), object : Listener {
+            DialogManager.showSaveDialog(requireContext(),
+                trackItem,
+                object : Listener {
                 override fun onClick() {
                     showToast("Track Saved!")
                 }
