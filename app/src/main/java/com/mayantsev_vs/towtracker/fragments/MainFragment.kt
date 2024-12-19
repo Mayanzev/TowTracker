@@ -28,7 +28,7 @@ import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
 import com.mayantsev_vs.towtracker.location.LocationModel
 import com.mayantsev_vs.towtracker.location.LocationService
 import com.mayantsev_vs.towtracker.utils.DialogManager
-import com.mayantsev_vs.towtracker.utils.Listener
+import com.mayantsev_vs.towtracker.utils.DialogManager.Listener
 import com.mayantsev_vs.towtracker.utils.TimeUtils
 import com.mayantsev_vs.towtracker.utils.checkPermission
 import com.mayantsev_vs.towtracker.utils.showToast
@@ -125,6 +125,11 @@ class MainFragment : Fragment() {
             activity?.stopService(Intent(activity, LocationService::class.java))
             binding.fStartStop.setImageResource(R.drawable.ic_play)
             timer?.cancel()
+            DialogManager.showSaveDialog(requireContext(), object : Listener {
+                override fun onClick() {
+                    showToast("Track Saved!")
+                }
+            })
         }
         isServiceRunning = !isServiceRunning
     }
