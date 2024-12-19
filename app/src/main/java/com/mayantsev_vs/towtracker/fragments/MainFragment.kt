@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +52,7 @@ class MainFragment : Fragment() {
     private val model: MainViewModel by activityViewModels()
     private var pl: Polyline? = null
     private var firstStart = true
-    private var trackItem: TrackItem? = null
+    private var locationModel: LocationModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,16 +94,18 @@ class MainFragment : Fragment() {
             tvDistance.text = distance
             tvVelocity.text = velocity
             tvAverageVel.text = aVelocity
-            trackItem = TrackItem(
-                null,
-                getCurrentTime(),
-                TimeUtils.getDate(),
-                String.format(Locale.US, "%.1f", it.distance / 1000),
-                getAverageSpeed(it.distance),
-                ""
-            )
+            locationModel = it
             updatePolyline(it.geoPointsList)
         }
+    }
+
+    private fun geoPointsToString(list: List<GeoPoint>): String {
+        val sb = StringBuilder()
+        list.forEach {
+            sb.append("${it.latitude}, ${it.longitude}/")
+        }
+        Log.d("MyLog", "$sb")
+        return sb.toString()
     }
 
     private fun updateTime() {
@@ -117,9 +120,9 @@ class MainFragment : Fragment() {
         startTime = LocationService.startTime
         timer?.schedule(object : TimerTask() {
             override fun run() {
-               activity?.runOnUiThread {
-                   model.timeData.value = getCurrentTime()
-               }
+                activity?.runOnUiThread {
+                    model.timeData.value = getCurrentTime()
+                }
             }
         }, 1000, 1000)
     }
@@ -136,14 +139,25 @@ class MainFragment : Fragment() {
             binding.fStartStop.setImageResource(R.drawable.ic_play)
             timer?.cancel()
             DialogManager.showSaveDialog(requireContext(),
-                trackItem,
+                getTrackItem(),
                 object : Listener {
-                override fun onClick() {
-                    showToast("Track Saved!")
-                }
-            })
+                    override fun onClick() {
+                        showToast("Track Saved!")
+                    }
+                })
         }
         isServiceRunning = !isServiceRunning
+    }
+
+    private fun getTrackItem(): TrackItem {
+        return TrackItem(
+            null,
+            getCurrentTime(),
+            TimeUtils.getDate(),
+            String.format(Locale.US, "%.1f", locationModel?.distance?.div(1000) ?: 0),
+            getAverageSpeed(locationModel?.distance ?: 0.0f),
+            geoPointsToString(locationModel?.geoPointsList ?: listOf())
+        )
     }
 
     private fun checkServiceState() {
@@ -200,7 +214,8 @@ class MainFragment : Fragment() {
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
             if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true) {
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
                 initOSM()
                 checkLocationEnabled()
             } else {
@@ -240,7 +255,8 @@ class MainFragment : Fragment() {
     private fun checkPermissionAfter10() {
         if ((checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
                     checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) &&
-            checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+            checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        ) {
             initOSM()
             checkLocationEnabled()
         } else {
@@ -256,7 +272,8 @@ class MainFragment : Fragment() {
 
     private fun checkPermission10() {
         if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
-            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) {
             initOSM()
             checkLocationEnabled()
         } else {
@@ -268,9 +285,6 @@ class MainFragment : Fragment() {
             )
         }
     }
-
-
-
 
 
     private fun checkLocationEnabled() {
@@ -307,8 +321,6 @@ class MainFragment : Fragment() {
     }
 
 
-
-
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, i: Intent?) {
             if (i?.action == LocationService.LOC_MODEL_INTENT) {
@@ -317,7 +329,10 @@ class MainFragment : Fragment() {
                     @Suppress("DEPRECATION")
                     i.getSerializableExtra(LocationService.LOC_MODEL_INTENT) as LocationModel
                 } else {
-                    i.getSerializableExtra(LocationService.LOC_MODEL_INTENT, LocationModel::class.java)
+                    i.getSerializableExtra(
+                        LocationService.LOC_MODEL_INTENT,
+                        LocationModel::class.java
+                    )
                 }
 
                 model.locationUpdates.value = locModel
@@ -332,10 +347,12 @@ class MainFragment : Fragment() {
     }
 
     private fun getAverageSpeed(distance: Float): String {
-        return String.format(Locale.US, "%.1f", 3.6f * (distance / ((System.currentTimeMillis() - startTime) / 1000.0f)))
+        return String.format(
+            Locale.US,
+            "%.1f",
+            3.6f * (distance / ((System.currentTimeMillis() - startTime) / 1000.0f))
+        )
     }
-
-
 
 
     private fun addPoint(list: List<GeoPoint>) {
@@ -362,9 +379,6 @@ class MainFragment : Fragment() {
         LocalBroadcastManager.getInstance(activity as AppCompatActivity)
             .unregisterReceiver(receiver)
     }
-
-
-
 
 
     companion object {
