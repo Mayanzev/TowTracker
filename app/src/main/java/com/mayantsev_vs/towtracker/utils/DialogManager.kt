@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
-import android.widget.Toast
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.SaveDialogBinding
 import com.mayantsev_vs.towtracker.db.TrackItem
@@ -47,7 +46,7 @@ object DialogManager {
         binding.apply {
 
             val time = "${item?.time}"
-            val velocity = "${item?.velocity} km/h"
+            val velocity = "${item?.speed} km/h"
             val distance = "${item?.distance} km"
 
             tvTime.text = time
