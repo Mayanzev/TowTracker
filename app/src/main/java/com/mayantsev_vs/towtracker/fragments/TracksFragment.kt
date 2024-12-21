@@ -13,6 +13,7 @@ import com.mayantsev_vs.towtracker.MainViewModel
 import com.mayantsev_vs.towtracker.databinding.TracksBinding
 import com.mayantsev_vs.towtracker.db.TrackAdapter
 import com.mayantsev_vs.towtracker.db.TrackItem
+import com.mayantsev_vs.towtracker.utils.openFragment
 import kotlin.getValue
 
 class TracksFragment : Fragment(), TrackAdapter.Listener {
@@ -49,8 +50,11 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
         rcView.adapter = adapter
     }
 
-    override fun onClick(track: TrackItem) {
-        model.deleteTrack(track)
+    override fun onClick(track: TrackItem, type: TrackAdapter.ClickType) {
+        when (type) {
+            TrackAdapter.ClickType.DELETE -> model.deleteTrack(track)
+            TrackAdapter.ClickType.OPEN -> openFragment(ViewTrackFragment.newInstance())
+        }
     }
 
 
