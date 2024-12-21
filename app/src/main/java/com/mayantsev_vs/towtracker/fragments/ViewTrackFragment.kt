@@ -12,6 +12,8 @@ import com.mayantsev_vs.towtracker.MainApp
 import com.mayantsev_vs.towtracker.MainViewModel
 import com.mayantsev_vs.towtracker.databinding.ViewTrackBinding
 import org.osmdroid.config.Configuration
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.Polyline
 import kotlin.getValue
 
 class ViewTrackFragment : Fragment() {
@@ -46,7 +48,27 @@ class ViewTrackFragment : Fragment() {
             tvTime.text = time
             tvAverageVel.text = speed
             tvDistance.text = distance
+
+            val polyline = getPolyline(it.geoPoints)
+            map.overlays.add(polyline)
+            goToStartPosition(polyline.actualPoints[0])
         }
+    }
+
+    private fun goToStartPosition(startPosition: GeoPoint) {
+        binding.map.controller.zoomTo(18.0)
+        binding.map.controller.animateTo(startPosition)
+    }
+
+    private fun getPolyline(geoPoints: String): Polyline {
+        val polyline = Polyline()
+        val list = geoPoints.split("/")
+        list.forEach {
+            if (it.isEmpty()) return@forEach
+            val points = it.split(",")
+            polyline.addPoint(GeoPoint(points[0].toDouble(), points[1].toDouble()))
+        }
+        return polyline
     }
 
     private fun settingsOsm() {
