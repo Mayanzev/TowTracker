@@ -10,12 +10,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mayantsev_vs.towtracker.databinding.TrackItemBinding
 import com.mayantsev_vs.towtracker.db.TrackAdapter.Holder
 
-class TrackAdapter : ListAdapter<TrackItem, Holder>(Comparator()) {
+class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Holder>(Comparator()) {
 
-    class Holder(view: View) : RecyclerView.ViewHolder(view) {
+    class Holder(view: View, private val listener: Listener) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
         private val binding = TrackItemBinding.bind(view)
+        private var trackTemp: TrackItem? = null
+
+        init {
+            binding.ibDelete.setOnClickListener(this)
+        }
 
         fun bind(track: TrackItem) = with(binding) {
+
+            trackTemp = track
 
             val date = track.date
             val speed = "${track.velocity} km/h"
@@ -26,6 +34,10 @@ class TrackAdapter : ListAdapter<TrackItem, Holder>(Comparator()) {
             tvSpeed.text = speed
             tvTime.text = time
             tvDistance.text = distance
+        }
+
+        override fun onClick(p0: View?) {
+            trackTemp?.let { listener.onClick(it) }
         }
 
     }
@@ -44,11 +56,15 @@ class TrackAdapter : ListAdapter<TrackItem, Holder>(Comparator()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.track_item, parent, false)
-        return Holder(view)
+        return Holder(view, listener)
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    interface Listener {
+        fun onClick(track: TrackItem)
     }
 
 }
