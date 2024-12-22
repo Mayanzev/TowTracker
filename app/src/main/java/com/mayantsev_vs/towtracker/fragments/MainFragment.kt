@@ -215,6 +215,9 @@ class MainFragment : Fragment() {
                 .getString("color_key", "#0077FF")
         )
         map.controller.setZoom(15.0)
+
+        map.setMultiTouchControls(true)
+
         val mLocProvider = GpsMyLocationProvider(activity)
         mLocOverlay = MyLocationNewOverlay(mLocProvider, map)
         mLocOverlay.enableMyLocation()
