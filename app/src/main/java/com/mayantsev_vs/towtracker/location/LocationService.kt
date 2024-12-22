@@ -16,6 +16,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.PreferenceManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -31,6 +32,7 @@ class LocationService : Service() {
     private var lastLocation: Location? = null
     private var distance = 0.0f
     private lateinit var geoPointsList: ArrayList<GeoPoint>
+    private var isDebug = false
 
     override fun onBind(p0: Intent?): IBinder? {
         return null
@@ -91,9 +93,12 @@ class LocationService : Service() {
             val currentLocation = lResult.lastLocation
 
             if (lastLocation != null && currentLocation != null) {
-                distance += lastLocation!!.distanceTo(currentLocation)
 
-                geoPointsList.add(GeoPoint(currentLocation.latitude, currentLocation.longitude))
+                if (currentLocation.speed > 0.4 || isDebug) {
+                    distance += lastLocation!!.distanceTo(currentLocation)
+                    geoPointsList.add(GeoPoint(currentLocation.latitude, currentLocation.longitude))
+                }
+
                 val locModel = LocationModel(
                     currentLocation.speed,
                     distance,
@@ -113,10 +118,14 @@ class LocationService : Service() {
     }
 
     private fun initLocation() {
-        locRequest = LocationRequest.Builder(PRIORITY_HIGH_ACCURACY, 1000)
-            .setMinUpdateIntervalMillis(1000)
+        val updateInterval = PreferenceManager.getDefaultSharedPreferences(
+            this
+        ).getString("update_time_key", "3000")?.toLong() ?: 3000
+        locRequest = LocationRequest.Builder(PRIORITY_HIGH_ACCURACY, updateInterval)
+            .setMinUpdateIntervalMillis(updateInterval)
             .build()
         locProvider = LocationServices.getFusedLocationProviderClient(baseContext)
+        Log.d("MyLog", "Interval $updateInterval")
     }
 
     private fun startLocationUpdates() {
