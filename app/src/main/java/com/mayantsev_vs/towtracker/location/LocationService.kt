@@ -32,7 +32,7 @@ class LocationService : Service() {
     private var lastLocation: Location? = null
     private var distance = 0.0f
     private lateinit var geoPointsList: ArrayList<GeoPoint>
-    private var isDebug = false
+    private var isDebug = true
 
     override fun onBind(p0: Intent?): IBinder? {
         return null

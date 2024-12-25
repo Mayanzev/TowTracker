@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">TowTracker</string>
-    <string name="home">Home</string>
-    <string name="tracks">Tracks</string>
-    <string name="settings">Settings</string>
+
+    <string name="map">Карта</string>
+    <string name="order">Заказ</string>
+    <string name="profile">Профиль</string>
+
     <string name="location">Location</string>
 
     <string name="update_time">Update time</string>

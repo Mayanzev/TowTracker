@@ -40,11 +40,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onBottomNavClick() {
-        binding.bNan.setOnItemSelectedListener {
+        binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.id_home -> openFragment(MainFragment.newInstance())
-                R.id.id_tracks -> openFragment(TracksFragment.newInstance())
-                R.id.id_settings -> openFragment(SettingsFragment())
+                R.id.id_map -> openFragment(MainFragment.newInstance())
+                R.id.id_order -> openFragment(TracksFragment.newInstance())
+                R.id.id_profile -> openFragment(SettingsFragment())
             }
             true
         }
