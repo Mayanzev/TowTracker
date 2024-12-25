@@ -1,23 +1,22 @@
-package com.mayantsev_vs.towtracker.fragments
+package com.mayantsev_vs.towtracker.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mayantsev_vs.towtracker.MainApp
-import com.mayantsev_vs.towtracker.MainViewModel
-import com.mayantsev_vs.towtracker.databinding.TracksBinding
-import com.mayantsev_vs.towtracker.db.TrackAdapter
-import com.mayantsev_vs.towtracker.db.TrackItem
-import com.mayantsev_vs.towtracker.utils.openFragment
+import com.mayantsev_vs.towtracker.presentation.MainApp
+import com.mayantsev_vs.towtracker.presentation.MainViewModel
+import com.mayantsev_vs.towtracker.databinding.FragmentOrderBinding
+import com.mayantsev_vs.towtracker.data.db.TrackAdapter
+import com.mayantsev_vs.towtracker.data.db.TrackItem
+import com.mayantsev_vs.towtracker.data.utils.openFragment
 import kotlin.getValue
 
-class TracksFragment : Fragment(), TrackAdapter.Listener {
-    private lateinit var binding: TracksBinding
+class OrderFragment : Fragment(), TrackAdapter.Listener {
+    private lateinit var binding: FragmentOrderBinding
     private lateinit var adapter: TrackAdapter
     private val model: MainViewModel by activityViewModels {
         MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
@@ -27,7 +26,7 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = TracksBinding.inflate(inflater, container, false)
+        binding = FragmentOrderBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -45,7 +44,7 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
     }
 
     private fun initRcView() = with(binding) {
-        adapter = TrackAdapter(this@TracksFragment)
+        adapter = TrackAdapter(this@OrderFragment)
         rcView.layoutManager = LinearLayoutManager(requireContext())
         rcView.adapter = adapter
     }
@@ -63,6 +62,6 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
 
     companion object {
         @JvmStatic
-        fun newInstance() = TracksFragment()
+        fun newInstance() = OrderFragment()
     }
 }

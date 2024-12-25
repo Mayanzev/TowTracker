@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.location
+package com.mayantsev_vs.towtracker.data.location
 
 import org.osmdroid.util.GeoPoint
 import java.io.Serializable

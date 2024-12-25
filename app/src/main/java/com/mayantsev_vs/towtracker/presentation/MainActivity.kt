@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker
+package com.mayantsev_vs.towtracker.presentation
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -7,11 +7,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.ActivityMainBinding
-import com.mayantsev_vs.towtracker.fragments.MainFragment
-import com.mayantsev_vs.towtracker.fragments.SettingsFragment
-import com.mayantsev_vs.towtracker.fragments.TracksFragment
-import com.mayantsev_vs.towtracker.utils.openFragment
+import com.mayantsev_vs.towtracker.presentation.fragments.MapFragment
+import com.mayantsev_vs.towtracker.presentation.fragments.ProfileFragment
+import com.mayantsev_vs.towtracker.presentation.fragments.OrderFragment
+import com.mayantsev_vs.towtracker.data.utils.openFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -21,8 +22,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.bottomNavigation.selectedItemId = R.id.id_order
+
         onBottomNavClick()
-        openFragment(MainFragment.newInstance())
+        openFragment(OrderFragment.newInstance())
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(
@@ -42,9 +46,9 @@ class MainActivity : AppCompatActivity() {
     private fun onBottomNavClick() {
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.id_map -> openFragment(MainFragment.newInstance())
-                R.id.id_order -> openFragment(TracksFragment.newInstance())
-                R.id.id_profile -> openFragment(SettingsFragment())
+                R.id.id_map -> openFragment(MapFragment.newInstance())
+                R.id.id_order -> openFragment(OrderFragment.newInstance())
+                R.id.id_profile -> openFragment(ProfileFragment())
             }
             true
         }

@@ -1,13 +1,13 @@
-package com.mayantsev_vs.towtracker
+package com.mayantsev_vs.towtracker.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.mayantsev_vs.towtracker.db.MainDb
-import com.mayantsev_vs.towtracker.db.TrackItem
-import com.mayantsev_vs.towtracker.location.LocationModel
+import com.mayantsev_vs.towtracker.data.db.MainDb
+import com.mayantsev_vs.towtracker.data.db.TrackItem
+import com.mayantsev_vs.towtracker.data.location.LocationModel
 import kotlinx.coroutines.launch
 
 @Suppress("UNCHECKED_CAST")

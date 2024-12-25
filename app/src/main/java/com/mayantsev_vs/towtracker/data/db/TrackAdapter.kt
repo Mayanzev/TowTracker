@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.db
+package com.mayantsev_vs.towtracker.data.db
 
 import com.mayantsev_vs.towtracker.R
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mayantsev_vs.towtracker.databinding.TrackItemBinding
-import com.mayantsev_vs.towtracker.db.TrackAdapter.Holder
+import com.mayantsev_vs.towtracker.data.db.TrackAdapter.Holder
 
 class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Holder>(Comparator()) {
 

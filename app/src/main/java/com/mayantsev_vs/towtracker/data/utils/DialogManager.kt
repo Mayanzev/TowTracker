@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.utils
+package com.mayantsev_vs.towtracker.data.utils
 
 import android.app.AlertDialog
 import android.content.Context
@@ -7,7 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.SaveDialogBinding
-import com.mayantsev_vs.towtracker.db.TrackItem
+import com.mayantsev_vs.towtracker.data.db.TrackItem
 
 object DialogManager {
     fun showLocEnableDialog(context: Context, listener: Listener) {

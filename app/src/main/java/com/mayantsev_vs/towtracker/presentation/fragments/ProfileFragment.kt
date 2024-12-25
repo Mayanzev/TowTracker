@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.fragments
+package com.mayantsev_vs.towtracker.presentation.fragments
 
 import android.graphics.Color
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.mayantsev_vs.towtracker.R
 
 
-class SettingsFragment : PreferenceFragmentCompat() {
+class ProfileFragment : PreferenceFragmentCompat() {
     private lateinit var timePref: Preference
     private lateinit var colorPref: Preference
 

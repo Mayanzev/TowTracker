@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.db
+package com.mayantsev_vs.towtracker.data.db
 
 import android.content.Context
 import androidx.room.Database

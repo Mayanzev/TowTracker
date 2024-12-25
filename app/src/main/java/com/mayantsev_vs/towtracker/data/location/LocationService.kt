@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.location
+package com.mayantsev_vs.towtracker.data.location
 
 import android.Manifest
 import android.R
@@ -23,7 +23,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
-import com.mayantsev_vs.towtracker.MainActivity
+import com.mayantsev_vs.towtracker.presentation.MainActivity
 import org.osmdroid.util.GeoPoint
 
 class LocationService : Service() {

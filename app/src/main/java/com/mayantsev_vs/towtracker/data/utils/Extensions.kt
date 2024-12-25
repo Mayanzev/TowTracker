@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.utils
+package com.mayantsev_vs.towtracker.data.utils
 
 import android.content.pm.PackageManager
 import android.widget.Toast

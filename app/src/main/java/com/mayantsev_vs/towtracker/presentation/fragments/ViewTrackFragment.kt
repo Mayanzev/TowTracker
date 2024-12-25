@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.fragments
+package com.mayantsev_vs.towtracker.presentation.fragments
 
 import android.content.Context
 import android.graphics.Color
@@ -12,9 +12,9 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.activityViewModels
 import androidx.preference.PreferenceManager
-import com.mayantsev_vs.towtracker.MainApp
-import com.mayantsev_vs.towtracker.MainViewModel
-import com.mayantsev_vs.towtracker.databinding.ViewTrackBinding
+import com.mayantsev_vs.towtracker.presentation.MainApp
+import com.mayantsev_vs.towtracker.presentation.MainViewModel
+import com.mayantsev_vs.towtracker.databinding.FragmentViewTrackBinding
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
@@ -23,7 +23,7 @@ import kotlin.getValue
 
 class ViewTrackFragment : Fragment() {
     private var startPoint: GeoPoint? = null
-    private lateinit var binding: ViewTrackBinding
+    private lateinit var binding: FragmentViewTrackBinding
     private val model: MainViewModel by activityViewModels {
         MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
     }
@@ -33,7 +33,7 @@ class ViewTrackFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         settingsOsm()
-        binding = ViewTrackBinding.inflate(inflater, container, false)
+        binding = FragmentViewTrackBinding.inflate(inflater, container, false)
         return binding.root
     }
 

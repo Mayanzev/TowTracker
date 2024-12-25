@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.fragments
+package com.mayantsev_vs.towtracker.presentation.fragments
 
 import android.Manifest
 import android.content.BroadcastReceiver
@@ -25,17 +25,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
-import com.mayantsev_vs.towtracker.MainApp
-import com.mayantsev_vs.towtracker.MainViewModel
-import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
-import com.mayantsev_vs.towtracker.db.TrackItem
-import com.mayantsev_vs.towtracker.location.LocationModel
-import com.mayantsev_vs.towtracker.location.LocationService
-import com.mayantsev_vs.towtracker.utils.DialogManager
-import com.mayantsev_vs.towtracker.utils.DialogManager.Listener
-import com.mayantsev_vs.towtracker.utils.TimeUtils
-import com.mayantsev_vs.towtracker.utils.checkPermission
-import com.mayantsev_vs.towtracker.utils.showToast
+import com.mayantsev_vs.towtracker.presentation.MainApp
+import com.mayantsev_vs.towtracker.presentation.MainViewModel
+import com.mayantsev_vs.towtracker.databinding.FragmentMapBinding
+import com.mayantsev_vs.towtracker.data.db.TrackItem
+import com.mayantsev_vs.towtracker.data.location.LocationModel
+import com.mayantsev_vs.towtracker.data.location.LocationService
+import com.mayantsev_vs.towtracker.data.utils.DialogManager
+import com.mayantsev_vs.towtracker.data.utils.DialogManager.Listener
+import com.mayantsev_vs.towtracker.data.utils.TimeUtils
+import com.mayantsev_vs.towtracker.data.utils.checkPermission
+import com.mayantsev_vs.towtracker.data.utils.showToast
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
@@ -45,9 +45,9 @@ import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
 
-class MainFragment : Fragment() {
+class MapFragment : Fragment() {
     private lateinit var pLauncher: ActivityResultLauncher<Array<String>>
-    private lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentMapBinding
     private var isServiceRunning = false
     private var timer: Timer? = null
     private var startTime = 0L
@@ -64,7 +64,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         settingsOsm()
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+        binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -403,6 +403,6 @@ class MainFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = MainFragment()
+        fun newInstance() = MapFragment()
     }
 }

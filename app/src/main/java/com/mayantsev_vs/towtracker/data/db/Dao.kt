@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.db
+package com.mayantsev_vs.towtracker.data.db
 
 import androidx.room.Dao
 import androidx.room.Delete
