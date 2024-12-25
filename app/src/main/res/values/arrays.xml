@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="loc_time_update_name">
-        <item>0.5 sec</item>
-        <item>1 sec</item>
-        <item>3 sec</item>
-        <item>5 sec</item>
+        <item>0.01 сек.</item>
+        <item>0.5 сек.</item>
+        <item>1 сек.</item>
+        <item>3 сек.</item>
+        <item>5 сек.</item>
     </string-array>
     <string-array name="loc_time_update_value">
+        <item>10</item>
         <item>500</item>
         <item>1000</item>
         <item>3000</item>

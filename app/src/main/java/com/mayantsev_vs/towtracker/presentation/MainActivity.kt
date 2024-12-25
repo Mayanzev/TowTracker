@@ -13,6 +13,7 @@ import com.mayantsev_vs.towtracker.presentation.fragments.MapFragment
 import com.mayantsev_vs.towtracker.presentation.fragments.ProfileFragment
 import com.mayantsev_vs.towtracker.presentation.fragments.OrderFragment
 import com.mayantsev_vs.towtracker.data.utils.openFragment
+import com.mayantsev_vs.towtracker.presentation.fragments.MainSettingsFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -48,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.id_map -> openFragment(MapFragment.newInstance())
                 R.id.id_order -> openFragment(OrderFragment.newInstance())
-                R.id.id_profile -> openFragment(ProfileFragment())
+                R.id.id_main_settings -> openFragment(MainSettingsFragment())
             }
             true
         }

@@ -1,58 +1,21 @@
 package com.mayantsev_vs.towtracker.presentation.fragments
 
-import android.graphics.Color
 import android.os.Bundle
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import com.mayantsev_vs.towtracker.R
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.mayantsev_vs.towtracker.databinding.FragmentProfileBinding
 
 
-class ProfileFragment : PreferenceFragmentCompat() {
-    private lateinit var timePref: Preference
-    private lateinit var colorPref: Preference
+class ProfileFragment : Fragment() {
+    private lateinit var binding: FragmentProfileBinding
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.main_preferences, rootKey)
-        init()
-    }
-
-    private fun init() {
-        timePref = findPreference("update_time_key")!!
-        colorPref = findPreference("color_key")!!
-        val changeListener = onChangeListener()
-        timePref.onPreferenceChangeListener = changeListener
-        colorPref.onPreferenceChangeListener = changeListener
-        initPrefs()
-    }
-
-    private fun onChangeListener(): Preference.OnPreferenceChangeListener {
-        return Preference.OnPreferenceChangeListener {
-            pref, value ->
-                when (pref.key) {
-                    "update_time_key" -> onTimeChange(value.toString())
-                    "color_key" -> pref.icon?.setTint(Color.parseColor(value.toString()))
-                }
-            true
-        }
-    }
-
-    private fun onTimeChange(value: String) {
-        val nameArray = resources.getStringArray(R.array.loc_time_update_name)
-        val valueArray = resources.getStringArray(R.array.loc_time_update_value)
-        val title = timePref.title.toString().substringBefore(":")
-        val pos = valueArray.indexOf(value)
-        timePref.title = "$title: ${nameArray[pos]}"
-    }
-
-    private fun initPrefs() {
-        val pref = timePref.preferenceManager.sharedPreferences
-        val nameArray = resources.getStringArray(R.array.loc_time_update_name)
-        val valueArray = resources.getStringArray(R.array.loc_time_update_value)
-        val title = timePref.title
-        val pos = valueArray.indexOf(pref?.getString("update_time_key", "3000"))
-        timePref.title = "$title: ${nameArray[pos]}"
-
-        val trackColor = pref?.getString("color_key", "#0077FF")
-        colorPref.icon?.setTint(Color.parseColor(trackColor))
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        return binding.root
     }
 }
