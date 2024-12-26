@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // function for handling a click
     private fun onBottomNavClick() {
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {

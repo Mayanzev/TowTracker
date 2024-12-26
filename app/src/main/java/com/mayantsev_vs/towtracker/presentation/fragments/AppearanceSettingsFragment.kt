@@ -17,25 +17,27 @@ class AppearanceSettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun init() {
-        timePreference = findPreference("update_time_key")!!
-        colorPreference = findPreference("color_key")!!
+        timePreference = findPreference(KEY_UPDATE_TIME)!!
+        colorPreference = findPreference(KEY_COLOR)!!
         val changeListener = onChangeListener()
         timePreference.onPreferenceChangeListener = changeListener
         colorPreference.onPreferenceChangeListener = changeListener
         initPrefs()
     }
 
+    // function for displaying color and time changes in the settings
     private fun onChangeListener(): Preference.OnPreferenceChangeListener {
         return Preference.OnPreferenceChangeListener {
             pref, value ->
                 when (pref.key) {
-                    "update_time_key" -> onTimeChange(value.toString())
-                    "color_key" -> pref.icon?.setTint(Color.parseColor(value.toString()))
+                    KEY_UPDATE_TIME -> onTimeChange(value.toString())
+                    KEY_COLOR -> onColorChange(pref, value.toString())
                 }
             true
         }
     }
 
+    // function for adding time to the time header
     private fun onTimeChange(value: String) {
         val nameArray = resources.getStringArray(R.array.loc_time_update_name)
         val valueArray = resources.getStringArray(R.array.loc_time_update_value)
@@ -44,15 +46,27 @@ class AppearanceSettingsFragment : PreferenceFragmentCompat() {
         timePreference.title = "$title: ${nameArray[pos]}"
     }
 
+    // function for color change
+    private fun onColorChange(pref: Preference, color: String) {
+        pref.icon?.setTint(Color.parseColor(color))
+    }
+
+    // function for initializing values at application startup
     private fun initPrefs() {
         val pref = timePreference.preferenceManager.sharedPreferences
         val nameArray = resources.getStringArray(R.array.loc_time_update_name)
         val valueArray = resources.getStringArray(R.array.loc_time_update_value)
         val title = timePreference.title
-        val pos = valueArray.indexOf(pref?.getString("update_time_key", "1000"))
+        val pos = valueArray.indexOf(pref?.getString(KEY_UPDATE_TIME, "1000"))
         timePreference.title = "$title: ${nameArray[pos]}"
 
-        val trackColor = pref?.getString("color_key", "#0077FF")
+        val trackColor = pref?.getString(KEY_COLOR, "#0077FF")
         colorPreference.icon?.setTint(Color.parseColor(trackColor))
+    }
+
+
+    companion object {
+        const val KEY_UPDATE_TIME = "update_time_key"
+        const val KEY_COLOR = "color_key"
     }
 }
