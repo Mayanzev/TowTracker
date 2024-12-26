@@ -15,9 +15,9 @@
         <item>5000</item>
     </string-array>
     <string-array name="color_name">
-        <item>Blue</item>
-        <item>Red</item>
-        <item>Black</item>
+        <item>Синий</item>
+        <item>Красный</item>
+        <item>Черный</item>
     </string-array>
     <string-array name="color_value">
         <item>#0077FF</item>
