@@ -68,6 +68,16 @@ class MapFragment : Fragment() {
         return binding.root
     }
 
+    // Sets up OSM configuration by loading preferences and defining a custom User-Agent.
+    private fun settingsOsm() {
+        Configuration.getInstance().load(
+            activity as ComponentActivity,
+            activity?.getSharedPreferences("osm_pref", Context.MODE_PRIVATE)
+        )
+        val userAgent = "com.mayantsev_vs.towtracker/1.0"
+        Configuration.getInstance().userAgentValue = userAgent
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerPermissions()
@@ -197,15 +207,6 @@ class MapFragment : Fragment() {
         super.onResume()
         checkLocPermission()
         firstStart = true
-    }
-
-    private fun settingsOsm() {
-        Configuration.getInstance().load(
-            activity as ComponentActivity,
-            activity?.getSharedPreferences("osm_pref", Context.MODE_PRIVATE)
-        )
-        val userAgent = "com.mayantsev_vs.towtracker/1.0"
-        Configuration.getInstance().userAgentValue = userAgent
     }
 
     private fun initOSM() = with(binding) {

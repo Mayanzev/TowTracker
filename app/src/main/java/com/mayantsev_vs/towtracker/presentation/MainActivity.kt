@@ -10,8 +10,7 @@ import androidx.core.app.ActivityCompat
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.ActivityMainBinding
 import com.mayantsev_vs.towtracker.presentation.fragments.MapFragment
-import com.mayantsev_vs.towtracker.presentation.fragments.ProfileFragment
-import com.mayantsev_vs.towtracker.presentation.fragments.OrderFragment
+import com.mayantsev_vs.towtracker.presentation.fragments.MainOrderFragment
 import com.mayantsev_vs.towtracker.data.utils.openFragment
 import com.mayantsev_vs.towtracker.presentation.fragments.MainSettingsFragment
 
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.selectedItemId = R.id.id_order
 
         onBottomNavClick()
-        openFragment(OrderFragment.newInstance())
+        openFragment(MainOrderFragment.newInstance())
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(
@@ -49,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.id_map -> openFragment(MapFragment.newInstance())
-                R.id.id_order -> openFragment(OrderFragment.newInstance())
+                R.id.id_order -> openFragment(MainOrderFragment.newInstance())
                 R.id.id_main_settings -> openFragment(MainSettingsFragment())
             }
             true

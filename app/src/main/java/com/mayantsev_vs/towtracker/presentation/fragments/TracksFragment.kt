@@ -9,14 +9,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mayantsev_vs.towtracker.presentation.MainApp
 import com.mayantsev_vs.towtracker.presentation.MainViewModel
-import com.mayantsev_vs.towtracker.databinding.FragmentOrderBinding
 import com.mayantsev_vs.towtracker.data.db.TrackAdapter
 import com.mayantsev_vs.towtracker.data.db.TrackItem
 import com.mayantsev_vs.towtracker.data.utils.openFragment
+import com.mayantsev_vs.towtracker.databinding.FragmentTracksBinding
 import kotlin.getValue
 
-class OrderFragment : Fragment(), TrackAdapter.Listener {
-    private lateinit var binding: FragmentOrderBinding
+class TracksFragment : Fragment(), TrackAdapter.Listener {
+    private lateinit var binding: FragmentTracksBinding
     private lateinit var adapter: TrackAdapter
     private val model: MainViewModel by activityViewModels {
         MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
@@ -26,7 +26,7 @@ class OrderFragment : Fragment(), TrackAdapter.Listener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentOrderBinding.inflate(inflater, container, false)
+        binding = FragmentTracksBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,12 +39,12 @@ class OrderFragment : Fragment(), TrackAdapter.Listener {
     private fun getTracks() {
         model.tracks.observe(viewLifecycleOwner) {
             adapter.submitList(it)
-            binding.tvEmpty.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
+            binding.tvEmptyTracks.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
     private fun initRcView() = with(binding) {
-        adapter = TrackAdapter(this@OrderFragment)
+        adapter = TrackAdapter(this@TracksFragment)
         rcView.layoutManager = LinearLayoutManager(requireContext())
         rcView.adapter = adapter
     }
@@ -62,6 +62,6 @@ class OrderFragment : Fragment(), TrackAdapter.Listener {
 
     companion object {
         @JvmStatic
-        fun newInstance() = OrderFragment()
+        fun newInstance() = TracksFragment()
     }
 }

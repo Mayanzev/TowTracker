@@ -13,6 +13,7 @@ fun Fragment.openFragment(f: Fragment) {
         .beginTransaction()
         .replace(R.id.fragments_container, f).commit()
 }
+
 // function for easy opening of a activity
 fun AppCompatActivity.openFragment(f: Fragment) {
     if (supportFragmentManager.fragments.isNotEmpty()) {

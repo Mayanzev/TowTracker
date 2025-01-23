@@ -24,4 +24,8 @@
         <item>#FF0000</item>
         <item>#FF000000</item>
     </string-array>
+    <string-array name="fragments_list_titles">
+        <item>Маршруты</item>
+        <item>Услуги</item>
+    </string-array>
 </resources>
