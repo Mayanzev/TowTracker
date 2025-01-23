@@ -46,7 +46,7 @@ import java.util.Timer
 import java.util.TimerTask
 
 class MapFragment : Fragment() {
-    private lateinit var pLauncher: ActivityResultLauncher<Array<String>>
+    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var binding: FragmentMapBinding
     private var isServiceRunning = false
     private var timer: Timer? = null
@@ -54,7 +54,7 @@ class MapFragment : Fragment() {
     private var pl: Polyline? = null
     private var firstStart = true
     private var locationModel: LocationModel? = null
-    private lateinit var mLocOverlay: MyLocationNewOverlay
+    private lateinit var myLocationOverlay: MyLocationNewOverlay
     private val model: MainViewModel by activityViewModels {
         MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
     }
@@ -68,7 +68,17 @@ class MapFragment : Fragment() {
         return binding.root
     }
 
-    // Sets up OSM configuration by loading preferences and defining a custom User-Agent.
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        registerPermissions()
+        setOnClicks()
+        checkServiceState()
+        updateTime()
+        registerLocReceiver()
+        locationUpdates()
+    }
+
+    // sets up OSM configuration by loading preferences and defining a custom User-Agent.
     private fun settingsOsm() {
         Configuration.getInstance().load(
             activity as ComponentActivity,
@@ -78,14 +88,106 @@ class MapFragment : Fragment() {
         Configuration.getInstance().userAgentValue = userAgent
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        registerPermissions()
-        setOnClicks()
-        checkServiceState()
-        updateTime()
-        registerLocReceiver()
-        locationUpdates()
+    private fun initOSM() = with(binding) {
+        pl = Polyline()
+        pl?.outlinePaint?.color = Color.parseColor(
+            PreferenceManager.getDefaultSharedPreferences(requireContext())
+                .getString(KEY_COLOR, "#0077FF")
+        )
+        map.controller.setZoom(15.0)
+
+        map.setMultiTouchControls(true)
+
+        val myLocationProvider = GpsMyLocationProvider(activity)
+        myLocationOverlay = MyLocationNewOverlay(myLocationProvider, map)
+        myLocationOverlay.enableMyLocation()
+        myLocationOverlay.enableFollowLocation()
+        myLocationOverlay.runOnFirstFix {
+            map.overlays.clear()
+            map.overlays.add(pl)
+            map.overlays.add(myLocationOverlay)
+        }
+    }
+
+    // registers a permission launcher to handle location permissions when requested.
+    private fun registerPermissions() {
+        permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
+                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
+            ) {
+                initOSM()
+                checkLocationEnabled()
+            } else {
+                showToast(getString(R.string.location_permission_denied))
+            }
+        }
+    }
+
+    // determines the appropriate permission check logic based on the Android version.
+    private fun checkLocationPermission() {
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> checkPermissionAfter11()
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.Q -> checkPermissionAfter10()
+            else -> checkPermission10()
+        }
+    }
+
+    // checks location permissions for Android 11 (API 30) and above, including background location permission.
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun checkPermissionAfter11() {
+        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
+            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) {
+            initOSM()
+            checkLocationEnabled()
+            checkBackgroundPermission()
+        } else {
+            permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
+
+    // checks location permissions for Android 10 (API 29), including background location permission.
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun checkPermissionAfter10() {
+        if ((checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
+                    checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) &&
+            checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        ) {
+            initOSM()
+            checkLocationEnabled()
+        } else {
+            permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            )
+        }
+    }
+
+    // checks location permissions for Android versions below 10 (API 29).
+    private fun checkPermission10() {
+        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
+            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) {
+            initOSM()
+            checkLocationEnabled()
+        } else {
+            permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
     }
 
     private fun setOnClicks() = with(binding) {
@@ -104,8 +206,8 @@ class MapFragment : Fragment() {
     }
 
     private fun  centerLocation() {
-        binding.map.controller.animateTo(mLocOverlay.myLocation)
-        mLocOverlay.enableFollowLocation()
+        binding.map.controller.animateTo(myLocationOverlay.myLocation)
+        myLocationOverlay.enableFollowLocation()
     }
 
     private fun locationUpdates() = with(binding) {
@@ -205,106 +307,8 @@ class MapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        checkLocPermission()
+        checkLocationPermission()
         firstStart = true
-    }
-
-    private fun initOSM() = with(binding) {
-        pl = Polyline()
-        pl?.outlinePaint?.color = Color.parseColor(
-            PreferenceManager.getDefaultSharedPreferences(requireContext())
-                .getString("color_key", "#0077FF")
-        )
-        map.controller.setZoom(15.0)
-
-        map.setMultiTouchControls(true)
-
-        val mLocProvider = GpsMyLocationProvider(activity)
-        mLocOverlay = MyLocationNewOverlay(mLocProvider, map)
-        mLocOverlay.enableMyLocation()
-        mLocOverlay.enableFollowLocation()
-        mLocOverlay.runOnFirstFix {
-            map.overlays.clear()
-            map.overlays.add(pl)
-            map.overlays.add(mLocOverlay)
-        }
-    }
-
-    private fun registerPermissions() {
-        pLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-            ) {
-                initOSM()
-                checkLocationEnabled()
-            } else {
-                showToast("Вы не дали разрешения на использование местоположения!")
-            }
-        }
-    }
-
-    private fun checkLocPermission() {
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> checkPermissionAfter11()
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.Q -> checkPermissionAfter10()
-            else -> checkPermission10()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun checkPermissionAfter11() {
-        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
-            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-        ) {
-            initOSM()
-            checkLocationEnabled()
-            checkBackgroundPermission()
-        } else {
-            pLauncher.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            )
-        }
-    }
-
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun checkPermissionAfter10() {
-        if ((checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
-                    checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) &&
-            checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-        ) {
-            initOSM()
-            checkLocationEnabled()
-        } else {
-            pLauncher.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                )
-            )
-        }
-    }
-
-    private fun checkPermission10() {
-        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
-            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-        ) {
-            initOSM()
-            checkLocationEnabled()
-        } else {
-            pLauncher.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            )
-        }
     }
 
 
@@ -405,5 +409,6 @@ class MapFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = MapFragment()
+        const val KEY_COLOR = "color_key"
     }
 }

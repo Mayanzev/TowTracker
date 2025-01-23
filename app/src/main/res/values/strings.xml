@@ -18,4 +18,9 @@
 
     <string name="background_mode_disabled">Разрешение на фоновое местоположение</string>
     <string name="background_mode_message">Для улучшения работы приложения нам нужен доступ к вашему местоположению даже в фоновом режиме. Пожалуйста, разрешите это в настройках приложения.</string>
+
+    <string name="location_permission_denied">Вы не дали разрешения на использование местоположения! Функционал приложения будет ограничен.</string>
+
+    <string name="notification_permission_granted">Вы дали разрешения на получение уведомлений!</string>
+    <string name="notification_permission_denied">Вы не дали разрешения на получение уведомлений!</string>
 </resources>
