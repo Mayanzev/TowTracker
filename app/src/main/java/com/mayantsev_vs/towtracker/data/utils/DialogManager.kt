@@ -10,29 +10,32 @@ import com.mayantsev_vs.towtracker.databinding.SaveDialogBinding
 import com.mayantsev_vs.towtracker.data.db.TrackItem
 
 object DialogManager {
+
+    // function that asks if the location is turned on if the user on their phone has turned the location completely off
     fun showLocEnableDialog(context: Context, listener: Listener) {
         val builder = AlertDialog.Builder(context)
         val dialog = builder.create()
         dialog.setTitle(R.string.location_disabled)
         dialog.setMessage(context.getString(R.string.location_dialog_message))
-        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes") { _, _ ->
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, context.getString(R.string.yes_button)) { _, _ ->
             listener.onClick()
         }
-        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No") { _, _ ->
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, context.getString(R.string.no_button)) { _, _ ->
             dialog.dismiss()
         }
         dialog.show()
     }
 
+    // function that asks for permission to run in the background
     fun showBackgroundPermissionDialog(context: Context, listener: Listener) {
         val builder = AlertDialog.Builder(context)
         val dialog = builder.create()
-        dialog.setTitle(R.string.background_mode_disabled)
+        dialog.setTitle(context.getString(R.string.background_mode_disabled))
         dialog.setMessage(context.getString(R.string.background_mode_message))
-        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Перейти в настройки") { _, _ ->
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, context.getString(R.string.go_to_settings)) { _, _ ->
             listener.onClick()
         }
-        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Отмена") { _, _ ->
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, context.getString(R.string.cancel)) { _, _ ->
             dialog.dismiss()
         }
         dialog.show()
@@ -46,18 +49,18 @@ object DialogManager {
         binding.apply {
 
             val time = "${item?.time}"
-            val velocity = "${item?.speed} km/h"
-            val distance = "${item?.distance} km"
+            val velocity = "${item?.speed} ${context.getString(R.string.km_h)}"
+            val distance = "${item?.distance} ${context.getString(R.string.km)}"
 
             tvTime.text = time
             tvSpeed.text = velocity
             tvDistance.text = distance
 
-            bSave.setOnClickListener {
+            btnSave.setOnClickListener {
                 listener.onClick()
                 dialog.dismiss()
             }
-            bCancel.setOnClickListener {
+            btnCancel.setOnClickListener {
                 dialog.dismiss()
             }
 

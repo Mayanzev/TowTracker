@@ -15,12 +15,10 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-    </org.osmdroid.views.MapView>
+        app:layout_constraintVertical_bias="0.0"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fCenter"
+        android:id="@+id/ivCenter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -32,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fStartStop"
+        android:id="@+id/ivStartStop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -41,7 +39,7 @@
         android:src="@drawable/ic_play"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fCenter" />
+        app:layout_constraintTop_toBottomOf="@+id/ivCenter" />
 
     <TextView
         android:id="@+id/tvTime"
@@ -52,7 +50,7 @@
         android:background="#99FFFFFF"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:text="Time: 00:00:00"
+        android:text="@string/time_label"
         android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -65,7 +63,7 @@
         android:background="#99FFFFFF"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:text="Average velocity 3.5 km/h"
+        android:text="@string/average_velocity_label"
         android:textColor="#000000"
         app:layout_constraintStart_toStartOf="@+id/tvTime"
         app:layout_constraintTop_toBottomOf="@+id/tvTime" />
@@ -78,7 +76,7 @@
         android:background="#99FFFFFF"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:text="Velocity: 3.5 km/h"
+        android:text="@string/velocity_label"
         android:textColor="#000000"
         app:layout_constraintStart_toStartOf="@+id/tvAverageVel"
         app:layout_constraintTop_toBottomOf="@+id/tvAverageVel" />
@@ -91,11 +89,25 @@
         android:background="#99FFFFFF"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:text="Distance: 16.5 km"
+        android:text="@string/distance_label"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/tvVelocity"
         app:layout_constraintTop_toBottomOf="@+id/tvVelocity" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="#99FFFFFF"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="@string/price_label"
+        android:textColor="#1A1A1A"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/tvDistance"
+        app:layout_constraintTop_toBottomOf="@+id/tvDistance" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

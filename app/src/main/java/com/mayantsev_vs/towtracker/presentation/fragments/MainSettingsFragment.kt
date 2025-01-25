@@ -21,10 +21,10 @@ class MainSettingsFragment : Fragment() {
     }
 
     private fun onBottomClick() {
-        binding.buttonProfile.setOnClickListener {
+        binding.btnProfile.setOnClickListener {
             openFragment(ProfileFragment())
         }
-        binding.buttonSettings.setOnClickListener {
+        binding.btnSettings.setOnClickListener {
             openFragment(AppearanceSettingsFragment())
         }
     }

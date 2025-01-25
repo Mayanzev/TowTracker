@@ -40,7 +40,7 @@ class ViewTrackFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getTrack()
-        binding.fCenter.setOnClickListener {
+        binding.ivCenter.setOnClickListener {
             if (startPoint != null) binding.map.controller.animateTo(startPoint)
         }
     }

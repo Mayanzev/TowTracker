@@ -13,14 +13,35 @@
     <string name="track_color">Цвет маршрута</string>
     <string name="track_color_summary">Цвет маршрута на карте.</string>
 
-    <string name="location_disabled">Location disabled</string>
-    <string name="location_dialog_message">Do you want enable GPS?</string>
+    <string name="location_disabled">Местоположение выключено</string>
+    <string name="location_dialog_message">Вы хотите включить GPS?</string>
 
     <string name="background_mode_disabled">Разрешение на фоновое местоположение</string>
     <string name="background_mode_message">Для улучшения работы приложения нам нужен доступ к вашему местоположению даже в фоновом режиме. Пожалуйста, разрешите это в настройках приложения.</string>
 
-    <string name="location_permission_denied">Вы не дали разрешения на использование местоположения! Функционал приложения будет ограничен.</string>
+    <string name="location_permission_denied">Вы не дали разрешение на использование местоположения!</string>
+    <string name="location_permission_granted">Вы дали разрешение на использование местоположения!</string>
 
-    <string name="notification_permission_granted">Вы дали разрешения на получение уведомлений!</string>
-    <string name="notification_permission_denied">Вы не дали разрешения на получение уведомлений!</string>
+    <string name="notification_permission_granted">Вы дали разрешение на получение уведомлений!</string>
+    <string name="notification_permission_denied">Вы не дали разрешение на получение уведомлений!</string>
+
+    <string name="yes_button">Да</string>
+    <string name="no_button">Нет</string>
+    <string name="go_to_settings">Перейти в настройки</string>
+    <string name="cancel">Отмена</string>
+
+    <string name="km">км</string>
+    <string name="km_h">км/ч</string>
+
+    <string name="time">Время:</string>
+    <string name="average_velocity">Средняя скорость:</string>
+    <string name="velocity">Скорость:</string>
+    <string name="distance">Расстояние:</string>
+
+    <string name="time_label">Время: 00:00:00</string>
+    <string name="average_velocity_label">Средняя скорость: 0.0 км/ч</string>
+    <string name="velocity_label">Скорость: 0.0 км/ч</string>
+    <string name="distance_label">Расстояние: 0.0 км</string>
+    <string name="price_label">Цена: 0 р</string>
+
 </resources>

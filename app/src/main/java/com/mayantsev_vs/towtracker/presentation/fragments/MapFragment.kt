@@ -78,6 +78,12 @@ class MapFragment : Fragment() {
         locationUpdates()
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkLocationPermission()
+        firstStart = true
+    }
+
     // sets up OSM configuration by loading preferences and defining a custom User-Agent.
     private fun settingsOsm() {
         Configuration.getInstance().load(
@@ -190,17 +196,35 @@ class MapFragment : Fragment() {
         }
     }
 
+    // function that is triggered after all permissions have been granted, which asks for permission to use the location
+    private fun checkLocationEnabled() {
+        val lManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val isEnabled = lManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (!isEnabled) {
+            DialogManager.showLocEnableDialog(
+                activity as AppCompatActivity,
+                object : Listener {
+                    override fun onClick() {
+                        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                    }
+                }
+            )
+        } else {
+            showToast(getString(R.string.location_permission_granted))
+        }
+    }
+
     private fun setOnClicks() = with(binding) {
         val listener = onClicks()
-        fStartStop.setOnClickListener(listener)
-        fCenter.setOnClickListener(listener)
+        ivStartStop.setOnClickListener(listener)
+        ivCenter.setOnClickListener(listener)
     }
 
     private fun onClicks(): View.OnClickListener {
         return View.OnClickListener {
             when (it.id) {
-                R.id.fStartStop -> startStopService()
-                R.id.fCenter -> centerLocation()
+                R.id.ivStartStop -> startStopService()
+                R.id.ivCenter -> centerLocation()
             }
         }
     }
@@ -212,9 +236,9 @@ class MapFragment : Fragment() {
 
     private fun locationUpdates() = with(binding) {
         model.locationUpdates.observe(viewLifecycleOwner) {
-            val distance = "Distance: ${String.format(Locale.US, "%.1f", it.distance / 1000)} km"
-            val velocity = "Velocity: ${String.format(Locale.US, "%.1f", 3.6f * it.velocity)} km/h"
-            val aVelocity = "Average Velocity: ${getAverageSpeed(it.distance)} km/h"
+            val distance = "${getString(R.string.distance)} ${String.format(Locale.US, "%.1f", it.distance / 1000)} ${getString(R.string.km)}"
+            val velocity = "${getString(R.string.velocity)} ${String.format(Locale.US, "%.1f", 3.6f * it.velocity)} ${getString(R.string.km_h)}"
+            val aVelocity = "${getString(R.string.average_velocity)} ${getAverageSpeed(it.distance)} ${getString(R.string.km_h)}"
             tvDistance.text = distance
             tvVelocity.text = velocity
             tvAverageVel.text = aVelocity
@@ -252,7 +276,7 @@ class MapFragment : Fragment() {
     }
 
     private fun getCurrentTime(): String {
-        return "Time: ${TimeUtils.getTime(System.currentTimeMillis() - startTime)}"
+        return "${getString(R.string.time)} ${TimeUtils.getTime(System.currentTimeMillis() - startTime)}"
     }
 
     private fun startStopService() {
@@ -260,7 +284,7 @@ class MapFragment : Fragment() {
             startLocService()
         } else {
             activity?.stopService(Intent(activity, LocationService::class.java))
-            binding.fStartStop.setImageResource(R.drawable.ic_play)
+            binding.ivStartStop.setImageResource(R.drawable.ic_play)
             timer?.cancel()
             val track = getTrackItem()
             DialogManager.showSaveDialog(requireContext(),
@@ -289,7 +313,7 @@ class MapFragment : Fragment() {
     private fun checkServiceState() {
         isServiceRunning = LocationService.isRunning
         if (isServiceRunning) {
-            binding.fStartStop.setImageResource(R.drawable.ic_stop)
+            binding.ivStartStop.setImageResource(R.drawable.ic_stop)
             startTimer()
         }
     }
@@ -300,33 +324,9 @@ class MapFragment : Fragment() {
         } else {
             activity?.startService(Intent(activity, LocationService::class.java))
         }
-        binding.fStartStop.setImageResource(R.drawable.ic_stop)
+        binding.ivStartStop.setImageResource(R.drawable.ic_stop)
         LocationService.startTime = System.currentTimeMillis()
         startTimer()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        checkLocationPermission()
-        firstStart = true
-    }
-
-
-    private fun checkLocationEnabled() {
-        val lManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val isEnabled = lManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        if (!isEnabled) {
-            DialogManager.showLocEnableDialog(
-                activity as AppCompatActivity,
-                object : Listener {
-                    override fun onClick() {
-                        startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                    }
-                }
-            )
-        } else {
-            showToast("Location enabled")
-        }
     }
 
     private fun checkBackgroundPermission() {

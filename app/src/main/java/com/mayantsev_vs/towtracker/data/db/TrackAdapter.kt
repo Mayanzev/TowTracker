@@ -18,7 +18,7 @@ class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Hold
         private var trackTemp: TrackItem? = null
 
         init {
-            binding.ibDelete.setOnClickListener(this)
+            binding.ivDelete.setOnClickListener(this)
             binding.item.setOnClickListener(this)
         }
 
@@ -39,7 +39,7 @@ class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Hold
 
         override fun onClick(view: View) {
             val type = when (view.id) {
-                R.id.ibDelete -> ClickType.DELETE
+                R.id.ivDelete -> ClickType.DELETE
                 R.id.item -> ClickType.OPEN
                 else -> ClickType.OPEN
             }

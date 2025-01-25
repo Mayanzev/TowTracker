@@ -13,6 +13,7 @@ import com.mayantsev_vs.towtracker.presentation.fragments.MainOrderFragment
 import com.mayantsev_vs.towtracker.data.utils.openFragment
 import com.mayantsev_vs.towtracker.presentation.fragments.MainSettingsFragment
 import com.mayantsev_vs.towtracker.data.utils.checkPermission
+import com.mayantsev_vs.towtracker.data.utils.showToast
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -45,9 +46,9 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == requestCodePostNotifications) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, R.string.notification_permission_granted, Toast.LENGTH_SHORT).show()
+                showToast(getString(R.string.notification_permission_granted))
             } else {
-                Toast.makeText(this, R.string.notification_permission_denied, Toast.LENGTH_SHORT).show()
+                showToast(getString(R.string.notification_permission_denied))
             }
         }
     }
