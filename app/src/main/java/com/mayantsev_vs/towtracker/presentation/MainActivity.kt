@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.ActivityMainBinding
@@ -57,8 +56,8 @@ class MainActivity : AppCompatActivity() {
     private fun onBottomNavClick() {
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.id_map -> openFragment(MapFragment.newInstance())
                 R.id.id_order -> openFragment(MainOrderFragment.newInstance())
+                R.id.id_map -> openFragment(MapFragment.newInstance())
                 R.id.id_main_settings -> openFragment(MainSettingsFragment())
             }
             true

@@ -1,7 +1,7 @@
 package com.mayantsev_vs.towtracker.data.location
 
 import android.Manifest
-import android.R
+import com.mayantsev_vs.towtracker.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -26,13 +26,14 @@ import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.mayantsev_vs.towtracker.presentation.MainActivity
 import org.osmdroid.util.GeoPoint
 
+// service that is needed for the application to run in the background
 class LocationService : Service() {
     private lateinit var locProvider: FusedLocationProviderClient
     private lateinit var locRequest: LocationRequest
     private var lastLocation: Location? = null
     private var distance = 0.0f
     private lateinit var geoPointsList: ArrayList<GeoPoint>
-    private var isDebug = true
+    private var isDebug = true // for development
 
     override fun onBind(p0: Intent?): IBinder? {
         return null
@@ -57,7 +58,7 @@ class LocationService : Service() {
         locProvider.removeLocationUpdates(locCallBack)
     }
 
-
+    // starts a foreground notification for the service with a custom notification channel and content.
     private fun startNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val nChannel = NotificationChannel(
@@ -65,23 +66,24 @@ class LocationService : Service() {
                 "Location Service",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
-            val nManager = getSystemService(NotificationManager::class.java) as NotificationManager
-            nManager.createNotificationChannel(nChannel)
+            val notificationManager = getSystemService(NotificationManager::class.java) as NotificationManager
+            notificationManager.createNotificationChannel(nChannel)
         }
 
-        val nIntent = Intent(this, MainActivity::class.java).apply {
+        val notificationIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pIntent = PendingIntent.getActivity(
+        val pendingIntent = PendingIntent.getActivity(
             this,
             0,
-            nIntent,
+            notificationIntent,
             PendingIntent.FLAG_IMMUTABLE
         )
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.sym_def_app_icon)
-            .setContentTitle("Tracker Running!")
-            .setContentIntent(pIntent)
+            .setSmallIcon(android.R.mipmap.sym_def_app_icon)
+            .setContentTitle(getString(R.string.notification_title))
+            .setContentText(getString(R.string.notification_content))
+            .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT).build()
 
         startForeground(99, notification)
@@ -125,7 +127,6 @@ class LocationService : Service() {
             .setMinUpdateIntervalMillis(updateInterval)
             .build()
         locProvider = LocationServices.getFusedLocationProviderClient(baseContext)
-        Log.d("MyLog", "Interval $updateInterval")
     }
 
     private fun startLocationUpdates() {

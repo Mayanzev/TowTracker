@@ -52,4 +52,9 @@
     <string name="price_dialog_message">Введите стоимость за один километр маршрута:</string>
     <string name="ok_button">Ок</string>
 
+    <string name="notification_title">Трекер активен!</string>
+    <string name="notification_content">Ваше местоположение отслеживается.</string>
+
+    <string name="track_saved">Маршрут сохранен.</string>
+
 </resources>

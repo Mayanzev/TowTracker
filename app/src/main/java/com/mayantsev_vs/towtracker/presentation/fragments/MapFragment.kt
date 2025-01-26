@@ -12,11 +12,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -51,7 +49,6 @@ import java.util.TimerTask
 class MapFragment : Fragment() {
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var binding: FragmentMapBinding
-    private var isServiceRunning = false
     private var timer: Timer? = null
     private var startTime = 0L
     private var pl: Polyline? = null
@@ -217,13 +214,7 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun setOnClicks() = with(binding) {
-        val listener = onClicks()
-        ivStartStop.setOnClickListener(listener)
-        ivCenter.setOnClickListener(listener)
-        btnSetPrice.setOnClickListener(listener)
-    }
-
+    // creates and returns a click listener that handles multiple button clicks based on their IDs
     private fun onClicks(): View.OnClickListener {
         return View.OnClickListener {
             when (it.id) {
@@ -231,6 +222,54 @@ class MapFragment : Fragment() {
                 R.id.ivCenter -> centerLocation()
                 R.id.btnSetPrice -> setPrice()
             }
+        }
+    }
+
+    // binds the created click listener to the corresponding views in the layout using their IDs
+    private fun setOnClicks() = with(binding) {
+        val listener = onClicks()
+        ivStartStop.setOnClickListener(listener)
+        ivCenter.setOnClickListener(listener)
+        btnSetPrice.setOnClickListener(listener)
+    }
+
+    // starts or stops the location tracking service and handles related UI updates.
+    private fun startStopService() {
+        if (!LocationService.isRunning) {
+            startLocationService()
+        } else {
+            activity?.stopService(Intent(activity, LocationService::class.java))
+            binding.ivStartStop.setImageResource(R.drawable.ic_play)
+            timer?.cancel()
+            val track = getTrackItem()
+            DialogManager.showSaveDialog(requireContext(),
+                track,
+                object : SimpleListener {
+                    override fun onClick() {
+                        showToast(getString(R.string.track_saved))
+                        model.insertTrack(track)
+                    }
+                })
+        }
+    }
+
+    // starts the location tracking service in foreground mode and initializes the timer
+    private fun startLocationService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            activity?.startForegroundService(Intent(activity, LocationService::class.java))
+        } else {
+            activity?.startService(Intent(activity, LocationService::class.java))
+        }
+        binding.ivStartStop.setImageResource(R.drawable.ic_stop)
+        LocationService.startTime = System.currentTimeMillis()
+        startTimer()
+    }
+
+    // updates the UI and starts the timer if the location service is running
+    private fun checkServiceState() {
+        if (LocationService.isRunning) {
+            binding.ivStartStop.setImageResource(R.drawable.ic_stop)
+            startTimer()
         }
     }
 
@@ -293,26 +332,6 @@ class MapFragment : Fragment() {
         return "${getString(R.string.time)} ${TimeUtils.getTime(System.currentTimeMillis() - startTime)}"
     }
 
-    private fun startStopService() {
-        if (!isServiceRunning) {
-            startLocService()
-        } else {
-            activity?.stopService(Intent(activity, LocationService::class.java))
-            binding.ivStartStop.setImageResource(R.drawable.ic_play)
-            timer?.cancel()
-            val track = getTrackItem()
-            DialogManager.showSaveDialog(requireContext(),
-                track,
-                object : SimpleListener {
-                    override fun onClick() {
-                        showToast("Track Saved!")
-                        model.insertTrack(track)
-                    }
-                })
-        }
-        isServiceRunning = !isServiceRunning
-    }
-
     private fun getTrackItem(): TrackItem {
         return TrackItem(
             null,
@@ -322,25 +341,6 @@ class MapFragment : Fragment() {
             getAverageSpeed(locationModel?.distance ?: 0.0f),
             geoPointsToString(locationModel?.geoPointsList ?: listOf())
         )
-    }
-
-    private fun checkServiceState() {
-        isServiceRunning = LocationService.isRunning
-        if (isServiceRunning) {
-            binding.ivStartStop.setImageResource(R.drawable.ic_stop)
-            startTimer()
-        }
-    }
-
-    private fun startLocService() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            activity?.startForegroundService(Intent(activity, LocationService::class.java))
-        } else {
-            activity?.startService(Intent(activity, LocationService::class.java))
-        }
-        binding.ivStartStop.setImageResource(R.drawable.ic_stop)
-        LocationService.startTime = System.currentTimeMillis()
-        startTimer()
     }
 
     private fun checkBackgroundPermission() {
