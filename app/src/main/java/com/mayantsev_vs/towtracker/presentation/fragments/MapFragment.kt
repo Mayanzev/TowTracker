@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,7 +33,9 @@ import com.mayantsev_vs.towtracker.data.db.TrackItem
 import com.mayantsev_vs.towtracker.data.location.LocationModel
 import com.mayantsev_vs.towtracker.data.location.LocationService
 import com.mayantsev_vs.towtracker.data.utils.DialogManager
-import com.mayantsev_vs.towtracker.data.utils.DialogManager.Listener
+import com.mayantsev_vs.towtracker.data.utils.DialogManager.PriceListener
+import com.mayantsev_vs.towtracker.data.utils.DialogManager.SimpleListener
+import com.mayantsev_vs.towtracker.data.utils.DialogManager.showPriceDialog
 import com.mayantsev_vs.towtracker.data.utils.TimeUtils
 import com.mayantsev_vs.towtracker.data.utils.checkPermission
 import com.mayantsev_vs.towtracker.data.utils.showToast
@@ -203,7 +206,7 @@ class MapFragment : Fragment() {
         if (!isEnabled) {
             DialogManager.showLocEnableDialog(
                 activity as AppCompatActivity,
-                object : Listener {
+                object : SimpleListener {
                     override fun onClick() {
                         startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                     }
@@ -218,6 +221,7 @@ class MapFragment : Fragment() {
         val listener = onClicks()
         ivStartStop.setOnClickListener(listener)
         ivCenter.setOnClickListener(listener)
+        btnSetPrice.setOnClickListener(listener)
     }
 
     private fun onClicks(): View.OnClickListener {
@@ -225,8 +229,19 @@ class MapFragment : Fragment() {
             when (it.id) {
                 R.id.ivStartStop -> startStopService()
                 R.id.ivCenter -> centerLocation()
+                R.id.btnSetPrice -> setPrice()
             }
         }
+    }
+
+    private fun setPrice() {
+        showPriceDialog(requireContext(), object : PriceListener {
+            override fun onClick(price: String) {
+                val finalPrice = if (price.isBlank()) "0" else price
+                binding.btnSetPrice.text = "$finalPrice р"
+                showToast(getString(R.string.price_change_message, finalPrice))
+            }
+        })
     }
 
     private fun  centerLocation() {
@@ -252,7 +267,6 @@ class MapFragment : Fragment() {
         list.forEach {
             sb.append("${it.latitude}, ${it.longitude}/")
         }
-        Log.d("MyLog", "$sb")
         return sb.toString()
     }
 
@@ -289,7 +303,7 @@ class MapFragment : Fragment() {
             val track = getTrackItem()
             DialogManager.showSaveDialog(requireContext(),
                 track,
-                object : Listener {
+                object : SimpleListener {
                     override fun onClick() {
                         showToast("Track Saved!")
                         model.insertTrack(track)
@@ -333,7 +347,7 @@ class MapFragment : Fragment() {
         if (!checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
             DialogManager.showBackgroundPermissionDialog(
                 activity as AppCompatActivity,
-                object : Listener {
+                object : SimpleListener {
                     override fun onClick() {
                         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                             data = Uri.fromParts("package", requireActivity().packageName, null)

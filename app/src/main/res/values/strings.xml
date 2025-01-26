@@ -44,4 +44,12 @@
     <string name="distance_label">Расстояние: 0.0 км</string>
     <string name="price_label">Цена: 0 р</string>
 
+    <string name="price">0 р</string>
+
+    <string name="price_change_message">Цена за километр маршрута изменена на %1$s р</string>
+    <string name="enter_price_hint">Введите цену</string>
+    <string name="price_dialog_title">Укажите цену</string>
+    <string name="price_dialog_message">Введите стоимость за один километр маршрута:</string>
+    <string name="ok_button">Ок</string>
+
 </resources>

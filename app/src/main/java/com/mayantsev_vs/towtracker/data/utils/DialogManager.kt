@@ -4,7 +4,9 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.text.InputType
 import android.view.LayoutInflater
+import android.widget.EditText
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.SaveDialogBinding
 import com.mayantsev_vs.towtracker.data.db.TrackItem
@@ -12,7 +14,7 @@ import com.mayantsev_vs.towtracker.data.db.TrackItem
 object DialogManager {
 
     // function that asks if the location is turned on if the user on their phone has turned the location completely off
-    fun showLocEnableDialog(context: Context, listener: Listener) {
+    fun showLocEnableDialog(context: Context, listener: SimpleListener) {
         val builder = AlertDialog.Builder(context)
         val dialog = builder.create()
         dialog.setTitle(R.string.location_disabled)
@@ -27,7 +29,7 @@ object DialogManager {
     }
 
     // function that asks for permission to run in the background
-    fun showBackgroundPermissionDialog(context: Context, listener: Listener) {
+    fun showBackgroundPermissionDialog(context: Context, listener: SimpleListener) {
         val builder = AlertDialog.Builder(context)
         val dialog = builder.create()
         dialog.setTitle(context.getString(R.string.background_mode_disabled))
@@ -41,7 +43,7 @@ object DialogManager {
         dialog.show()
     }
 
-    fun showSaveDialog(context: Context, item: TrackItem?, listener: Listener) {
+    fun showSaveDialog(context: Context, item: TrackItem?, listener: SimpleListener) {
         val builder = AlertDialog.Builder(context)
         val binding = SaveDialogBinding.inflate(LayoutInflater.from(context), null, false)
         builder.setView(binding.root)
@@ -69,8 +71,32 @@ object DialogManager {
         dialog.show()
     }
 
+    fun showPriceDialog(context: Context, listener: PriceListener) {
+        val builder = AlertDialog.Builder(context)
+        val input = EditText(context)
+        input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        input.hint = context.getString(R.string.enter_price_hint)
 
-    interface Listener {
+        builder.setTitle(context.getString(R.string.price_dialog_title))
+            .setMessage(context.getString(R.string.price_dialog_message))
+            .setView(input)
+            .setPositiveButton(context.getString(R.string.ok_button)) { _, _ ->
+                val price = input.text.toString()
+                listener.onClick(price)
+            }
+            .setNegativeButton(context.getString(R.string.cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
+
+        builder.create().show()
+    }
+
+
+    interface SimpleListener {
         fun onClick()
+    }
+
+    interface PriceListener {
+        fun onClick(price: String)
     }
 }
