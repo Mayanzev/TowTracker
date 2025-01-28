@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvDate" />
 
     <TextView
-        android:id="@+id/tvAverageVel"
+        android:id="@+id/tvAverageSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -83,7 +83,7 @@
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@+id/tvDate"
-        app:layout_constraintTop_toBottomOf="@+id/tvAverageVel" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAverageSpeed" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

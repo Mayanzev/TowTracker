@@ -56,7 +56,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvAverageVel"
+        android:id="@+id/tvAverageSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -69,7 +69,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTime" />
 
     <TextView
-        android:id="@+id/tvVelocity"
+        android:id="@+id/tvSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -78,8 +78,8 @@
         android:paddingEnd="5dp"
         android:text="@string/velocity_label"
         android:textColor="#000000"
-        app:layout_constraintStart_toStartOf="@+id/tvAverageVel"
-        app:layout_constraintTop_toBottomOf="@+id/tvAverageVel" />
+        app:layout_constraintStart_toStartOf="@+id/tvAverageSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/tvAverageSpeed" />
 
     <TextView
         android:id="@+id/tvDistance"
@@ -92,8 +92,8 @@
         android:text="@string/distance_label"
         android:textColor="#000000"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/tvVelocity"
-        app:layout_constraintTop_toBottomOf="@+id/tvVelocity" />
+        app:layout_constraintStart_toStartOf="@+id/tvSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/tvSpeed" />
 
     <TextView
         android:id="@+id/tvPrice"
@@ -116,7 +116,6 @@
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         android:backgroundTint="#FFFFFF"
-        android:text="@string/price"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

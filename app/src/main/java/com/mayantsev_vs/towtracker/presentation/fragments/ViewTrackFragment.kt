@@ -55,7 +55,7 @@ class ViewTrackFragment : Fragment() {
 
             tvDate.text = date
             tvTime.text = time
-            tvAverageVel.text = speed
+            tvAverageSpeed.text = speed
             tvDistance.text = distance
 
             val polyline = getPolyline(it.geoPoints)

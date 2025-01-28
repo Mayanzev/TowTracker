@@ -12,7 +12,6 @@ import android.location.Location
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -25,11 +24,12 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.mayantsev_vs.towtracker.presentation.MainActivity
 import org.osmdroid.util.GeoPoint
+import java.math.BigDecimal
 
 // service that is needed for the application to run in the background
 class LocationService : Service() {
-    private lateinit var locProvider: FusedLocationProviderClient
-    private lateinit var locRequest: LocationRequest
+    private lateinit var locationProvider: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
     private var lastLocation: Location? = null
     private var distance = 0.0f
     private lateinit var geoPointsList: ArrayList<GeoPoint>
@@ -55,7 +55,7 @@ class LocationService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         isRunning = false
-        locProvider.removeLocationUpdates(locCallBack)
+        locationProvider.removeLocationUpdates(locCallBack)
     }
 
     // starts a foreground notification for the service with a custom notification channel and content.
@@ -69,7 +69,6 @@ class LocationService : Service() {
             val notificationManager = getSystemService(NotificationManager::class.java) as NotificationManager
             notificationManager.createNotificationChannel(nChannel)
         }
-
         val notificationIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -89,10 +88,38 @@ class LocationService : Service() {
         startForeground(99, notification)
     }
 
+    // function that initializes a class to get location information
+    private fun initLocation() {
+        val updateInterval = PreferenceManager.getDefaultSharedPreferences(
+            this
+        ).getString("update_time_key", "3000")?.toLong() ?: 3000
+        locationRequest = LocationRequest.Builder(PRIORITY_HIGH_ACCURACY, updateInterval)
+            .setMinUpdateIntervalMillis(updateInterval)
+            .build()
+        locationProvider = LocationServices.getFusedLocationProviderClient(baseContext)
+    }
+
+    // function whereby we begin to receive information about our location
+    private fun startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        locationProvider.requestLocationUpdates(
+            locationRequest,
+            locCallBack,
+            Looper.myLooper()
+        )
+    }
+
+    // locationCallback to receive location updates
     private val locCallBack = object  : LocationCallback() {
-        override fun onLocationResult(lResult: LocationResult) {
-            super.onLocationResult(lResult)
-            val currentLocation = lResult.lastLocation
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+            val currentLocation = locationResult.lastLocation
 
             if (lastLocation != null && currentLocation != null) {
 
@@ -101,53 +128,31 @@ class LocationService : Service() {
                     geoPointsList.add(GeoPoint(currentLocation.latitude, currentLocation.longitude))
                 }
 
-                val locModel = LocationModel(
+                val locationModel = LocationModel(
                     currentLocation.speed,
                     distance,
                     geoPointsList
 
                 )
-                sendLocData(locModel)
+                sendLocationData(locationModel)
             }
             lastLocation = currentLocation
         }
     }
 
-    private fun sendLocData(locModel: LocationModel) {
-        val i = Intent(LOC_MODEL_INTENT)
-        i.putExtra(LOC_MODEL_INTENT, locModel)
-        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(i)
+    // function to send location data via broadcast using LocalBroadcastManager
+    private fun sendLocationData(locationModel: LocationModel) {
+        val intent = Intent(LOC_MODEL_INTENT)
+        intent.putExtra(LOC_MODEL_INTENT, locationModel)
+        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
     }
 
-    private fun initLocation() {
-        val updateInterval = PreferenceManager.getDefaultSharedPreferences(
-            this
-        ).getString("update_time_key", "3000")?.toLong() ?: 3000
-        locRequest = LocationRequest.Builder(PRIORITY_HIGH_ACCURACY, updateInterval)
-            .setMinUpdateIntervalMillis(updateInterval)
-            .build()
-        locProvider = LocationServices.getFusedLocationProviderClient(baseContext)
-    }
-
-    private fun startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(
-            this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        locProvider.requestLocationUpdates(
-            locRequest,
-            locCallBack,
-            Looper.myLooper()
-        )
-    }
 
     companion object {
         const val CHANNEL_ID = "channel_1"
+        const val LOC_MODEL_INTENT = "loc_intent"
         var isRunning = false
         var startTime = 0L
-        const val LOC_MODEL_INTENT = "loc_intent"
+        var startPrice: BigDecimal = BigDecimal("0.0")
     }
 }

@@ -42,6 +42,8 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.Locale
 import java.util.Timer
 import java.util.TimerTask
@@ -74,8 +76,9 @@ class MapFragment : Fragment() {
         setOnClicks()
         checkServiceState()
         updateTime()
-        registerLocReceiver()
+        registerLocationReceiver()
         locationUpdates()
+        loadCurrentPrice()
     }
 
     override fun onResume() {
@@ -273,48 +276,7 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun setPrice() {
-        showPriceDialog(requireContext(), object : PriceListener {
-            override fun onClick(price: String) {
-                val finalPrice = if (price.isBlank()) "0" else price
-                binding.btnSetPrice.text = "$finalPrice р"
-                showToast(getString(R.string.price_change_message, finalPrice))
-            }
-        })
-    }
-
-    private fun  centerLocation() {
-        binding.map.controller.animateTo(myLocationOverlay.myLocation)
-        myLocationOverlay.enableFollowLocation()
-    }
-
-    private fun locationUpdates() = with(binding) {
-        model.locationUpdates.observe(viewLifecycleOwner) {
-            val distance = "${getString(R.string.distance)} ${String.format(Locale.US, "%.1f", it.distance / 1000)} ${getString(R.string.km)}"
-            val velocity = "${getString(R.string.velocity)} ${String.format(Locale.US, "%.1f", 3.6f * it.velocity)} ${getString(R.string.km_h)}"
-            val aVelocity = "${getString(R.string.average_velocity)} ${getAverageSpeed(it.distance)} ${getString(R.string.km_h)}"
-            tvDistance.text = distance
-            tvVelocity.text = velocity
-            tvAverageVel.text = aVelocity
-            locationModel = it
-            updatePolyline(it.geoPointsList)
-        }
-    }
-
-    private fun geoPointsToString(list: List<GeoPoint>): String {
-        val sb = StringBuilder()
-        list.forEach {
-            sb.append("${it.latitude}, ${it.longitude}/")
-        }
-        return sb.toString()
-    }
-
-    private fun updateTime() {
-        model.timeData.observe(viewLifecycleOwner) {
-            binding.tvTime.text = it
-        }
-    }
-
+    // starts a timer to update the elapsed time in the UI every second
     private fun startTimer() {
         timer?.cancel()
         timer = Timer()
@@ -328,8 +290,103 @@ class MapFragment : Fragment() {
         }, 1000, 1000)
     }
 
+    // observes time data and updates the UI with the current elapsed time
+    private fun updateTime() {
+        model.timeData.observe(viewLifecycleOwner) {
+            binding.tvTime.text = it
+        }
+    }
+
+    // retrieves the current elapsed time as a formatted string
     private fun getCurrentTime(): String {
         return "${getString(R.string.time)} ${TimeUtils.getTime(System.currentTimeMillis() - startTime)}"
+    }
+
+    // function for setting the price per route
+    private fun setPrice() {
+        showPriceDialog(requireContext(), object : PriceListener {
+            override fun onClick(price: String) {
+                val finalPrice = price.toBigDecimalOrNull() ?: BigDecimal("0.0")
+                binding.btnSetPrice.text = getString(R.string.price_format, finalPrice)
+                LocationService.startPrice = finalPrice
+                showToast(getString(R.string.price_change_message, "$finalPrice"))
+            }
+        })
+    }
+
+    // function for loading the price per route
+    private fun loadCurrentPrice() {
+        val currentPrice = LocationService.startPrice
+        binding.btnSetPrice.text = getString(R.string.price_format, currentPrice)
+    }
+
+    // broadcastReceiver listens for location updates broadcasted by LocationService
+    // when receiving an intent with the location data, it extracts the LocationModel and updates the model with the new location
+    private val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == LocationService.LOC_MODEL_INTENT) {
+                val locationModel = if (Build.VERSION.SDK_INT < 33) {
+                    @Suppress("DEPRECATION")
+                    intent.getSerializableExtra(LocationService.LOC_MODEL_INTENT) as LocationModel
+                } else {
+                    intent.getSerializableExtra(
+                        LocationService.LOC_MODEL_INTENT,
+                        LocationModel::class.java
+                    )
+                }
+                model.locationUpdates.value = locationModel
+            }
+        }
+    }
+
+    // Registers a receiver for location updates by creating an IntentFilter with the specified action
+    private fun registerLocationReceiver() {
+        val locationFilter = IntentFilter(LocationService.LOC_MODEL_INTENT)
+        LocalBroadcastManager.getInstance(activity as AppCompatActivity)
+            .registerReceiver(receiver, locationFilter)
+    }
+
+    // observes location updates and refreshes UI elements like distance, speed, polyline
+    private fun locationUpdates() = with(binding) {
+        model.locationUpdates.observe(viewLifecycleOwner) {
+            val distance = "${getString(R.string.distance)} ${String.format(Locale.US, "%.1f", it.distance / 1000)} ${getString(R.string.km)}"
+            val speed = "${getString(R.string.velocity)} ${String.format(Locale.US, "%.1f", 3.6f * it.velocity)} ${getString(R.string.km_h)}"
+            val averageSpeed = "${getString(R.string.average_velocity)} ${getAverageSpeed(it.distance)} ${getString(R.string.km_h)}"
+            val price = "${getString(R.string.price)} ${getPrice(it.distance, LocationService.startPrice)} ${getString(R.string.currency_symbol)}"
+
+            tvDistance.text = distance
+            tvSpeed.text = speed
+            tvAverageSpeed.text = averageSpeed
+            tvPrice.text = price
+            locationModel = it
+            updatePolyline(it.geoPointsList)
+        }
+    }
+
+    // function for calculating the average speed
+    private fun getAverageSpeed(distance: Float): String {
+        return String.format(Locale.US, "%.1f", 3.6f * (distance / ((System.currentTimeMillis() - startTime) / 1000.0f))
+        )
+    }
+
+    // function for price calculation
+    private fun getPrice(distance: Float, startPrice: BigDecimal): String {
+        val distanceInKm = BigDecimal(distance.toDouble()).divide(BigDecimal(1000), 1, RoundingMode.HALF_UP)
+        val price = distanceInKm.multiply(startPrice)
+        return String.format(Locale.US, "%.1f", price)
+    }
+
+    private fun  centerLocation() {
+        binding.map.controller.animateTo(myLocationOverlay.myLocation)
+        myLocationOverlay.enableFollowLocation()
+    }
+
+    private fun geoPointsToString(list: List<GeoPoint>): String {
+        val sb = StringBuilder()
+        list.forEach {
+            sb.append("${it.latitude}, ${it.longitude}/")
+        }
+        return sb.toString()
     }
 
     private fun getTrackItem(): TrackItem {
@@ -358,41 +415,6 @@ class MapFragment : Fragment() {
             )
         }
     }
-
-
-    private val receiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, i: Intent?) {
-            if (i?.action == LocationService.LOC_MODEL_INTENT) {
-
-                val locModel = if (Build.VERSION.SDK_INT < 33) {
-                    @Suppress("DEPRECATION")
-                    i.getSerializableExtra(LocationService.LOC_MODEL_INTENT) as LocationModel
-                } else {
-                    i.getSerializableExtra(
-                        LocationService.LOC_MODEL_INTENT,
-                        LocationModel::class.java
-                    )
-                }
-
-                model.locationUpdates.value = locModel
-            }
-        }
-    }
-
-    private fun registerLocReceiver() {
-        val locFilter = IntentFilter(LocationService.LOC_MODEL_INTENT)
-        LocalBroadcastManager.getInstance(activity as AppCompatActivity)
-            .registerReceiver(receiver, locFilter)
-    }
-
-    private fun getAverageSpeed(distance: Float): String {
-        return String.format(
-            Locale.US,
-            "%.1f",
-            3.6f * (distance / ((System.currentTimeMillis() - startTime) / 1000.0f))
-        )
-    }
-
 
     private fun addPoint(list: List<GeoPoint>) {
         if (list.isNotEmpty()) pl?.addPoint(list[list.size - 1])
