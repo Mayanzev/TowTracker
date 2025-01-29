@@ -53,7 +53,7 @@ class MapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
     private var timer: Timer? = null
     private var startTime = 0L
-    private var pl: Polyline? = null
+    private var polyLine: Polyline? = null
     private var firstStart = true
     private var locationModel: LocationModel? = null
     private lateinit var myLocationOverlay: MyLocationNewOverlay
@@ -98,8 +98,8 @@ class MapFragment : Fragment() {
     }
 
     private fun initOSM() = with(binding) {
-        pl = Polyline()
-        pl?.outlinePaint?.color = Color.parseColor(
+        polyLine = Polyline()
+        polyLine?.outlinePaint?.color = Color.parseColor(
             PreferenceManager.getDefaultSharedPreferences(requireContext())
                 .getString(KEY_COLOR, "#0077FF")
         )
@@ -113,7 +113,7 @@ class MapFragment : Fragment() {
         myLocationOverlay.enableFollowLocation()
         myLocationOverlay.runOnFirstFix {
             map.overlays.clear()
-            map.overlays.add(pl)
+            map.overlays.add(polyLine)
             map.overlays.add(myLocationOverlay)
         }
     }
@@ -204,7 +204,7 @@ class MapFragment : Fragment() {
         val lManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val isEnabled = lManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (!isEnabled) {
-            DialogManager.showLocEnableDialog(
+            DialogManager.showLocationEnableDialog(
                 activity as AppCompatActivity,
                 object : SimpleListener {
                     override fun onClick() {
@@ -245,7 +245,7 @@ class MapFragment : Fragment() {
             binding.ivStartStop.setImageResource(R.drawable.ic_play)
             timer?.cancel()
             val track = getTrackItem()
-            DialogManager.showSaveDialog(requireContext(),
+            DialogManager.showRouteDialog(requireContext(),
                 track,
                 object : SimpleListener {
                     override fun onClick() {
@@ -299,7 +299,7 @@ class MapFragment : Fragment() {
 
     // retrieves the current elapsed time as a formatted string
     private fun getCurrentTime(): String {
-        return "Time: ${TimeUtils.getTime(System.currentTimeMillis() - startTime)}"
+        return TimeUtils.getTime(System.currentTimeMillis() - startTime)
     }
 
     // function for setting the price per route
@@ -350,7 +350,7 @@ class MapFragment : Fragment() {
     private fun locationUpdates() = with(binding) {
         model.locationUpdates.observe(viewLifecycleOwner) {
             val distance = "${getString(R.string.distance)} ${String.format(Locale.US, "%.1f", it.distance / 1000)} ${getString(R.string.km)}"
-            val speed = "${getString(R.string.velocity)} ${String.format(Locale.US, "%.1f", 3.6f * it.velocity)} ${getString(R.string.km_h)}"
+            val speed = "${getString(R.string.speed)} ${String.format(Locale.US, "%.1f", 3.6f * it.velocity)} ${getString(R.string.km_h)}"
             val averageSpeed = "${getString(R.string.average_velocity)} ${getAverageSpeed(it.distance)} ${getString(R.string.km_h)}"
             val price = "${getString(R.string.price)} ${getPrice(it.distance, LocationService.startPrice)} ${getString(R.string.currency_symbol)}"
 
@@ -376,6 +376,50 @@ class MapFragment : Fragment() {
         return String.format(Locale.US, "%.1f", price)
     }
 
+    // adds the last point from the list to the polyline
+    private fun addPoint(list: List<GeoPoint>) {
+        if (list.isNotEmpty()) polyLine?.addPoint(list[list.size - 1])
+    }
+
+    // adds all points from the list to the polyline
+    private fun fillPolyline(list: List<GeoPoint>) {
+        list.forEach {
+            polyLine?.addPoint(it)
+        }
+    }
+
+    // updates the polyline by either adding all points (on the first start)
+    // or adding only the last point to extend the existing path.
+    private fun updatePolyline(list: List<GeoPoint>) {
+        if (list.size > 1 && firstStart) {
+            fillPolyline(list)
+            firstStart = false
+        } else {
+            addPoint(list)
+        }
+    }
+
+    // unregisters the location updates receiver when the fragment is detached
+    // to prevent memory leaks and unnecessary background updates
+    override fun onDetach() {
+        super.onDetach()
+        LocalBroadcastManager.getInstance(activity as AppCompatActivity)
+            .unregisterReceiver(receiver)
+    }
+
+    // returns a TrackItem object with current time, date, distance, average speed, geo points, and price
+    private fun getTrackItem(): TrackItem {
+        return TrackItem(
+            null,
+            getCurrentTime(),
+            TimeUtils.getDate(),
+            String.format(Locale.US, "%.1f", locationModel?.distance?.div(1000) ?: 0),
+            getAverageSpeed(locationModel?.distance ?: 0.0f),
+            geoPointsToString(locationModel?.geoPointsList ?: listOf()),
+            getPrice(locationModel?.distance ?: 0.0f, LocationService.startPrice)
+        )
+    }
+
     private fun  centerLocation() {
         binding.map.controller.animateTo(myLocationOverlay.myLocation)
         myLocationOverlay.enableFollowLocation()
@@ -387,17 +431,6 @@ class MapFragment : Fragment() {
             sb.append("${it.latitude}, ${it.longitude}/")
         }
         return sb.toString()
-    }
-
-    private fun getTrackItem(): TrackItem {
-        return TrackItem(
-            null,
-            getCurrentTime(),
-            TimeUtils.getDate(),
-            String.format(Locale.US, "%.1f", locationModel?.distance?.div(1000) ?: 0),
-            getAverageSpeed(locationModel?.distance ?: 0.0f),
-            geoPointsToString(locationModel?.geoPointsList ?: listOf())
-        )
     }
 
     private fun checkBackgroundPermission() {
@@ -414,31 +447,6 @@ class MapFragment : Fragment() {
                 }
             )
         }
-    }
-
-    private fun addPoint(list: List<GeoPoint>) {
-        if (list.isNotEmpty()) pl?.addPoint(list[list.size - 1])
-    }
-
-    private fun fillPolyline(list: List<GeoPoint>) {
-        list.forEach {
-            pl?.addPoint(it)
-        }
-    }
-
-    private fun updatePolyline(list: List<GeoPoint>) {
-        if (list.size > 1 && firstStart) {
-            fillPolyline(list)
-            firstStart = false
-        } else {
-            addPoint(list)
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        LocalBroadcastManager.getInstance(activity as AppCompatActivity)
-            .unregisterReceiver(receiver)
     }
 
 

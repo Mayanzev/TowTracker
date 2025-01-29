@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Save this track?"
+            android:text="@string/save_track_title"
             android:textColor="#000000"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -27,34 +27,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Time:"
+            android:text="@string/time"
             android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
         <TextView
-            android:id="@+id/tvSpeed"
+            android:id="@+id/tvDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Velocity:"
+            android:text="@string/distance"
             android:textColor="#000000"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTime" />
 
         <TextView
-            android:id="@+id/tvDistance"
+            android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Distance:"
+            android:text="@string/price"
             android:textColor="#000000"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSpeed" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDistance" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -66,7 +67,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDistance"
+            app:layout_constraintTop_toBottomOf="@+id/tvPrice"
             app:layout_constraintVertical_bias="0.0">
 
             <Button
@@ -76,7 +77,7 @@
                 android:layout_marginEnd="2dp"
                 android:layout_weight="1"
                 android:backgroundTint="#000000"
-                android:text="Save" />
+                android:text="@string/save_button" />
 
             <Button
                 android:id="@+id/btnCancel"
@@ -85,7 +86,7 @@
                 android:layout_marginStart="2dp"
                 android:layout_weight="1"
                 android:backgroundTint="#000000"
-                android:text="Cancel" />
+                android:text="@string/cancel_button" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

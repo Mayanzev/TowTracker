@@ -17,5 +17,7 @@ data class TrackItem(
     @ColumnInfo (name = "velocity")
     val speed: String,
     @ColumnInfo (name = "geo_points")
-    val geoPoints: String
+    val geoPoints: String,
+    @ColumnInfo (name = "price")
+    val price: String
 )

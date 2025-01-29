@@ -28,7 +28,7 @@
     <string name="yes_button">Да</string>
     <string name="no_button">Нет</string>
     <string name="go_to_settings">Перейти в настройки</string>
-    <string name="cancel">Отмена</string>
+    <string name="cancel_button">Отмена</string>
 
     <string name="km">км</string>
     <string name="km_h">км/ч</string>
@@ -36,13 +36,13 @@
 
     <string name="time">Время:</string>
     <string name="average_velocity">Средняя скорость:</string>
-    <string name="velocity">Скорость:</string>
+    <string name="speed">Скорость:</string>
     <string name="distance">Расстояние:</string>
     <string name="price">Цена:</string>
 
-    <string name="time_label">Время: 00:00:00</string>
-    <string name="average_velocity_label">Средняя скорость: 0.0 км/ч</string>
-    <string name="velocity_label">Скорость: 0.0 км/ч</string>
+    <string name="time_label">00:00:00</string>
+    <string name="average_speed_label">Средняя скорость: 0.0 км/ч</string>
+    <string name="speed_label">Скорость: 0.0 км/ч</string>
     <string name="distance_label">Расстояние: 0.0 км</string>
     <string name="price_label">Цена: 0.0 р</string>
     <string name="price_format">%1$s р / км</string>
@@ -57,5 +57,8 @@
     <string name="notification_content">Ваше местоположение отслеживается.</string>
 
     <string name="track_saved">Маршрут сохранен.</string>
+
+    <string name="save_button">Сохранить</string>
+    <string name="save_track_title">Сохранить этот маршрут?</string>
 
 </resources>

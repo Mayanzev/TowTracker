@@ -8,13 +8,13 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.widget.EditText
 import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.databinding.SaveDialogBinding
 import com.mayantsev_vs.towtracker.data.db.TrackItem
+import com.mayantsev_vs.towtracker.databinding.RouteDialogBinding
 
 object DialogManager {
 
     // function that asks if the location is turned on if the user on their phone has turned the location completely off
-    fun showLocEnableDialog(context: Context, listener: SimpleListener) {
+    fun showLocationEnableDialog(context: Context, listener: SimpleListener) {
         val builder = AlertDialog.Builder(context)
         val dialog = builder.create()
         dialog.setTitle(R.string.location_disabled)
@@ -37,26 +37,26 @@ object DialogManager {
         dialog.setButton(AlertDialog.BUTTON_POSITIVE, context.getString(R.string.go_to_settings)) { _, _ ->
             listener.onClick()
         }
-        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, context.getString(R.string.cancel)) { _, _ ->
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, context.getString(R.string.cancel_button)) { _, _ ->
             dialog.dismiss()
         }
         dialog.show()
     }
 
-    fun showSaveDialog(context: Context, item: TrackItem?, listener: SimpleListener) {
+    // shows the dialog box for saving a route
+    fun showRouteDialog(context: Context, item: TrackItem?, listener: SimpleListener) {
         val builder = AlertDialog.Builder(context)
-        val binding = SaveDialogBinding.inflate(LayoutInflater.from(context), null, false)
+        val binding = RouteDialogBinding.inflate(LayoutInflater.from(context), null, false)
         builder.setView(binding.root)
         val dialog = builder.create()
         binding.apply {
-
-            val time = "${item?.time}"
-            val velocity = "${item?.speed} ${context.getString(R.string.km_h)}"
-            val distance = "${item?.distance} ${context.getString(R.string.km)}"
+            val time = "${context.getString(R.string.time)} ${item?.time}"
+            val distance = "${context.getString(R.string.distance)} ${item?.distance} ${context.getString(R.string.km)}"
+            val price = "${context.getString(R.string.price)} ${item?.price} ${context.getString(R.string.currency_symbol)}"
 
             tvTime.text = time
-            tvSpeed.text = velocity
             tvDistance.text = distance
+            tvPrice.text = price
 
             btnSave.setOnClickListener {
                 listener.onClick()
@@ -65,12 +65,12 @@ object DialogManager {
             btnCancel.setOnClickListener {
                 dialog.dismiss()
             }
-
         }
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
     }
 
+    // dialog for changing the price per kilometer of the route on the button
     fun showPriceDialog(context: Context, listener: PriceListener) {
         val builder = AlertDialog.Builder(context)
         val input = EditText(context)
@@ -84,10 +84,9 @@ object DialogManager {
                 val price = input.text.toString()
                 listener.onClick(price)
             }
-            .setNegativeButton(context.getString(R.string.cancel)) { dialog, _ ->
+            .setNegativeButton(context.getString(R.string.cancel_button)) { dialog, _ ->
                 dialog.dismiss()
             }
-
         builder.create().show()
     }
 
