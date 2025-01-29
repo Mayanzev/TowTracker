@@ -299,7 +299,7 @@ class MapFragment : Fragment() {
 
     // retrieves the current elapsed time as a formatted string
     private fun getCurrentTime(): String {
-        return "${getString(R.string.time)} ${TimeUtils.getTime(System.currentTimeMillis() - startTime)}"
+        return "Time: ${TimeUtils.getTime(System.currentTimeMillis() - startTime)}"
     }
 
     // function for setting the price per route
