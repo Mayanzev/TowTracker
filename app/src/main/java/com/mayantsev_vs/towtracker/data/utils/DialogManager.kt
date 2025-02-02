@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.text.InputType
 import android.view.LayoutInflater
 import android.widget.EditText
+import android.widget.LinearLayout
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.data.db.TrackItem
 import com.mayantsev_vs.towtracker.databinding.RouteDialogBinding
@@ -90,6 +91,38 @@ object DialogManager {
         builder.create().show()
     }
 
+    fun showServiceDialog(context: Context, listener: ServiceListener) {
+        val builder = AlertDialog.Builder(context)
+
+        val layout = LinearLayout(context)
+        layout.orientation = LinearLayout.VERTICAL
+
+        val serviceNameInput = EditText(context)
+        serviceNameInput.hint = context.getString(R.string.enter_service_name_hint)
+
+        val servicePriceInput = EditText(context)
+        servicePriceInput.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        servicePriceInput.hint = context.getString(R.string.enter_price_hint)
+
+        layout.addView(serviceNameInput)
+        layout.addView(servicePriceInput)
+
+        builder.setTitle(context.getString(R.string.add_service_dialog_title))
+            .setMessage(context.getString(R.string.add_service_dialog_message))
+            .setView(layout)
+            .setPositiveButton(context.getString(R.string.ok_button)) { _, _ ->
+                val serviceName = serviceNameInput.text.toString()
+                val servicePrice = servicePriceInput.text.toString()
+                listener.onClick(serviceName, servicePrice)
+            }
+            .setNegativeButton(context.getString(R.string.cancel_button)) { dialog, _ ->
+                dialog.dismiss()
+            }
+
+        builder.create().show()
+    }
+
+
 
     interface SimpleListener {
         fun onClick()
@@ -97,5 +130,9 @@ object DialogManager {
 
     interface PriceListener {
         fun onClick(price: String)
+    }
+
+    interface ServiceListener {
+        fun onClick(serviceName: String, servicePrice: String)
     }
 }

@@ -246,8 +246,7 @@ class MapFragment : Fragment() {
             timer?.cancel()
             val track = getTrackItem()
             DialogManager.showRouteDialog(requireContext(),
-                track,
-                object : SimpleListener {
+                track, object : SimpleListener {
                     override fun onClick() {
                         showToast(getString(R.string.track_saved))
                         model.insertTrack(track)
@@ -420,17 +419,18 @@ class MapFragment : Fragment() {
         )
     }
 
+    // Converts a list of GeoPoints to a string in the format "lat1, lon1/lat2, lon2/..."
+    private fun geoPointsToString(list: List<GeoPoint>): String {
+        val stringBuilder = StringBuilder()
+        list.forEach {
+            stringBuilder.append("${it.latitude}, ${it.longitude}/")
+        }
+        return stringBuilder.toString()
+    }
+
     private fun  centerLocation() {
         binding.map.controller.animateTo(myLocationOverlay.myLocation)
         myLocationOverlay.enableFollowLocation()
-    }
-
-    private fun geoPointsToString(list: List<GeoPoint>): String {
-        val sb = StringBuilder()
-        list.forEach {
-            sb.append("${it.latitude}, ${it.longitude}/")
-        }
-        return sb.toString()
     }
 
     private fun checkBackgroundPermission() {
