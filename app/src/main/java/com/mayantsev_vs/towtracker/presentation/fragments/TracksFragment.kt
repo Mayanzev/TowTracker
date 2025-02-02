@@ -32,21 +32,23 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRcView()
+        initRecyclerView()
         getTracks()
     }
 
+    // initializes RecyclerView with a LinearLayoutManager and sets the adapter
+    private fun initRecyclerView() = with(binding) {
+        adapter = TrackAdapter(this@TracksFragment)
+        rcView.layoutManager = LinearLayoutManager(requireContext())
+        rcView.adapter = adapter
+    }
+
+    // observes track data and updates the adapter and empty state visibility
     private fun getTracks() {
         model.tracks.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             binding.tvEmptyTracks.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
-    }
-
-    private fun initRcView() = with(binding) {
-        adapter = TrackAdapter(this@TracksFragment)
-        rcView.layoutManager = LinearLayoutManager(requireContext())
-        rcView.adapter = adapter
     }
 
     override fun onClick(track: TrackItem, type: TrackAdapter.ClickType) {

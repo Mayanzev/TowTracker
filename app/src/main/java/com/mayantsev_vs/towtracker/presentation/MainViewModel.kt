@@ -43,4 +43,8 @@ class MainViewModel(db: MainDb) : ViewModel() {
         dao.insertService(serviceItem)
     }
 
+    fun deleteService(serviceItem: ServiceItem) = viewModelScope.launch {
+        dao.deleteService(serviceItem)
+    }
+
 }

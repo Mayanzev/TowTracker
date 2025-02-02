@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mayantsev_vs.towtracker.databinding.TrackItemBinding
 import com.mayantsev_vs.towtracker.data.db.TrackAdapter.Holder
 
+// adapter for displaying a list of track items with click handling for delete and open actions
 class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Holder>(Comparator()) {
 
     class Holder(view: View, private val listener: Listener) : RecyclerView.ViewHolder(view),
@@ -27,12 +28,10 @@ class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Hold
             trackTemp = track
 
             val date = track.date
-            val speed = "${track.speed} km/h"
             val time = track.time
             val distance = "${track.distance} km"
 
             tvDate.text = date
-            tvSpeed.text = speed
             tvTime.text = time
             tvDistance.text = distance
         }
