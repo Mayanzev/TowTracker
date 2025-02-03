@@ -61,12 +61,25 @@
     <string name="save_button">Сохранить</string>
     <string name="save_track_title">Сохранить этот маршрут?</string>
 
-    <string name="add_service_button">Добавить услугу</string>
-
     <string name="enter_service_name_hint">Введите название услуги</string>
     <string name="add_service_dialog_title">Добавление услуги</string>
     <string name="add_service_dialog_message">Please provide the service details</string>
 
     <string name="service_saved">Услуга сохранена</string>
+
+    <string name="date_format_label">дд/мм/гггг чч:мм</string>
+    <string name="time_format_label">чч:мм:cc</string>
+    <string name="price_format_label">0</string>
+    <string name="distance_format_label">0</string>
+    <string name="service_name_label">Название услуги</string>
+    <string name="city_1_label">Город 1</string>
+    <string name="city_2_label">Город 2</string>
+    <string name="arrow">→</string>
+    <string name="total_price_label">ИТОГ: 0р.</string>
+    <string name="complete_order_button">Завершить заказ</string>
+
+    <string name="empty_message">Список пуст</string>
+    <string name="profile_button">Профиль</string>
+    <string name="settings_button">Настройки</string>
 
 </resources>

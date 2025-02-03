@@ -16,7 +16,8 @@
         android:src="@drawable/ic_loc"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,KeyboardInaccessibleWidget" />
 
     <org.osmdroid.views.MapView
         android:id="@+id/map"

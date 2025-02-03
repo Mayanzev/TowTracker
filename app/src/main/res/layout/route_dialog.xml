@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp">
@@ -77,7 +78,8 @@
                 android:layout_marginEnd="2dp"
                 android:layout_weight="1"
                 android:backgroundTint="#000000"
-                android:text="@string/save_button" />
+                android:text="@string/save_button"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/btnCancel"
@@ -86,7 +88,8 @@
                 android:layout_marginStart="2dp"
                 android:layout_weight="1"
                 android:backgroundTint="#000000"
-                android:text="@string/cancel_button" />
+                android:text="@string/cancel_button"
+                tools:ignore="ButtonStyle" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

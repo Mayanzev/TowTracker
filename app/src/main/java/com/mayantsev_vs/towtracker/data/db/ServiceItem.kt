@@ -11,5 +11,7 @@ data class ServiceItem(
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo (name = "price")
-    val price: Double
+    val price: String,
+    @ColumnInfo (name = "date")
+    val date: String
 )

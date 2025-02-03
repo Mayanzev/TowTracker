@@ -1,5 +1,6 @@
 package com.mayantsev_vs.towtracker.data.db
 
+import android.provider.Settings.Global.getString
 import com.mayantsev_vs.towtracker.R
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mayantsev_vs.towtracker.databinding.TrackItemBinding
 import com.mayantsev_vs.towtracker.data.db.TrackAdapter.Holder
+import java.util.Locale
 
 // adapter for displaying a list of track items with click handling for delete and open actions
 class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Holder>(Comparator()) {
@@ -24,16 +26,11 @@ class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Hold
         }
 
         fun bind(track: TrackItem) = with(binding) {
-
             trackTemp = track
-
-            val date = track.date
-            val time = track.time
-            val distance = "${track.distance} km"
-
-            tvDate.text = date
-            tvTime.text = time
-            tvDistance.text = distance
+            tvDate.text = track.date
+            tvTime.text = track.time
+            tvDistance.text = track.distance
+            tvPrice.text = track.price
         }
 
         override fun onClick(view: View) {

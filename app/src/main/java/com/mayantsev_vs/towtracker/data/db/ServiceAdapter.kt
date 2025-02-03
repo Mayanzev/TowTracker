@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mayantsev_vs.towtracker.data.db.TrackAdapter.ClickType
 import com.mayantsev_vs.towtracker.databinding.ServiceItemBinding
 
 
@@ -26,7 +25,8 @@ class ServiceAdapter(private val listener: Listener) : ListAdapter<ServiceItem, 
         fun bind(service: ServiceItem) = with(binding) {
             serviceTemp = service
             tvServiceName.text = service.name
-            tvPrice.text = service.price.toString()
+            tvPrice.text = service.price
+            tvDate.text = service.date
         }
 
         override fun onClick(v: View?) {

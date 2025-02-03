@@ -12,6 +12,7 @@ import com.mayantsev_vs.towtracker.data.db.ServiceAdapter
 import com.mayantsev_vs.towtracker.data.db.ServiceItem
 import com.mayantsev_vs.towtracker.data.utils.DialogManager.ServiceListener
 import com.mayantsev_vs.towtracker.data.utils.DialogManager.showServiceDialog
+import com.mayantsev_vs.towtracker.data.utils.TimeUtils
 import com.mayantsev_vs.towtracker.data.utils.showToast
 import com.mayantsev_vs.towtracker.databinding.FragmentServicesBinding
 import com.mayantsev_vs.towtracker.presentation.MainApp
@@ -22,7 +23,8 @@ import kotlin.getValue
 class ServicesFragment : Fragment(), ServiceAdapter.Listener {
     private lateinit var binding: FragmentServicesBinding
     private var serviceName: String? = null
-    private var servicePrice: Double? = null
+    private var servicePrice: String? = null
+    private var serviceDate: String? = null
     private lateinit var adapter: ServiceAdapter
     private val model: MainViewModel by activityViewModels {
         MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
@@ -48,7 +50,8 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
         showServiceDialog(requireContext(), object : ServiceListener {
             override fun onClick(serviceNameInput: String, servicePriceInput: String) {
                 serviceName = serviceNameInput
-                servicePrice = servicePriceInput.toDouble()
+                servicePrice = servicePriceInput
+                serviceDate = TimeUtils.getDate()
                 val service = getServiceItem()
                 showToast(getString(R.string.service_saved))
                 model.insertService(service)
@@ -76,7 +79,8 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
         return ServiceItem(
             null,
             serviceName ?: "",
-            servicePrice ?: 0.0
+            servicePrice ?: "",
+            serviceDate ?: ""
         )
     }
 

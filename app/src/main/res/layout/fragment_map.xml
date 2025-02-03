@@ -27,7 +27,8 @@
         android:src="@drawable/ic_loc"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,KeyboardInaccessibleWidget,SpeakableTextPresentCheck" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/ivStartStop"
@@ -39,7 +40,8 @@
         android:src="@drawable/ic_play"
         app:backgroundTint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivCenter" />
+        app:layout_constraintTop_toBottomOf="@+id/ivCenter"
+        tools:ignore="ContentDescription,KeyboardInaccessibleWidget,SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/tvTime"
@@ -113,13 +115,14 @@
         android:id="@+id/btnSetPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:backgroundTint="#FFFFFF"
         android:textColor="#000000"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
