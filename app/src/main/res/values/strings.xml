@@ -35,7 +35,7 @@
     <string name="currency_symbol">р</string>
 
     <string name="time">Время:</string>
-    <string name="average_velocity">Средняя скорость:</string>
+    <string name="average_speed">Средняя скорость:</string>
     <string name="speed">Скорость:</string>
     <string name="distance">Расстояние:</string>
     <string name="price">Цена:</string>
@@ -63,7 +63,7 @@
 
     <string name="enter_service_name_hint">Введите название услуги</string>
     <string name="add_service_dialog_title">Добавление услуги</string>
-    <string name="add_service_dialog_message">Please provide the service details</string>
+    <string name="add_service_dialog_message">Пожалуйста, укажите детали услуги</string>
 
     <string name="service_saved">Услуга сохранена</string>
 

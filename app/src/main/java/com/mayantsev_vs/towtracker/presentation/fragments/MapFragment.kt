@@ -349,8 +349,8 @@ class MapFragment : Fragment() {
     private fun locationUpdates() = with(binding) {
         model.locationUpdates.observe(viewLifecycleOwner) {
             val distance = "${getString(R.string.distance)} ${String.format(Locale.US, "%.1f", it.distance / 1000)} ${getString(R.string.km)}"
-            val speed = "${getString(R.string.speed)} ${String.format(Locale.US, "%.1f", 3.6f * it.velocity)} ${getString(R.string.km_h)}"
-            val averageSpeed = "${getString(R.string.average_velocity)} ${getAverageSpeed(it.distance)} ${getString(R.string.km_h)}"
+            val speed = "${getString(R.string.speed)} ${String.format(Locale.US, "%.1f", 3.6f * it.speed)} ${getString(R.string.km_h)}"
+            val averageSpeed = "${getString(R.string.average_speed)} ${getAverageSpeed(it.distance)} ${getString(R.string.km_h)}"
             val price = "${getString(R.string.price)} ${getPrice(it.distance, LocationService.startPrice)} ${getString(R.string.currency_symbol)}"
 
             tvDistance.text = distance

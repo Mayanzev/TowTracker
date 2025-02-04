@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.activityViewModels
 import androidx.preference.PreferenceManager
+import com.mayantsev_vs.towtracker.data.location.LocationService
 import com.mayantsev_vs.towtracker.presentation.MainApp
 import com.mayantsev_vs.towtracker.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.databinding.FragmentViewTrackBinding
@@ -48,15 +49,15 @@ class ViewTrackFragment : Fragment() {
     private fun getTrack() = with(binding) {
         model.currentTrack.observe(viewLifecycleOwner) {
 
-            val date = it.date
             val time = it.time
-            val speed = "Average speed: ${it.speed} km/h"
-            val distance = "Distance: ${it.distance} km"
+            val averageSpeed = "${getString(R.string.average_speed)} ${it.speed} ${getString(R.string.km_h)}"
+            val distance = "${getString(R.string.distance)} ${it.distance} ${getString(R.string.km)}"
+            val price = "${getString(R.string.price)} ${it.price} ${getString(R.string.currency_symbol)}"
 
-            tvDate.text = date
             tvTime.text = time
-            tvAverageSpeed.text = speed
+            tvAverageSpeed.text = averageSpeed
             tvDistance.text = distance
+            tvPrice.text = price
 
             val polyline = getPolyline(it.geoPoints)
             map.overlays.add(polyline)
