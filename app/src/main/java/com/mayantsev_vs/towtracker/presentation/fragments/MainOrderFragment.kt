@@ -5,10 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mayantsev_vs.towtracker.databinding.FragmentMainOrderBinding
 import com.mayantsev_vs.towtracker.R
+import com.mayantsev_vs.towtracker.data.db.ServiceItem
+import com.mayantsev_vs.towtracker.data.db.TrackItem
+import com.mayantsev_vs.towtracker.presentation.MainApp
+import com.mayantsev_vs.towtracker.presentation.MainViewModel
+import java.math.BigDecimal
+import java.util.Locale
+import kotlin.getValue
 
 
 class MainOrderFragment : Fragment() {
@@ -17,6 +25,9 @@ class MainOrderFragment : Fragment() {
         ServicesFragment.newInstance()
     )
     private lateinit var binding: FragmentMainOrderBinding
+    private val model: MainViewModel by activityViewModels {
+        MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +48,14 @@ class MainOrderFragment : Fragment() {
         TabLayoutMediator(binding.tabLayout, binding.viewPager) {
             tab, pos -> tab.text = tabTitles[pos]
         }.attach()
+
+        model.services.observe(viewLifecycleOwner) { serviceList ->
+            updateTotalPrice(serviceList, model.tracks.value ?: emptyList())
+        }
+
+        model.tracks.observe(viewLifecycleOwner) { trackList ->
+            updateTotalPrice(model.services.value ?: emptyList(), trackList)
+        }
     }
 
     // An adapter for ViewPager2 that is responsible for creating and managing slices
@@ -47,6 +66,15 @@ class MainOrderFragment : Fragment() {
         override fun createFragment(position: Int): Fragment {
             return list[position]
         }
+    }
+
+    // calculates the total price by summing up the prices of services and tracks, then updates the UI
+    private fun updateTotalPrice(serviceList: List<ServiceItem>, trackList: List<TrackItem>) {
+        val totalServicePrice = serviceList.sumOf { it.price.toBigDecimalOrNull() ?: BigDecimal.ZERO }
+        val totalTrackPrice = trackList.sumOf { it.price.toBigDecimalOrNull() ?: BigDecimal.ZERO }
+        val totalPrice = totalServicePrice + totalTrackPrice
+        val formattedPrice = String.format(Locale.US, "%.2f", totalPrice)
+        binding.tvTotalPrice.text = getString(R.string.total_price_label, formattedPrice)
     }
 
 

@@ -12,7 +12,6 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.activityViewModels
 import androidx.preference.PreferenceManager
-import com.mayantsev_vs.towtracker.data.location.LocationService
 import com.mayantsev_vs.towtracker.presentation.MainApp
 import com.mayantsev_vs.towtracker.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.databinding.FragmentViewTrackBinding
@@ -46,6 +45,17 @@ class ViewTrackFragment : Fragment() {
         }
     }
 
+    // configures OSM settings by loading preferences and setting the user agent
+    private fun settingsOsm() {
+        Configuration.getInstance().load(
+            activity as ComponentActivity,
+            activity?.getSharedPreferences("osm_pref", Context.MODE_PRIVATE)
+        )
+        val userAgent = "com.mayantsev_vs.towtracker/1.0"
+        Configuration.getInstance().userAgentValue = userAgent
+    }
+
+    // observes the current track and updates UI elements with time, speed, distance, and price
     private fun getTrack() = with(binding) {
         model.currentTrack.observe(viewLifecycleOwner) {
 
@@ -67,11 +77,29 @@ class ViewTrackFragment : Fragment() {
         }
     }
 
+    // creates a Polyline from a string of geo-coordinates, setting its color and adding points
+    private fun getPolyline(geoPoints: String): Polyline {
+        val polyline = Polyline()
+        polyline.outlinePaint.color = Color.parseColor(
+            PreferenceManager.getDefaultSharedPreferences(requireContext())
+                .getString(KEY_COLOR, "#0077FF")
+        )
+        val list = geoPoints.split("/")
+        list.forEach {
+            if (it.isEmpty()) return@forEach
+            val points = it.split(",")
+            polyline.addPoint(GeoPoint(points[0].toDouble(), points[1].toDouble()))
+        }
+        return polyline
+    }
+
+    // moves the map to the start position with an animation and sets the zoom level to 15
     private fun goToStartPosition(startPosition: GeoPoint) {
-        binding.map.controller.zoomTo(18.0)
+        binding.map.controller.zoomTo(15.0)
         binding.map.controller.animateTo(startPosition)
     }
 
+    // adds start and finish markers to the map based on the provided list of GeoPoints
     private fun setMarkers(list: List<GeoPoint>) = with(binding) {
         val startMarker = Marker(map)
         val finishMarker = Marker(map)
@@ -85,32 +113,9 @@ class ViewTrackFragment : Fragment() {
         map.overlays.add(finishMarker)
     }
 
-    private fun getPolyline(geoPoints: String): Polyline {
-        val polyline = Polyline()
-        polyline.outlinePaint.color = Color.parseColor(
-            PreferenceManager.getDefaultSharedPreferences(requireContext())
-                .getString("color_key", "#0077FF")
-        )
-        val list = geoPoints.split("/")
-        list.forEach {
-            if (it.isEmpty()) return@forEach
-            val points = it.split(",")
-            polyline.addPoint(GeoPoint(points[0].toDouble(), points[1].toDouble()))
-        }
-        return polyline
-    }
-
-    private fun settingsOsm() {
-        Configuration.getInstance().load(
-            activity as ComponentActivity,
-            activity?.getSharedPreferences("osm_pref", Context.MODE_PRIVATE)
-        )
-        val userAgent = "com.mayantsev_vs.towtracker/1.0"
-        Configuration.getInstance().userAgentValue = userAgent
-    }
-
     companion object {
         @JvmStatic
         fun newInstance() = ViewTrackFragment()
+        const val KEY_COLOR = "color_key"
     }
 }

@@ -199,6 +199,23 @@ class MapFragment : Fragment() {
         }
     }
 
+    // checks if the app has background location permission and prompts the user if not
+    private fun checkBackgroundPermission() {
+        if (!checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+            DialogManager.showBackgroundPermissionDialog(
+                activity as AppCompatActivity,
+                object : SimpleListener {
+                    override fun onClick() {
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", requireActivity().packageName, null)
+                        }
+                        startActivity(intent)
+                    }
+                }
+            )
+        }
+    }
+
     // function that is triggered after all permissions have been granted, which asks for permission to use the location
     private fun checkLocationEnabled() {
         val lManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -428,25 +445,10 @@ class MapFragment : Fragment() {
         return stringBuilder.toString()
     }
 
+    // centers the map on the user's current location and enables location follow mode
     private fun  centerLocation() {
         binding.map.controller.animateTo(myLocationOverlay.myLocation)
         myLocationOverlay.enableFollowLocation()
-    }
-
-    private fun checkBackgroundPermission() {
-        if (!checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-            DialogManager.showBackgroundPermissionDialog(
-                activity as AppCompatActivity,
-                object : SimpleListener {
-                    override fun onClick() {
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.fromParts("package", requireActivity().packageName, null)
-                        }
-                        startActivity(intent)
-                    }
-                }
-            )
-        }
     }
 
 
