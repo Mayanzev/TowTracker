@@ -40,15 +40,23 @@ class MainOrderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupViewPager()
+        observeData()
+        onCompleteOrderClick()
+    }
+
+    private fun setupViewPager() {
         val adapter = ViewPagerAdapter(this, fragList)
         binding.viewPager.adapter = adapter
 
         val tabTitles = resources.getStringArray(R.array.fragments_list_titles)
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) {
-            tab, pos -> tab.text = tabTitles[pos]
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, pos ->
+            tab.text = tabTitles[pos]
         }.attach()
+    }
 
+    private fun observeData() {
         model.services.observe(viewLifecycleOwner) { serviceList ->
             updateTotalPrice(serviceList, model.tracks.value ?: emptyList())
         }
@@ -68,7 +76,7 @@ class MainOrderFragment : Fragment() {
         }
     }
 
-    // calculates the total price by summing up the prices of services and tracks, then updates the UI
+    // Calculates the total price by summing up the prices of services and tracks, then updates the UI
     private fun updateTotalPrice(serviceList: List<ServiceItem>, trackList: List<TrackItem>) {
         val totalServicePrice = serviceList.sumOf { it.price.toBigDecimalOrNull() ?: BigDecimal.ZERO }
         val totalTrackPrice = trackList.sumOf { it.price.toBigDecimalOrNull() ?: BigDecimal.ZERO }
@@ -77,6 +85,14 @@ class MainOrderFragment : Fragment() {
         binding.tvTotalPrice.text = getString(R.string.total_price_label, formattedPrice)
     }
 
+    private fun onCompleteOrderClick() {
+        binding.btnCompleteOrder.setOnClickListener {
+            val newOrderFragment = NewOrderFragment.newInstance()
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.fragments_container, newOrderFragment)
+                ?.commit()
+        }
+    }
 
     companion object {
         @JvmStatic
