@@ -1,5 +1,6 @@
 package com.mayantsev_vs.towtracker.presentation.fragments
 
+import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import com.mayantsev_vs.towtracker.databinding.FragmentMainOrderBinding
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.data.db.ServiceItem
 import com.mayantsev_vs.towtracker.data.db.TrackItem
+import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
 import com.mayantsev_vs.towtracker.presentation.MainApp
 import com.mayantsev_vs.towtracker.presentation.MainViewModel
 import java.math.BigDecimal
@@ -26,7 +28,7 @@ class MainOrderFragment : Fragment() {
     )
     private lateinit var binding: FragmentMainOrderBinding
     private val model: MainViewModel by activityViewModels {
-        MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
+        ViewModelFactory((requireContext().applicationContext as MainApp).database, PreferencesHelper(requireContext()))
     }
 
     override fun onCreateView(
@@ -87,6 +89,8 @@ class MainOrderFragment : Fragment() {
 
     private fun onCompleteOrderClick() {
         binding.btnCompleteOrder.setOnClickListener {
+            model.finishOrder()
+            model.deleteAllData()
             val newOrderFragment = NewOrderFragment.newInstance()
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.fragments_container, newOrderFragment)

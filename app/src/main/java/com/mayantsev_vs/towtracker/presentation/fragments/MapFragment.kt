@@ -1,5 +1,6 @@
 package com.mayantsev_vs.towtracker.presentation.fragments
 
+import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.Manifest
 import android.content.BroadcastReceiver
 import com.mayantsev_vs.towtracker.R
@@ -35,6 +36,7 @@ import com.mayantsev_vs.towtracker.data.utils.DialogManager.PriceListener
 import com.mayantsev_vs.towtracker.data.utils.DialogManager.SimpleListener
 import com.mayantsev_vs.towtracker.data.utils.DialogManager.showPriceDialog
 import com.mayantsev_vs.towtracker.data.utils.TimeUtils
+import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.checkPermission
 import com.mayantsev_vs.towtracker.data.utils.showToast
 import org.osmdroid.config.Configuration
@@ -58,7 +60,7 @@ class MapFragment : Fragment() {
     private var locationModel: LocationModel? = null
     private lateinit var myLocationOverlay: MyLocationNewOverlay
     private val model: MainViewModel by activityViewModels {
-        MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
+        ViewModelFactory((requireContext().applicationContext as MainApp).database, PreferencesHelper(requireContext()))
     }
 
     override fun onCreateView(

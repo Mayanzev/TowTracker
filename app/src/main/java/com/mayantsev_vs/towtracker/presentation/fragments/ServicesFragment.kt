@@ -1,5 +1,6 @@
 package com.mayantsev_vs.towtracker.presentation.fragments
 
+import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.mayantsev_vs.towtracker.data.db.ServiceItem
 import com.mayantsev_vs.towtracker.data.utils.DialogManager.ServiceListener
 import com.mayantsev_vs.towtracker.data.utils.DialogManager.showServiceDialog
 import com.mayantsev_vs.towtracker.data.utils.TimeUtils
+import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.showToast
 import com.mayantsev_vs.towtracker.databinding.FragmentServicesBinding
 import com.mayantsev_vs.towtracker.presentation.MainApp
@@ -27,7 +29,7 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
     private var serviceDate: String? = null
     private lateinit var adapter: ServiceAdapter
     private val model: MainViewModel by activityViewModels {
-        MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
+        ViewModelFactory((requireContext().applicationContext as MainApp).database, PreferencesHelper(requireContext()))
     }
 
     override fun onCreateView(

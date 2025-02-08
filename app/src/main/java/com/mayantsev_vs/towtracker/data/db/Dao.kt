@@ -14,6 +14,8 @@ interface Dao {
     fun getAllTracks(): Flow<List<TrackItem>>
     @Delete
     suspend fun deleteTrack(trackItem: TrackItem)
+    @Query("DELETE FROM TRACK")
+    suspend fun deleteAllTracks()
 
     @Insert
     suspend fun insertService(service: ServiceItem)
@@ -21,4 +23,6 @@ interface Dao {
     fun getAllServices(): Flow<List<ServiceItem>>
     @Delete
     suspend fun deleteService(serviceItem: ServiceItem)
+    @Query("DELETE FROM SERVICE")
+    suspend fun deleteAllServices()
 }

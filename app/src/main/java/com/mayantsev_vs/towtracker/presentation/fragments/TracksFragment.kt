@@ -1,5 +1,6 @@
 package com.mayantsev_vs.towtracker.presentation.fragments
 
+import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import com.mayantsev_vs.towtracker.presentation.MainApp
 import com.mayantsev_vs.towtracker.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.data.db.TrackAdapter
 import com.mayantsev_vs.towtracker.data.db.TrackItem
+import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.openFragment
 import com.mayantsev_vs.towtracker.databinding.FragmentTracksBinding
 import kotlin.getValue
@@ -19,7 +21,7 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
     private lateinit var binding: FragmentTracksBinding
     private lateinit var adapter: TrackAdapter
     private val model: MainViewModel by activityViewModels {
-        MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
+        ViewModelFactory((requireContext().applicationContext as MainApp).database, PreferencesHelper(requireContext()))
     }
 
     override fun onCreateView(

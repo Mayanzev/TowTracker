@@ -1,5 +1,6 @@
 package com.mayantsev_vs.towtracker.presentation.fragments
 
+import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.activityViewModels
 import androidx.preference.PreferenceManager
+import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
 import com.mayantsev_vs.towtracker.presentation.MainApp
 import com.mayantsev_vs.towtracker.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.databinding.FragmentViewTrackBinding
@@ -25,7 +27,7 @@ class ViewTrackFragment : Fragment() {
     private var startPoint: GeoPoint? = null
     private lateinit var binding: FragmentViewTrackBinding
     private val model: MainViewModel by activityViewModels {
-        MainViewModel.ViewModelFactory((requireContext().applicationContext as MainApp).database)
+        ViewModelFactory((requireContext().applicationContext as MainApp).database, PreferencesHelper(requireContext()))
     }
 
     override fun onCreateView(
