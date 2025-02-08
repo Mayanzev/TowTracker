@@ -13,7 +13,9 @@ import com.mayantsev_vs.towtracker.databinding.FragmentMainOrderBinding
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.data.db.ServiceItem
 import com.mayantsev_vs.towtracker.data.db.TrackItem
+import com.mayantsev_vs.towtracker.data.location.LocationService
 import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
+import com.mayantsev_vs.towtracker.data.utils.openFragment
 import com.mayantsev_vs.towtracker.presentation.MainApp
 import com.mayantsev_vs.towtracker.presentation.MainViewModel
 import java.math.BigDecimal
@@ -89,12 +91,14 @@ class MainOrderFragment : Fragment() {
 
     private fun onCompleteOrderClick() {
         binding.btnCompleteOrder.setOnClickListener {
-            model.finishOrder()
-            model.deleteAllData()
-            val newOrderFragment = NewOrderFragment.newInstance()
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.fragments_container, newOrderFragment)
-                ?.commit()
+            if (LocationService.isRunning) {
+                model.updateFinishOrder(true)
+                openFragment(MapFragment.newInstance())
+            } else {
+                model.emptyOrder()
+                model.deleteAllData()
+                openFragment(NewOrderFragment.newInstance())
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentNewOrderBinding
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
+import com.mayantsev_vs.towtracker.data.utils.openFragment
 import com.mayantsev_vs.towtracker.presentation.MainApp
 import com.mayantsev_vs.towtracker.presentation.MainViewModel
 import kotlin.getValue
@@ -39,11 +40,8 @@ class NewOrderFragment : Fragment() {
 
     private fun onNewOrderClick() {
         binding.btnNewOrder.setOnClickListener {
-            model.startNewOrder()
-            val mainOrderFragment = MainOrderFragment.newInstance()
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.fragments_container, mainOrderFragment)
-                ?.commit()
+            model.activeOrder()
+            openFragment(MainOrderFragment.newInstance())
         }
     }
 

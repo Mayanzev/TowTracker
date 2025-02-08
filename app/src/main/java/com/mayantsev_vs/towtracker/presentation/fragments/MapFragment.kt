@@ -81,6 +81,7 @@ class MapFragment : Fragment() {
         registerLocationReceiver()
         locationUpdates()
         loadCurrentPrice()
+        observeOrderFinish()
     }
 
     override fun onResume() {
@@ -258,20 +259,29 @@ class MapFragment : Fragment() {
     // starts or stops the location tracking service and handles related UI updates.
     private fun startStopService() {
         if (!LocationService.isRunning) {
-            startLocationService()
-        } else {
-            activity?.stopService(Intent(activity, LocationService::class.java))
-            binding.ivStartStop.setImageResource(R.drawable.ic_play)
-            timer?.cancel()
-            val track = getTrackItem()
-            DialogManager.showRouteDialog(requireContext(),
-                track, object : SimpleListener {
-                    override fun onClick() {
-                        showToast(getString(R.string.track_saved))
-                        model.insertTrack(track)
-                    }
-                })
+            startService()
+        } else stopService()
+    }
+
+    private fun startService() {
+        startLocationService()
+        if (model.isOrderStarted.value == false) {
+            model.activeOrder()
         }
+    }
+
+    private fun stopService() {
+        activity?.stopService(Intent(activity, LocationService::class.java))
+        binding.ivStartStop.setImageResource(R.drawable.ic_play)
+        timer?.cancel()
+        val track = getTrackItem()
+        DialogManager.showRouteDialog(requireContext(),
+            track, object : SimpleListener {
+                override fun onClick() {
+                    showToast(getString(R.string.track_saved))
+                    model.insertTrack(track)
+                }
+            })
     }
 
     // starts the location tracking service in foreground mode and initializes the timer
@@ -431,7 +441,7 @@ class MapFragment : Fragment() {
             null,
             getCurrentTime(),
             TimeUtils.getDate(),
-            String.format(Locale.US, "%.1f", locationModel?.distance?.div(1000) ?: 0),
+            String.format(Locale.US, "%.1f", (locationModel?.distance?.div(1000.0) ?: 0.0)),
             getAverageSpeed(locationModel?.distance ?: 0.0f),
             geoPointsToString(locationModel?.geoPointsList ?: listOf()),
             getPrice(locationModel?.distance ?: 0.0f, LocationService.startPrice)
@@ -451,6 +461,15 @@ class MapFragment : Fragment() {
     private fun  centerLocation() {
         binding.map.controller.animateTo(myLocationOverlay.myLocation)
         myLocationOverlay.enableFollowLocation()
+    }
+
+    private fun observeOrderFinish() {
+        model.isOrderFinished.observe(viewLifecycleOwner) { isOrderFinished ->
+            if (isOrderFinished) {
+                stopService()
+                model.updateFinishOrder(false)
+            }
+        }
     }
 
 

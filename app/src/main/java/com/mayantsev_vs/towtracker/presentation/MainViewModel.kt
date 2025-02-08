@@ -20,6 +20,7 @@ class MainViewModel(db: MainDb, private val preferencesHelper: PreferencesHelper
     val tracks = dao.getAllTracks().asLiveData()
     val services = dao.getAllServices().asLiveData()
     val isOrderStarted = MutableLiveData<Boolean>()
+    val isOrderFinished = MutableLiveData<Boolean>()
 
     fun insertTrack(trackItem: TrackItem) = viewModelScope.launch {
         dao.insertTrack(trackItem)
@@ -55,13 +56,17 @@ class MainViewModel(db: MainDb, private val preferencesHelper: PreferencesHelper
         preferencesHelper.isOrderStarted = isStarted
     }
 
-    fun startNewOrder() {
+    fun activeOrder() {
         isOrderStarted.value = true
         saveOrderState(true)
     }
 
-    fun finishOrder() {
+    fun emptyOrder() {
         isOrderStarted.value = false
         saveOrderState(false)
+    }
+
+    fun updateFinishOrder(value: Boolean) {
+        isOrderFinished.value = value
     }
 }
