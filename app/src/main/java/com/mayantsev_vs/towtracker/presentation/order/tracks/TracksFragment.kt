@@ -1,6 +1,5 @@
-package com.mayantsev_vs.towtracker.presentation.fragments
+package com.mayantsev_vs.towtracker.presentation.order.tracks
 
-import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mayantsev_vs.towtracker.presentation.MainApp
-import com.mayantsev_vs.towtracker.presentation.MainViewModel
-import com.mayantsev_vs.towtracker.data.db.TrackAdapter
 import com.mayantsev_vs.towtracker.data.db.TrackItem
-import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
+import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.openFragment
 import com.mayantsev_vs.towtracker.databinding.FragmentTracksBinding
 import kotlin.getValue
@@ -20,9 +16,10 @@ import kotlin.getValue
 class TracksFragment : Fragment(), TrackAdapter.Listener {
     private lateinit var binding: FragmentTracksBinding
     private lateinit var adapter: TrackAdapter
-    private val model: MainViewModel by activityViewModels {
-        ViewModelFactory((requireContext().applicationContext as MainApp).database, PreferencesHelper(requireContext()))
+    private val tracksViewModel: TrackViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +44,7 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
 
     // observes track data and updates the adapter and empty state visibility
     private fun getTracks() {
-        model.tracks.observe(viewLifecycleOwner) {
+        tracksViewModel.tracks.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             binding.tvEmptyTracks.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
@@ -55,10 +52,10 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
 
     override fun onClick(track: TrackItem, type: TrackAdapter.ClickType) {
         when (type) {
-            TrackAdapter.ClickType.DELETE -> model.deleteTrack(track)
+            TrackAdapter.ClickType.DELETE -> tracksViewModel.deleteTrack(track)
             TrackAdapter.ClickType.OPEN -> {
-                model.currentTrack.value = track
-                openFragment(ViewTrackFragment.newInstance())
+                tracksViewModel.currentTrack.value = track
+                openFragment(ViewTrackFragment.Companion.newInstance())
             }
         }
     }

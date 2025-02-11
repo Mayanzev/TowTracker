@@ -1,6 +1,5 @@
-package com.mayantsev_vs.towtracker.presentation.fragments
+package com.mayantsev_vs.towtracker.presentation.order
 
-import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,19 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentNewOrderBinding
-import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
+import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.openFragment
-import com.mayantsev_vs.towtracker.presentation.MainApp
-import com.mayantsev_vs.towtracker.presentation.MainViewModel
 import kotlin.getValue
 
 
 class NewOrderFragment : Fragment() {
 
     private lateinit var binding: FragmentNewOrderBinding
-    private val model: MainViewModel by activityViewModels {
-        ViewModelFactory((requireContext().applicationContext as MainApp).database, PreferencesHelper(requireContext()))
+    private val orderViewModel: OrderViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
     }
 
     override fun onCreateView(
@@ -40,8 +36,8 @@ class NewOrderFragment : Fragment() {
 
     private fun onNewOrderClick() {
         binding.btnNewOrder.setOnClickListener {
-            model.activeOrder()
-            openFragment(MainOrderFragment.newInstance())
+            orderViewModel.activeOrder()
+            openFragment(MainOrderFragment.Companion.newInstance())
         }
     }
 

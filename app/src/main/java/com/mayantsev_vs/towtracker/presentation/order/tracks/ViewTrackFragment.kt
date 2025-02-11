@@ -1,21 +1,18 @@
-package com.mayantsev_vs.towtracker.presentation.fragments
+package com.mayantsev_vs.towtracker.presentation.order.tracks
 
-import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import com.mayantsev_vs.towtracker.R
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.preference.PreferenceManager
-import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
-import com.mayantsev_vs.towtracker.presentation.MainApp
-import com.mayantsev_vs.towtracker.presentation.MainViewModel
+import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.databinding.FragmentViewTrackBinding
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
@@ -26,9 +23,10 @@ import kotlin.getValue
 class ViewTrackFragment : Fragment() {
     private var startPoint: GeoPoint? = null
     private lateinit var binding: FragmentViewTrackBinding
-    private val model: MainViewModel by activityViewModels {
-        ViewModelFactory((requireContext().applicationContext as MainApp).database, PreferencesHelper(requireContext()))
+    private val tracksViewModel: TrackViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +57,7 @@ class ViewTrackFragment : Fragment() {
 
     // observes the current track and updates UI elements with time, speed, distance, and price
     private fun getTrack() = with(binding) {
-        model.currentTrack.observe(viewLifecycleOwner) {
+        tracksViewModel.currentTrack.observe(viewLifecycleOwner) {
 
             val time = it.time
             val averageSpeed = "${getString(R.string.average_speed)} ${it.speed} ${getString(R.string.km_h)}"

@@ -1,6 +1,5 @@
 package com.mayantsev_vs.towtracker.presentation
 
-import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
@@ -9,24 +8,25 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
+import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.databinding.ActivityMainBinding
-import com.mayantsev_vs.towtracker.presentation.fragments.MapFragment
-import com.mayantsev_vs.towtracker.presentation.fragments.MainOrderFragment
+import com.mayantsev_vs.towtracker.presentation.map.MapFragment
+import com.mayantsev_vs.towtracker.presentation.order.MainOrderFragment
 import com.mayantsev_vs.towtracker.data.utils.openFragment
-import com.mayantsev_vs.towtracker.presentation.fragments.MainSettingsFragment
+import com.mayantsev_vs.towtracker.presentation.settings.MainSettingsFragment
 import com.mayantsev_vs.towtracker.data.utils.checkPermission
 import com.mayantsev_vs.towtracker.data.utils.showToast
-import com.mayantsev_vs.towtracker.presentation.fragments.NewOrderFragment
+import com.mayantsev_vs.towtracker.presentation.order.NewOrderFragment
+import com.mayantsev_vs.towtracker.presentation.order.OrderViewModel
 import kotlin.getValue
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val requestCodePostNotifications  = 1
-    private val model: MainViewModel by viewModels {
-        ViewModelFactory((applicationContext as MainApp).database, PreferencesHelper(this))
+    private val requestCodePostNotifications = 1
+    private val orderViewModel: OrderViewModel by viewModels {
+        ViewModelFactory(applicationContext)
     }
-    private lateinit var preferencesHelper: PreferencesHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         onBottomNavClick()
 
-        preferencesHelper = PreferencesHelper(this)
-
-        model.isOrderStarted.observe(this, Observer { isOrderStarted ->
+        orderViewModel.isOrderStarted.observe(this, Observer { isOrderStarted ->
             if (isOrderStarted) {
                 openFragment(MainOrderFragment.newInstance())
             } else {
@@ -76,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.id_order -> {
-                    model.isOrderStarted.value?.let { isOrderStarted ->
+                    orderViewModel.isOrderStarted.value?.let { isOrderStarted ->
                         if (isOrderStarted) {
                             openFragment(MainOrderFragment.newInstance())
                         } else {
@@ -84,10 +82,18 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
+
                 R.id.id_map -> openFragment(MapFragment.newInstance())
                 R.id.id_main_settings -> openFragment(MainSettingsFragment())
             }
             true
+        }
+    }
+
+    fun changeBottomNavigation(currentScreen: CurrentScreen) {
+        binding.bottomNavigation.selectedItemId = when (currentScreen) {
+            CurrentScreen.MAP -> R.id.id_map
+            CurrentScreen.ORDER -> R.id.id_order
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.data.db
+package com.mayantsev_vs.towtracker.presentation.order.services
 
 import com.mayantsev_vs.towtracker.R
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mayantsev_vs.towtracker.data.db.ServiceItem
 import com.mayantsev_vs.towtracker.databinding.ServiceItemBinding
 
 

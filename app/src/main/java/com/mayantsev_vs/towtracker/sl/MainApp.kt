@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.presentation
+package com.mayantsev_vs.towtracker.sl
 
 import android.app.Application
 import com.mayantsev_vs.towtracker.data.db.MainDb

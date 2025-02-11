@@ -1,6 +1,5 @@
-package com.mayantsev_vs.towtracker.data.db
+package com.mayantsev_vs.towtracker.presentation.order.tracks
 
-import android.provider.Settings.Global.getString
 import com.mayantsev_vs.towtracker.R
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.mayantsev_vs.towtracker.data.db.TrackItem
 import com.mayantsev_vs.towtracker.databinding.TrackItemBinding
-import com.mayantsev_vs.towtracker.data.db.TrackAdapter.Holder
-import java.util.Locale
 
 // adapter for displaying a list of track items with click handling for delete and open actions
-class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Holder>(Comparator()) {
+class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, TrackAdapter.Holder>(Comparator()) {
 
     class Holder(view: View, private val listener: Listener) : RecyclerView.ViewHolder(view),
         View.OnClickListener {

@@ -1,6 +1,5 @@
-package com.mayantsev_vs.towtracker.presentation.fragments
+package com.mayantsev_vs.towtracker.presentation.map
 
-import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.Manifest
 import android.content.BroadcastReceiver
 import com.mayantsev_vs.towtracker.R
@@ -25,8 +24,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
-import com.mayantsev_vs.towtracker.presentation.MainApp
-import com.mayantsev_vs.towtracker.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.databinding.FragmentMapBinding
 import com.mayantsev_vs.towtracker.data.db.TrackItem
 import com.mayantsev_vs.towtracker.data.location.LocationModel
@@ -36,9 +33,13 @@ import com.mayantsev_vs.towtracker.data.utils.DialogManager.PriceListener
 import com.mayantsev_vs.towtracker.data.utils.DialogManager.SimpleListener
 import com.mayantsev_vs.towtracker.data.utils.DialogManager.showPriceDialog
 import com.mayantsev_vs.towtracker.data.utils.TimeUtils
-import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
+import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.checkPermission
 import com.mayantsev_vs.towtracker.data.utils.showToast
+import com.mayantsev_vs.towtracker.presentation.CurrentScreen
+import com.mayantsev_vs.towtracker.presentation.MainActivity
+import com.mayantsev_vs.towtracker.presentation.order.OrderViewModel
+import com.mayantsev_vs.towtracker.presentation.order.tracks.TrackViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
@@ -59,9 +60,16 @@ class MapFragment : Fragment() {
     private var firstStart = true
     private var locationModel: LocationModel? = null
     private lateinit var myLocationOverlay: MyLocationNewOverlay
-    private val model: MainViewModel by activityViewModels {
-        ViewModelFactory((requireContext().applicationContext as MainApp).database, PreferencesHelper(requireContext()))
+    private val mapViewModel: MapViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
     }
+    private val tracksViewModel: TrackViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
+    }
+    private val orderViewModel: OrderViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,6 +90,7 @@ class MapFragment : Fragment() {
         locationUpdates()
         loadCurrentPrice()
         observeOrderFinish()
+        observeOrderState()
     }
 
     override fun onResume() {
@@ -265,8 +274,9 @@ class MapFragment : Fragment() {
 
     private fun startService() {
         startLocationService()
-        if (model.isOrderStarted.value == false) {
-            model.activeOrder()
+        if (orderViewModel.isOrderStarted.value == false) {
+            orderViewModel.activeOrder()
+
         }
     }
 
@@ -279,7 +289,7 @@ class MapFragment : Fragment() {
             track, object : SimpleListener {
                 override fun onClick() {
                     showToast(getString(R.string.track_saved))
-                    model.insertTrack(track)
+                    tracksViewModel.insertTrack(track)
                 }
             })
     }
@@ -312,7 +322,7 @@ class MapFragment : Fragment() {
         timer?.schedule(object : TimerTask() {
             override fun run() {
                 activity?.runOnUiThread {
-                    model.timeData.value = getCurrentTime()
+                    mapViewModel.timeData.value = getCurrentTime()
                 }
             }
         }, 1000, 1000)
@@ -320,7 +330,7 @@ class MapFragment : Fragment() {
 
     // observes time data and updates the UI with the current elapsed time
     private fun updateTime() {
-        model.timeData.observe(viewLifecycleOwner) {
+        mapViewModel.timeData.observe(viewLifecycleOwner) {
             binding.tvTime.text = it
         }
     }
@@ -362,7 +372,7 @@ class MapFragment : Fragment() {
                         LocationModel::class.java
                     )
                 }
-                model.locationUpdates.value = locationModel
+                mapViewModel.locationUpdates.value = locationModel
             }
         }
     }
@@ -376,7 +386,7 @@ class MapFragment : Fragment() {
 
     // observes location updates and refreshes UI elements like distance, speed, polyline
     private fun locationUpdates() = with(binding) {
-        model.locationUpdates.observe(viewLifecycleOwner) {
+        mapViewModel.locationUpdates.observe(viewLifecycleOwner) {
             val distance = "${getString(R.string.distance)} ${String.format(Locale.US, "%.1f", it.distance / 1000)} ${getString(R.string.km)}"
             val speed = "${getString(R.string.speed)} ${String.format(Locale.US, "%.1f", 3.6f * it.speed)} ${getString(R.string.km_h)}"
             val averageSpeed = "${getString(R.string.average_speed)} ${getAverageSpeed(it.distance)} ${getString(R.string.km_h)}"
@@ -464,11 +474,17 @@ class MapFragment : Fragment() {
     }
 
     private fun observeOrderFinish() {
-        model.isOrderFinished.observe(viewLifecycleOwner) { isOrderFinished ->
+        orderViewModel.isOrderFinished.observe(viewLifecycleOwner) { isOrderFinished ->
             if (isOrderFinished) {
                 stopService()
-                model.updateFinishOrder(false)
+                orderViewModel.updateFinishOrder(false)
             }
+        }
+    }
+
+    private fun observeOrderState() {
+        orderViewModel.isOrderFinished.observe(viewLifecycleOwner) {
+            (requireContext() as MainActivity).changeBottomNavigation(CurrentScreen.MAP)
         }
     }
 

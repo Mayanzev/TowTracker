@@ -1,6 +1,5 @@
-package com.mayantsev_vs.towtracker.presentation.fragments
+package com.mayantsev_vs.towtracker.presentation.order.services
 
-import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,16 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.data.db.ServiceAdapter
 import com.mayantsev_vs.towtracker.data.db.ServiceItem
 import com.mayantsev_vs.towtracker.data.utils.DialogManager.ServiceListener
 import com.mayantsev_vs.towtracker.data.utils.DialogManager.showServiceDialog
 import com.mayantsev_vs.towtracker.data.utils.TimeUtils
-import com.mayantsev_vs.towtracker.data.utils.ViewModelFactory
+import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.showToast
 import com.mayantsev_vs.towtracker.databinding.FragmentServicesBinding
-import com.mayantsev_vs.towtracker.presentation.MainApp
-import com.mayantsev_vs.towtracker.presentation.MainViewModel
 import kotlin.getValue
 
 
@@ -28,8 +24,8 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
     private var servicePrice: String? = null
     private var serviceDate: String? = null
     private lateinit var adapter: ServiceAdapter
-    private val model: MainViewModel by activityViewModels {
-        ViewModelFactory((requireContext().applicationContext as MainApp).database, PreferencesHelper(requireContext()))
+    private val servicesViewModel: ServiceViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
     }
 
     override fun onCreateView(
@@ -56,7 +52,7 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
                 serviceDate = TimeUtils.getDate()
                 val service = getServiceItem()
                 showToast(getString(R.string.service_saved))
-                model.insertService(service)
+                servicesViewModel.insertService(service)
             }
         })
     }
@@ -95,14 +91,14 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
 
     // observes track data and updates the adapter and empty state visibility
     private fun getServices() {
-        model.services.observe(viewLifecycleOwner) {
+        servicesViewModel.services.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             binding.tvEmptyServices.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
     override fun onClick(service: ServiceItem) {
-        model.deleteService(service)
+        servicesViewModel.deleteService(service)
     }
 
 

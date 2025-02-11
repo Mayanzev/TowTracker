@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.presentation.fragments
+package com.mayantsev_vs.towtracker.presentation.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
