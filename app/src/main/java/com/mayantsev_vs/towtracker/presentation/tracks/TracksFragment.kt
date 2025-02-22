@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.presentation.order.tracks
+package com.mayantsev_vs.towtracker.presentation.tracks
 
 import android.os.Bundle
 import android.view.LayoutInflater

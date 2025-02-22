@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.presentation.order.services
+package com.mayantsev_vs.towtracker.presentation.services
 
 import com.mayantsev_vs.towtracker.R
 import android.view.LayoutInflater

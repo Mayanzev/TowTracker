@@ -96,4 +96,8 @@ class MainActivity : AppCompatActivity() {
             CurrentScreen.ORDER -> R.id.id_order
         }
     }
+
+    enum class CurrentScreen {
+        MAP, ORDER
+    }
 }

@@ -36,10 +36,10 @@ import com.mayantsev_vs.towtracker.data.utils.TimeUtils
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.checkPermission
 import com.mayantsev_vs.towtracker.data.utils.showToast
-import com.mayantsev_vs.towtracker.presentation.CurrentScreen
 import com.mayantsev_vs.towtracker.presentation.MainActivity
+import com.mayantsev_vs.towtracker.presentation.MainActivity.CurrentScreen
 import com.mayantsev_vs.towtracker.presentation.order.OrderViewModel
-import com.mayantsev_vs.towtracker.presentation.order.tracks.TrackViewModel
+import com.mayantsev_vs.towtracker.presentation.tracks.TrackViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline

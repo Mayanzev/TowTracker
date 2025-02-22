@@ -3,7 +3,6 @@ package com.mayantsev_vs.towtracker.presentation.order
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
-import com.mayantsev_vs.towtracker.presentation.LiveDataWrapper
 
 class OrderViewModel(private val preferencesHelper: PreferencesHelper) : ViewModel() {
 
