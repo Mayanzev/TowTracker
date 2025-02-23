@@ -1,8 +1,5 @@
 package com.mayantsev_vs.towtracker.sl
 
 import android.app.Application
-import com.mayantsev_vs.towtracker.data.db.MainDb
 
-class MainApp : Application() {
-    val database by lazy { MainDb.getDatabase(this) }
-}
+class MainApp : Application()

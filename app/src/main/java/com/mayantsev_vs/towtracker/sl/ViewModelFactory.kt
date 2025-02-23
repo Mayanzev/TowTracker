@@ -3,6 +3,7 @@ package com.mayantsev_vs.towtracker.sl
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mayantsev_vs.towtracker.data.db.MainDb
 import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
 import com.mayantsev_vs.towtracker.presentation.map.MapViewModel
 import com.mayantsev_vs.towtracker.presentation.order.OrderViewModel
@@ -12,8 +13,8 @@ import com.mayantsev_vs.towtracker.presentation.tracks.TrackViewModel
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
 
-    val database = (context as MainApp).database
-    val preferencesHelper = PreferencesHelper(context)
+    private val database by lazy { MainDb.getDatabase(context) }
+    private val preferencesHelper = PreferencesHelper(context)
 
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
