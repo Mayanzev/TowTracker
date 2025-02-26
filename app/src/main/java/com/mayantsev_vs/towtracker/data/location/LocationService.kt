@@ -132,7 +132,6 @@ class LocationService : Service() {
                     currentLocation.speed,
                     distance,
                     geoPointsList
-
                 )
                 sendLocationData(locationModel)
             }

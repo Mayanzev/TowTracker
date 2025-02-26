@@ -2,6 +2,7 @@ package com.mayantsev_vs.towtracker.presentation.map
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mayantsev_vs.towtracker.data.cloud.NominatimService
 import com.mayantsev_vs.towtracker.data.location.LocationModel
 
 class MapViewModel() : ViewModel() {

@@ -23,8 +23,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+import com.mayantsev_vs.towtracker.data.cloud.Address
 import com.mayantsev_vs.towtracker.databinding.FragmentMapBinding
 import com.mayantsev_vs.towtracker.data.db.TrackItem
 import com.mayantsev_vs.towtracker.data.location.LocationModel
@@ -41,6 +43,7 @@ import com.mayantsev_vs.towtracker.presentation.MainActivity
 import com.mayantsev_vs.towtracker.presentation.MainActivity.CurrentScreen
 import com.mayantsev_vs.towtracker.presentation.order.OrderViewModel
 import com.mayantsev_vs.towtracker.presentation.tracks.TrackViewModel
+import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Polyline
@@ -277,7 +280,6 @@ class MapFragment : Fragment() {
         startLocationService()
         if (orderViewModel.isOrderStarted.value == false) {
             orderViewModel.activeOrder()
-
         }
     }
 
@@ -286,11 +288,12 @@ class MapFragment : Fragment() {
         binding.ivStartStop.setImageResource(R.drawable.ic_play)
         timer?.cancel()
         val track = getTrackItem()
+        val geoPointList = locationModel?.geoPointsList ?: arrayListOf()
         DialogManager.showRouteDialog(requireContext(),
             track, object : SimpleListener {
                 override fun onClick() {
                     showToast(getString(R.string.track_saved))
-                    tracksViewModel.insertTrack(track)
+                    tracksViewModel.insertTrack(track, geoPointList)
                 }
             })
     }
@@ -399,6 +402,8 @@ class MapFragment : Fragment() {
             tvPrice.text = price
             locationModel = it
             updatePolyline(it.geoPointsList)
+
+            Log.d("test", "$it")
         }
     }
 
@@ -455,7 +460,8 @@ class MapFragment : Fragment() {
             String.format(Locale.US, "%.1f", (locationModel?.distance?.div(1000.0) ?: 0.0)),
             getAverageSpeed(locationModel?.distance ?: 0.0f),
             geoPointsToString(locationModel?.geoPointsList ?: listOf()),
-            getPrice(locationModel?.distance ?: 0.0f, LocationService.startPrice)
+            getPrice(locationModel?.distance ?: 0.0f, LocationService.startPrice),
+            null
         )
     }
 
@@ -465,7 +471,6 @@ class MapFragment : Fragment() {
         list.forEach {
             stringBuilder.append("${it.latitude}, ${it.longitude}/")
         }
-        Log.d("test", "$stringBuilder")
         return stringBuilder.toString()
     }
 

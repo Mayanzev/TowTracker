@@ -14,10 +14,12 @@ data class TrackItem(
     val date: String,
     @ColumnInfo (name = "distance")
     val distance: String,
-    @ColumnInfo (name = "velocity")
+    @ColumnInfo (name = "speed")
     val speed: String,
     @ColumnInfo (name = "geo_points")
     val geoPoints: String,
     @ColumnInfo (name = "price")
-    val price: String
+    val price: String,
+    @ColumnInfo (name = "city")
+    val city: String? // Добавляем поле для города
 )
