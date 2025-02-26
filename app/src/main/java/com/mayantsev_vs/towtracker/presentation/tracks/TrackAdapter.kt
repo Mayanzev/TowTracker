@@ -29,7 +29,7 @@ class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Trac
             tvTime.text = track.time
             tvDistance.text = track.distance
             tvPrice.text = track.price
-            tvCityFrom.text = track.city ?: "Неизвестно"  // Отображаем город, если есть
+            tvCityFrom.text = track.city
         }
 
         override fun onClick(view: View) {
