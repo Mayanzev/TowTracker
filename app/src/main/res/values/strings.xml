@@ -72,8 +72,7 @@
     <string name="price_format_label">0</string>
     <string name="distance_format_label">0</string>
     <string name="service_name_label">Название услуги</string>
-    <string name="city_1_label">Город 1</string>
-    <string name="city_2_label">Город 2</string>
+    <string name="city_label">Неизвестно</string>
     <string name="arrow">→</string>
     <string name="total_price_label">ИТОГ: %1$s р</string>
     <string name="complete_order_button">Завершить заказ</string>

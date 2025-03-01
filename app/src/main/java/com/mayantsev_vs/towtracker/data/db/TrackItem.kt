@@ -20,6 +20,8 @@ data class TrackItem(
     val geoPoints: String,
     @ColumnInfo (name = "price")
     val price: String,
-    @ColumnInfo (name = "city")
-    val city: String? // Добавляем поле для города
+    @ColumnInfo (name = "firstCity")
+    val firstCity: String?,
+    @ColumnInfo (name = "secondCity")
+    val secondCity: String?
 )

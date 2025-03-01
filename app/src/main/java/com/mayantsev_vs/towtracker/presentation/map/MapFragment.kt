@@ -403,7 +403,6 @@ class MapFragment : Fragment() {
             locationModel = it
             updatePolyline(it.geoPointsList)
 
-            Log.d("test", "$it")
         }
     }
 
@@ -461,6 +460,7 @@ class MapFragment : Fragment() {
             getAverageSpeed(locationModel?.distance ?: 0.0f),
             geoPointsToString(locationModel?.geoPointsList ?: listOf()),
             getPrice(locationModel?.distance ?: 0.0f, LocationService.startPrice),
+            null,
             null
         )
     }

@@ -29,7 +29,8 @@ class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Trac
             tvTime.text = track.time
             tvDistance.text = track.distance
             tvPrice.text = track.price
-            tvCityFrom.text = track.city
+            tvCityFrom.text = track.firstCity
+            tvCityTo.text = track.secondCity
         }
 
         override fun onClick(view: View) {
