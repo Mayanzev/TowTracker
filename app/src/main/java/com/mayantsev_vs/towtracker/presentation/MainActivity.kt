@@ -20,6 +20,7 @@ import com.mayantsev_vs.towtracker.data.utils.openFragment
 import com.mayantsev_vs.towtracker.presentation.settings.MainSettingsFragment
 import com.mayantsev_vs.towtracker.data.utils.checkPermission
 import com.mayantsev_vs.towtracker.data.utils.showToast
+import com.mayantsev_vs.towtracker.login.presentation.LoginFragment
 import com.mayantsev_vs.towtracker.presentation.order.NewOrderFragment
 import com.mayantsev_vs.towtracker.presentation.order.OrderViewModel
 import kotlin.getValue
@@ -52,15 +53,17 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.selectedItemId = R.id.id_order
 
-        onBottomNavClick()
+        openFragment(LoginFragment())
 
-        orderViewModel.isOrderStarted.observe(this, Observer { isOrderStarted ->
-            if (isOrderStarted) {
-                openFragment(MainOrderFragment.newInstance())
-            } else {
-                openFragment(NewOrderFragment.newInstance())
-            }
-        })
+        // onBottomNavClick()
+
+//        orderViewModel.isOrderStarted.observe(this, Observer { isOrderStarted ->
+//            if (isOrderStarted) {
+//                openFragment(MainOrderFragment.newInstance())
+//            } else {
+//                openFragment(NewOrderFragment.newInstance())
+//            }
+//        })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (!checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
