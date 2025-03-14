@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.login.data
+package com.mayantsev_vs.towtracker.login.data.cloud
 
 import retrofit2.http.Body
 import retrofit2.http.POST

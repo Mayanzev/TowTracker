@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.mayantsev_vs.towtracker.data.utils.openFragment
+import com.mayantsev_vs.towtracker.data.utils.openParentFragmentBackstack
 import com.mayantsev_vs.towtracker.databinding.FragmentMainSettingsBinding
 
 class MainSettingsFragment : Fragment() {
@@ -22,10 +22,10 @@ class MainSettingsFragment : Fragment() {
 
     private fun onBottomClick() {
         binding.btnProfile.setOnClickListener {
-            openFragment(ProfileFragment())
+            openParentFragmentBackstack(ProfileFragment())
         }
         binding.btnSettings.setOnClickListener {
-            openFragment(AppearanceSettingsFragment())
+            openParentFragmentBackstack(AppearanceSettingsFragment())
         }
     }
 }

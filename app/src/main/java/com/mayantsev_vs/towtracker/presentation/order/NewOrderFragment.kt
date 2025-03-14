@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentNewOrderBinding
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.openFragment
+import com.mayantsev_vs.towtracker.data.utils.openParentFragment
 import kotlin.getValue
 
 
@@ -37,7 +38,7 @@ class NewOrderFragment : Fragment() {
     private fun onNewOrderClick() {
         binding.btnNewOrder.setOnClickListener {
             orderViewModel.activeOrder()
-            openFragment(MainOrderFragment.Companion.newInstance())
+            openParentFragment(MainOrderFragment.Companion.newInstance())
         }
     }
 

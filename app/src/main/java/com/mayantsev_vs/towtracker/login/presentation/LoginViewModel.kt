@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayantsev_vs.towtracker.login.data.LoginRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
@@ -14,15 +15,20 @@ class LoginViewModel(
     private val _stateLiveData: MutableLiveData<UiState> = MutableLiveData()
     val stateLiveData: LiveData<UiState> = _stateLiveData
 
+    private val _navigationLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    val navigationLiveData: LiveData<Boolean> = _navigationLiveData
+
     fun register(email: String, username: String, password: String, repeatedPassword: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.register(email, username, password)
+            _navigationLiveData.postValue(true)
         }
     }
 
     fun login(email: String, password: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.login(email, password)
+            _navigationLiveData.postValue(true)
         }
     }
 

@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.mayantsev_vs.towtracker.data.utils.openMainFragment
 import com.mayantsev_vs.towtracker.databinding.LoginScreenBinding
+import com.mayantsev_vs.towtracker.main.presentation.MainFragment
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import kotlin.getValue
 
@@ -64,6 +66,11 @@ class LoginFragment : Fragment() {
             )
         }
 
+        loginViewModel.navigationLiveData.observe(viewLifecycleOwner) {
+            if (it) {
+                openMainFragment(MainFragment())
+            }
+        }
     }
 
 }

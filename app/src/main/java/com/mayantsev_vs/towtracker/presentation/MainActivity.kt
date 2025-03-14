@@ -28,9 +28,6 @@ import kotlin.getValue
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val requestCodePostNotifications = 1
-    private val orderViewModel: OrderViewModel by viewModels {
-        ViewModelFactory(applicationContext)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,19 +48,7 @@ class MainActivity : AppCompatActivity() {
             WindowInsetsCompat.CONSUMED
         }
 
-        binding.bottomNavigation.selectedItemId = R.id.id_order
-
         openFragment(LoginFragment())
-
-        // onBottomNavClick()
-
-//        orderViewModel.isOrderStarted.observe(this, Observer { isOrderStarted ->
-//            if (isOrderStarted) {
-//                openFragment(MainOrderFragment.newInstance())
-//            } else {
-//                openFragment(NewOrderFragment.newInstance())
-//            }
-//        })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (!checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
@@ -87,37 +72,5 @@ class MainActivity : AppCompatActivity() {
                 showToast(getString(R.string.notification_permission_denied))
             }
         }
-    }
-
-    // function for handling a click
-    private fun onBottomNavClick() {
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.id_order -> {
-                    orderViewModel.isOrderStarted.value?.let { isOrderStarted ->
-                        if (isOrderStarted) {
-                            openFragment(MainOrderFragment.newInstance())
-                        } else {
-                            openFragment(NewOrderFragment.newInstance())
-                        }
-                    }
-                }
-
-                R.id.id_map -> openFragment(MapFragment.newInstance())
-                R.id.id_main_settings -> openFragment(MainSettingsFragment())
-            }
-            true
-        }
-    }
-
-    fun changeBottomNavigation(currentScreen: CurrentScreen) {
-        binding.bottomNavigation.selectedItemId = when (currentScreen) {
-            CurrentScreen.MAP -> R.id.id_map
-            CurrentScreen.ORDER -> R.id.id_order
-        }
-    }
-
-    enum class CurrentScreen {
-        MAP, ORDER
     }
 }

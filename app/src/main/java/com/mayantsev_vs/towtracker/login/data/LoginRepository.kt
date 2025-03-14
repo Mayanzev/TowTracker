@@ -1,6 +1,9 @@
 package com.mayantsev_vs.towtracker.login.data
 
 import android.util.Log
+import com.mayantsev_vs.towtracker.login.data.cloud.LoginBody
+import com.mayantsev_vs.towtracker.login.data.cloud.LoginService
+import com.mayantsev_vs.towtracker.login.data.cloud.RegistrationBody
 
 class LoginRepository (
     private val loginService: LoginService

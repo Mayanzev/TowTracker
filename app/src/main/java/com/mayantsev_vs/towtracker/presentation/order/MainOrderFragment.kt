@@ -8,26 +8,27 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
-import com.mayantsev_vs.towtracker.databinding.FragmentMainOrderBinding
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.data.db.ServiceItem
 import com.mayantsev_vs.towtracker.data.db.TrackItem
 import com.mayantsev_vs.towtracker.data.location.LocationService
-import com.mayantsev_vs.towtracker.sl.ViewModelFactory
-import com.mayantsev_vs.towtracker.data.utils.openFragment
-import com.mayantsev_vs.towtracker.presentation.MainActivity
-import com.mayantsev_vs.towtracker.presentation.MainActivity.CurrentScreen
+import com.mayantsev_vs.towtracker.data.utils.openParentFragment
+import com.mayantsev_vs.towtracker.data.utils.openParentFragmentBackstack
+import com.mayantsev_vs.towtracker.databinding.FragmentMainOrderBinding
+import com.mayantsev_vs.towtracker.main.presentation.MainFragment.CurrentScreen
+import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.presentation.map.MapFragment
 import com.mayantsev_vs.towtracker.presentation.services.ServiceViewModel
 import com.mayantsev_vs.towtracker.presentation.services.ServicesFragment
 import com.mayantsev_vs.towtracker.presentation.tracks.TrackViewModel
 import com.mayantsev_vs.towtracker.presentation.tracks.TracksFragment
+import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import java.math.BigDecimal
 import java.util.Locale
 import kotlin.getValue
 
 
-class MainOrderFragment : Fragment() {
+class MainOrderFragment : Fragment(), FragmentNavigationListener {
     private val fragList = listOf(
         TracksFragment.Companion.newInstance(),
         ServicesFragment.Companion.newInstance()
@@ -40,6 +41,9 @@ class MainOrderFragment : Fragment() {
         ViewModelFactory(requireContext().applicationContext)
     }
     private val orderViewModel: OrderViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
+    }
+    private val mainViewModel: MainViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
 
@@ -104,22 +108,25 @@ class MainOrderFragment : Fragment() {
         binding.btnCompleteOrder.setOnClickListener {
             if (LocationService.isRunning) {
                 orderViewModel.updateFinishOrder(true)
-                openFragment(MapFragment.Companion.newInstance())
+                openParentFragment(MapFragment.Companion.newInstance())
             } else {
                 orderViewModel.emptyOrder()
                 servicesViewModel.deleteAllServices()
                 tracksViewModel.deleteAllTracks()
-                openFragment(NewOrderFragment.Companion.newInstance())
+                openParentFragment(NewOrderFragment.Companion.newInstance())
             }
         }
     }
 
     private fun observeOrderState() {
         orderViewModel.isOrderStarted.observe(viewLifecycleOwner) {
-            (requireContext() as MainActivity).changeBottomNavigation(CurrentScreen.ORDER)
+            mainViewModel.changeBottomNavigation(CurrentScreen.ORDER)
         }
     }
 
+    override fun openNewFragment(f: Fragment) {
+        openParentFragmentBackstack(f)
+    }
 
     companion object {
         @JvmStatic

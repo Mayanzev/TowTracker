@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mayantsev_vs.towtracker.data.db.TrackItem
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.openFragment
+import com.mayantsev_vs.towtracker.data.utils.openParentFragment
 import com.mayantsev_vs.towtracker.databinding.FragmentTracksBinding
+import com.mayantsev_vs.towtracker.presentation.order.FragmentNavigationListener
 import kotlin.getValue
 
 class TracksFragment : Fragment(), TrackAdapter.Listener {
@@ -55,7 +58,7 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
             TrackAdapter.ClickType.DELETE -> tracksViewModel.deleteTrack(track)
             TrackAdapter.ClickType.OPEN -> {
                 tracksViewModel.currentTrack.value = track
-                openFragment(ViewTrackFragment.Companion.newInstance())
+                (parentFragment as FragmentNavigationListener).openNewFragment(ViewTrackFragment())
             }
         }
     }

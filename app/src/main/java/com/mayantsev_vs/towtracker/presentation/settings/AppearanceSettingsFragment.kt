@@ -2,14 +2,29 @@ package com.mayantsev_vs.towtracker.presentation.settings
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.mayantsev_vs.towtracker.R
+import com.mayantsev_vs.towtracker.data.utils.openParentFragment
 
 
 class AppearanceSettingsFragment : PreferenceFragmentCompat() {
     private lateinit var timePreference: Preference
     private lateinit var colorPreference: Preference
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        )
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.appearance_settings, rootKey)
@@ -23,6 +38,7 @@ class AppearanceSettingsFragment : PreferenceFragmentCompat() {
         timePreference.onPreferenceChangeListener = changeListener
         colorPreference.onPreferenceChangeListener = changeListener
         initPrefs()
+
     }
 
     // function for displaying color and time changes in the settings

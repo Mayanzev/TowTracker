@@ -1,6 +1,7 @@
 package com.mayantsev_vs.towtracker.data.utils
 
 import android.content.pm.PackageManager
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -10,6 +11,25 @@ import com.mayantsev_vs.towtracker.R
 
 // function for easy opening of a fragment
 fun Fragment.openFragment(f: Fragment) {
+    childFragmentManager
+        .beginTransaction()
+        .replace(R.id.bottom_container, f).commit()
+}
+
+fun Fragment.openParentFragment(f: Fragment) {
+    parentFragmentManager
+        .beginTransaction()
+        .replace(R.id.bottom_container, f).commit()
+}
+
+fun Fragment.openParentFragmentBackstack(f: Fragment) {
+    parentFragmentManager
+        .beginTransaction()
+        .replace(R.id.bottom_container, f).addToBackStack(null).commit()
+}
+
+
+fun Fragment.openMainFragment(f: Fragment) {
     (activity as AppCompatActivity).supportFragmentManager
         .beginTransaction()
         .replace(R.id.fragments_container, f).commit()

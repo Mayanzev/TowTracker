@@ -39,8 +39,9 @@ import com.mayantsev_vs.towtracker.data.utils.TimeUtils
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.data.utils.checkPermission
 import com.mayantsev_vs.towtracker.data.utils.showToast
+import com.mayantsev_vs.towtracker.main.presentation.MainFragment.CurrentScreen
+import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.presentation.MainActivity
-import com.mayantsev_vs.towtracker.presentation.MainActivity.CurrentScreen
 import com.mayantsev_vs.towtracker.presentation.order.OrderViewModel
 import com.mayantsev_vs.towtracker.presentation.tracks.TrackViewModel
 import kotlinx.coroutines.launch
@@ -71,6 +72,9 @@ class MapFragment : Fragment() {
         ViewModelFactory(requireContext().applicationContext)
     }
     private val orderViewModel: OrderViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
+    }
+    private val mainViewModel: MainViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
 
@@ -491,7 +495,7 @@ class MapFragment : Fragment() {
 
     private fun observeOrderState() {
         orderViewModel.isOrderFinished.observe(viewLifecycleOwner) {
-            (requireContext() as MainActivity).changeBottomNavigation(CurrentScreen.MAP)
+            mainViewModel.changeBottomNavigation(CurrentScreen.MAP)
         }
     }
 
