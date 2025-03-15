@@ -3,18 +3,16 @@ package com.mayantsev_vs.towtracker.sl
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.mayantsev_vs.towtracker.data.cloud.NominatimService
-import com.mayantsev_vs.towtracker.data.db.Dao
-import com.mayantsev_vs.towtracker.data.db.MainDb
-import com.mayantsev_vs.towtracker.data.utils.PreferencesHelper
+import com.mayantsev_vs.towtracker.order.data.cloud.NominatimService
+import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
 import com.mayantsev_vs.towtracker.login.data.LoginRepository
 import com.mayantsev_vs.towtracker.login.data.cloud.LoginService
 import com.mayantsev_vs.towtracker.login.presentation.LoginViewModel
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
-import com.mayantsev_vs.towtracker.presentation.map.MapViewModel
-import com.mayantsev_vs.towtracker.presentation.order.OrderViewModel
-import com.mayantsev_vs.towtracker.presentation.services.ServiceViewModel
-import com.mayantsev_vs.towtracker.presentation.tracks.TrackViewModel
+import com.mayantsev_vs.towtracker.map.presentation.MapViewModel
+import com.mayantsev_vs.towtracker.order.presentation.order.OrderViewModel
+import com.mayantsev_vs.towtracker.order.presentation.services.ServiceViewModel
+import com.mayantsev_vs.towtracker.order.presentation.tracks.TrackViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -26,7 +24,7 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
 
     private val loginService = Retrofit.Builder().baseUrl("http://10.0.2.2:8080/").addConverterFactory(
         GsonConverterFactory.create()).build().create(LoginService::class.java)
-    private val repository = LoginRepository(loginService, database.getDao())
+    private val repository = LoginRepository(loginService, database.getDaoUser())
 
     val retrofit = Retrofit.Builder()
         .baseUrl("https://nominatim.openstreetmap.org/")

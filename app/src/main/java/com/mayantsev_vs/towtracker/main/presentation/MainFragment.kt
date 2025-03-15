@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.data.utils.openFragment
+import com.mayantsev_vs.towtracker.main.utils.openFragment
 import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
-import com.mayantsev_vs.towtracker.presentation.map.MapFragment
-import com.mayantsev_vs.towtracker.presentation.order.MainOrderFragment
-import com.mayantsev_vs.towtracker.presentation.order.NewOrderFragment
-import com.mayantsev_vs.towtracker.presentation.order.OrderViewModel
-import com.mayantsev_vs.towtracker.presentation.settings.MainSettingsFragment
+import com.mayantsev_vs.towtracker.map.presentation.MapFragment
+import com.mayantsev_vs.towtracker.order.presentation.order.MainOrderFragment
+import com.mayantsev_vs.towtracker.order.presentation.order.NewOrderFragment
+import com.mayantsev_vs.towtracker.order.presentation.order.OrderViewModel
+import com.mayantsev_vs.towtracker.settings.presentation.MainSettingsFragment
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import kotlin.getValue
 

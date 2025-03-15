@@ -1,6 +1,6 @@
 package com.mayantsev_vs.towtracker.login.data
 
-import com.mayantsev_vs.towtracker.data.db.Dao
+import com.mayantsev_vs.towtracker.login.data.cache.UserDao
 import com.mayantsev_vs.towtracker.login.data.cache.UserItem
 import com.mayantsev_vs.towtracker.login.data.cloud.LoginBody
 import com.mayantsev_vs.towtracker.login.data.cloud.LoginService
@@ -8,7 +8,7 @@ import com.mayantsev_vs.towtracker.login.data.cloud.RegistrationBody
 
 class LoginRepository(
     private val loginService: LoginService,
-    private val dao: Dao
+    private val dao: UserDao
 ) {
     suspend fun login(email: String, password: String) {
         val loginBody = LoginBody(
