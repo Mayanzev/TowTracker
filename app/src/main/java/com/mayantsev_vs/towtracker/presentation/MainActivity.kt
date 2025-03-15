@@ -7,9 +7,11 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
@@ -21,9 +23,12 @@ import com.mayantsev_vs.towtracker.presentation.settings.MainSettingsFragment
 import com.mayantsev_vs.towtracker.data.utils.checkPermission
 import com.mayantsev_vs.towtracker.data.utils.showToast
 import com.mayantsev_vs.towtracker.login.presentation.LoginFragment
+import com.mayantsev_vs.towtracker.login.presentation.LoginViewModel
+import com.mayantsev_vs.towtracker.main.presentation.MainFragment
 import com.mayantsev_vs.towtracker.presentation.order.NewOrderFragment
 import com.mayantsev_vs.towtracker.presentation.order.OrderViewModel
 import kotlin.getValue
+import kotlin.math.log
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -32,6 +37,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        val loginViewModel: LoginViewModel by viewModels {
+            ViewModelFactory(applicationContext)
+        }
+
         setContentView(binding.root)
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -46,6 +56,16 @@ class MainActivity : AppCompatActivity() {
                 bottom = bars.bottom,
             )
             WindowInsetsCompat.CONSUMED
+        }
+
+        loginViewModel.init()
+
+        loginViewModel.registeredLiveData.observe(this) {
+            if (it) {
+                openFragment(MainFragment())
+            } else {
+                openFragment(LoginFragment())
+            }
         }
 
         openFragment(LoginFragment())

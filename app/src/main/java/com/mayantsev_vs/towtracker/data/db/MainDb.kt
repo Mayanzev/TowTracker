@@ -4,8 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.mayantsev_vs.towtracker.login.data.cache.UserItem
 
-@Database(entities = [TrackItem::class, ServiceItem::class], version = 1)
+@Database(entities = [TrackItem::class, ServiceItem::class, UserItem::class], version = 1)
 abstract class MainDb : RoomDatabase() {
 
     abstract fun getDao(): Dao

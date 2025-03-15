@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.mayantsev_vs.towtracker.login.data.cache.UserItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -27,4 +28,12 @@ interface Dao {
     suspend fun deleteService(serviceItem: ServiceItem)
     @Query("DELETE FROM SERVICE")
     suspend fun deleteAllServices()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUser(user: UserItem)
+    @Query("SELECT * FROM users_table WHERE login = (:login)")
+    suspend fun getUser(login: String): UserItem
+    @Query("SELECT token FROM users_table LIMIT 1")
+    suspend fun getToken(): String?
+
 }

@@ -10,13 +10,16 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val repository: LoginRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _stateLiveData: MutableLiveData<UiState> = MutableLiveData()
     val stateLiveData: LiveData<UiState> = _stateLiveData
 
     private val _navigationLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val navigationLiveData: LiveData<Boolean> = _navigationLiveData
+
+    private val _registeredLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    val registeredLiveData: LiveData<Boolean> = _registeredLiveData
 
     fun register(email: String, username: String, password: String, repeatedPassword: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -29,6 +32,13 @@ class LoginViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             repository.login(email, password)
             _navigationLiveData.postValue(true)
+        }
+    }
+
+    fun init() {
+        viewModelScope.launch {
+            val token = repository.getToken()
+            _registeredLiveData.value = token != null
         }
     }
 
