@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.mayantsev_vs.towtracker.login.data.LoginRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginViewModel(
     private val repository: LoginRepository
@@ -36,9 +37,9 @@ class LoginViewModel(
     }
 
     fun init() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val token = repository.getToken()
-            _registeredLiveData.value = token != null
+            _registeredLiveData.postValue(token != null)
         }
     }
 
@@ -47,6 +48,12 @@ class LoginViewModel(
             _stateLiveData.value = UiState.Login
         } else {
             _stateLiveData.value = UiState.Register
+        }
+    }
+
+    fun clearUser() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.clearUser()
         }
     }
 

@@ -41,4 +41,8 @@ class LoginRepository(
     suspend fun getToken(): String? {
         return dao.getToken()
     }
+
+    suspend fun clearUser() {
+        return dao.clearUser()
+    }
 }

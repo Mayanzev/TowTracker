@@ -9,7 +9,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email">
+        android:hint="@string/email">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailTextView"
@@ -22,7 +22,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Имя пользователя">
+        android:hint="@string/username">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/usernameTextView"
@@ -35,7 +35,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Пароль">
+        android:hint="@string/password">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordTextView"
@@ -48,7 +48,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Повторите пароль">
+        android:hint="@string/repeat_password">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/repeatPasswordTextView"
@@ -63,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Зарегистрироваться" />
+        android:text="@string/login" />
 
     <TextView
         android:id="@+id/registered"
@@ -72,6 +72,6 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:text="Уже зарегистрированы?" />
+        android:text="@string/registered" />
 
 </LinearLayout>
