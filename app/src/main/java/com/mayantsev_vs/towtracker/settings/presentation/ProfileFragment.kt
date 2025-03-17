@@ -11,15 +11,22 @@ import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentProfileBinding
 import com.mayantsev_vs.towtracker.login.presentation.LoginFragment
 import com.mayantsev_vs.towtracker.login.presentation.LoginViewModel
+import com.mayantsev_vs.towtracker.login.presentation.ProfileUiState
+import com.mayantsev_vs.towtracker.login.presentation.ProfileViewModel
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.main.utils.openFragment
+import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import kotlin.getValue
+import kotlin.math.log
 
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val loginViewModel: LoginViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
+    }
+    private val profileViewModel: ProfileViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
 
@@ -43,9 +50,50 @@ class ProfileFragment : Fragment() {
             }
         )
 
+        loginViewModel.getUser()
+
+        profileViewModel.changeEdit(false)
+
         binding.exitButton.setOnClickListener {
             loginViewModel.clearUser()
             (requireActivity() as AppCompatActivity).openFragment(LoginFragment())
         }
+
+        binding.editButton.setOnClickListener {
+            if (profileViewModel.profileState.value == ProfileUiState.Edit) {
+                profileViewModel.updateUser(
+                    binding.emailEditText.text.toString(),
+                    binding.usernameEditText.text.toString(),
+                    binding.passwordEditText.text.toString()
+                )
+            }
+            profileViewModel.changeEdit(profileViewModel.profileState.value != ProfileUiState.Edit)
+        }
+
+        loginViewModel.userLiveData.observe(viewLifecycleOwner) {
+            binding.emailEditText.setText(it.login)
+            binding.usernameEditText.setText(it.username)
+            binding.passwordEditText.setText(it.password)
+        }
+
+//        loginViewModel.progressUserLiveData.observe(viewLifecycleOwner) {
+//            binding.profileProgressBar.visibility = it
+//        }
+
+        profileViewModel.profileState.observe(viewLifecycleOwner) { profileState ->
+            profileState.apply(
+                binding.usernameTextLayout,
+                binding.passwordTextLayout,
+                binding.editButton
+            )
+        }
+
+        loginViewModel.error.observe(viewLifecycleOwner) { error ->
+            if (loginViewModel.error.value?.isNotEmpty() == true) {
+                showToast(error)
+                binding.errorTextView.visibility = View.VISIBLE
+            }
+        }
+
     }
 }

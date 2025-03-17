@@ -83,15 +83,18 @@
 
     <string name="new_order">Новый заказ</string>
 
-    <string name="email">Email</string>
+    <string name="email">E-mail</string>
     <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
     <string name="repeat_password">Повторите пароль</string>
     <string name="login">Зарегистрироваться</string>
-    <string name="registered">Уже зарегистрированы?</string>
+    <string name="registered">У меня уже есть аккаунт</string>
+    <string name="register">Создать новый аккаунт?</string>
     <string name="example_email">example@gmail.com</string>
     <string name="example_username">user123</string>
     <string name="example_password">password123</string>
-    <string name="exit">Выйти</string>
+    <string name="exit">Выйти из аккаунта</string>
+    <string name="enter">Войти</string>
+    <string name="edit">Редактировать</string>
 
 </resources>

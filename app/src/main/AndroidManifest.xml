@@ -23,8 +23,10 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".main.presentation.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

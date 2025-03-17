@@ -8,6 +8,7 @@ import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
 import com.mayantsev_vs.towtracker.login.data.LoginRepository
 import com.mayantsev_vs.towtracker.login.data.cloud.LoginService
 import com.mayantsev_vs.towtracker.login.presentation.LoginViewModel
+import com.mayantsev_vs.towtracker.login.presentation.ProfileViewModel
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.map.presentation.MapViewModel
 import com.mayantsev_vs.towtracker.order.presentation.order.OrderViewModel
@@ -40,6 +41,7 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
             modelClass.isAssignableFrom(OrderViewModel::class.java) -> OrderViewModel(preferencesHelper) as T
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(repository) as T
             modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel() as T
+            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> ProfileViewModel(repository) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }

@@ -1,5 +1,6 @@
 package com.mayantsev_vs.towtracker.login.presentation
 
+import com.mayantsev_vs.towtracker.R
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -40,8 +41,8 @@ abstract class UiState {
             clear(emailTextView, usernameTextView, passwordTextView, repeatedPasswordTextView)
             usernameTextView.visibility = View.GONE
             repeatedPasswordTextView.visibility = View.GONE
-            registeredTextView.text = "Еще не зарегистрированы?"
-            button.text = "Войти"
+            registeredTextView.text = button.context.getString(R.string.register)
+            button.text = button.context.getString(R.string.enter)
         }
     }
 
@@ -57,8 +58,8 @@ abstract class UiState {
             clear(emailTextView, usernameTextView, passwordTextView, repeatedPasswordTextView)
             usernameTextView.visibility = View.VISIBLE
             repeatedPasswordTextView.visibility = View.VISIBLE
-            registeredTextView.text = "Уже зарегистрированы?"
-            button.text = "Зарегистрироваться"
+            registeredTextView.text = button.context.getString(R.string.registered)
+            button.text = button.context.getString(R.string.login)
         }
     }
 

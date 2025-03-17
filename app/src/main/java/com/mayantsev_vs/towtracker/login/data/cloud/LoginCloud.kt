@@ -18,3 +18,15 @@ data class LoginBody(
 data class LoginResponse (
     val token: String
 )
+
+data class UserResponse(
+    val login: String,
+    val password: String,
+    val username: String
+)
+
+data class UserReceive(
+    val login: String,
+    val password: String,
+    val username: String
+)
