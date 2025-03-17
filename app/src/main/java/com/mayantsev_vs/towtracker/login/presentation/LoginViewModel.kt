@@ -27,9 +27,9 @@ class LoginViewModel(
     val userLiveData: LiveData<UserUiItem> = _userLiveData
 
     private val _error: MutableLiveData<String> = MutableLiveData()
-    val error: LiveData<String> = _error
+    val error: MutableLiveData<String> = _error
 
-    fun register(email: String, username: String, password: String, repeatedPassword: String) {
+    fun register(email: String, username: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.register(email, username, password)
             if (result == Result.Success) {

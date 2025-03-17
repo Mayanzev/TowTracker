@@ -61,13 +61,19 @@ class ProfileFragment : Fragment() {
 
         binding.editButton.setOnClickListener {
             if (profileViewModel.profileState.value == ProfileUiState.Edit) {
-                profileViewModel.updateUser(
-                    binding.emailEditText.text.toString(),
-                    binding.usernameEditText.text.toString(),
-                    binding.passwordEditText.text.toString()
-                )
+                if (binding.passwordEditText.text.toString().isEmpty()) {
+                    showToast("Пароль не может быть пустым!")
+                } else {
+                    profileViewModel.updateUser(
+                        binding.emailEditText.text.toString(),
+                        binding.usernameEditText.text.toString(),
+                        binding.passwordEditText.text.toString()
+                    )
+                    profileViewModel.changeEdit(profileViewModel.profileState.value != ProfileUiState.Edit)
+                }
+            } else {
+                profileViewModel.changeEdit(profileViewModel.profileState.value != ProfileUiState.Edit)
             }
-            profileViewModel.changeEdit(profileViewModel.profileState.value != ProfileUiState.Edit)
         }
 
         loginViewModel.userLiveData.observe(viewLifecycleOwner) {
@@ -75,10 +81,6 @@ class ProfileFragment : Fragment() {
             binding.usernameEditText.setText(it.username)
             binding.passwordEditText.setText(it.password)
         }
-
-//        loginViewModel.progressUserLiveData.observe(viewLifecycleOwner) {
-//            binding.profileProgressBar.visibility = it
-//        }
 
         profileViewModel.profileState.observe(viewLifecycleOwner) { profileState ->
             profileState.apply(

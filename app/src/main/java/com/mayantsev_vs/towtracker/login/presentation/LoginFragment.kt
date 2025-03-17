@@ -1,6 +1,7 @@
 package com.mayantsev_vs.towtracker.login.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,19 +33,33 @@ class LoginFragment : Fragment() {
             ViewModelFactory(requireContext().applicationContext)
         }
 
+
         binding.loginButton.setOnClickListener {
             if (loginViewModel.stateLiveData.value != UiState.Login) {
-                loginViewModel.register(
-                    binding.emailTextView.text.toString(),
-                    binding.usernameTextView.text.toString(),
-                    binding.passwordTextView.text.toString(),
-                    binding.repeatPasswordTextView.text.toString()
-                )
+                if (binding.emailTextView.text.toString().isEmpty()) {
+                    showToast("E-mail не может быть пустым!")
+                } else if (binding.passwordTextView.text.toString().isEmpty()) {
+                    showToast("Пароль не может быть пустым!")
+                } else if (binding.repeatPasswordTextView.text.toString() != binding.passwordTextView.text.toString()) {
+                    showToast("Пароли не совпадают!")
+                } else {
+                    loginViewModel.register(
+                        binding.emailTextView.text.toString(),
+                        binding.usernameTextView.text.toString(),
+                        binding.passwordTextView.text.toString()
+                    )
+                }
             } else {
-                loginViewModel.login(
-                    binding.emailTextView.text.toString(),
-                    binding.passwordTextView.text.toString()
-                )
+                if (binding.emailTextView.text.toString().isEmpty()) {
+                    showToast("Поле E-mail не может быть пустым!")
+                } else if (binding.passwordTextView.text.toString().isEmpty()) {
+                    showToast("Поле Пароль не может быть пустым!")
+                } else {
+                    loginViewModel.login(
+                        binding.emailTextView.text.toString(),
+                        binding.passwordTextView.text.toString()
+                    )
+                }
             }
         }
 
@@ -63,6 +78,8 @@ class LoginFragment : Fragment() {
                 binding.passwordTextView,
                 binding.repeatPasswordTextView,
                 binding.registered,
+                binding.usernameTextInputLayout,
+                binding.repeatedPasswordTextInputLayout,
                 binding.loginButton
             )
         }
@@ -79,5 +96,4 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
 }
