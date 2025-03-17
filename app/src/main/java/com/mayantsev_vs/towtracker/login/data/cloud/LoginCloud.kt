@@ -21,7 +21,6 @@ data class LoginResponse (
 
 data class UserResponse(
     val login: String,
-    val password: String,
     val username: String
 )
 

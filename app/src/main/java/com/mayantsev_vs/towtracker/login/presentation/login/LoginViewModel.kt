@@ -86,7 +86,6 @@ class LoginViewModel(
                 _userLiveData.postValue(
                     UserUiItem(
                         userData.login,
-                        userData.password,
                         userData.username
                     )
                 )

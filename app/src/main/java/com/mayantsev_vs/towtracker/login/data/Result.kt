@@ -8,7 +8,6 @@ sealed class Result {
 
     data class SuccessUser(
         val login: String,
-        val password: String,
         val username: String
     ) : Result()
 

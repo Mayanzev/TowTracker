@@ -21,7 +21,9 @@ interface ProfileUiState {
         newPasswordTextLayout: TextInputLayout,
         repeatedTextLayout: TextInputLayout,
         newPasswordEditText: TextInputEditText,
-        repeatedPasswordEditText: TextInputEditText
+        repeatedPasswordEditText: TextInputEditText,
+        passwordEditText: TextInputEditText,
+        passwordLinear: LinearLayout
     )
 
     object Edit: ProfileUiState {
@@ -36,17 +38,19 @@ interface ProfileUiState {
             newPasswordTextLayout: TextInputLayout,
             repeatedTextLayout: TextInputLayout,
             newPasswordEditText: TextInputEditText,
-            repeatedPasswordEditText: TextInputEditText
+            repeatedPasswordEditText: TextInputEditText,
+            passwordEditText: TextInputEditText,
+            passwordLinear: LinearLayout
         ) {
             usernameTextLayout.isEnabled = true
             passwordInputLayout.isEnabled = true
             editButton.text = editButton.context.getString(R.string.save_button)
             cancelButton.visibility = View.VISIBLE
-            passwordTextView.text = "Старый пароль"
             repeatedPasswordLinear.visibility = View.VISIBLE
             newPasswordLinear.visibility = View.VISIBLE
             newPasswordTextLayout.isEnabled = true
             repeatedTextLayout.isEnabled = true
+            passwordLinear.visibility = View.VISIBLE
         }
     }
 
@@ -62,7 +66,9 @@ interface ProfileUiState {
             newPasswordTextLayout: TextInputLayout,
             repeatedTextLayout: TextInputLayout,
             newPasswordEditText: TextInputEditText,
-            repeatedPasswordEditText: TextInputEditText
+            repeatedPasswordEditText: TextInputEditText,
+            passwordEditText: TextInputEditText,
+            passwordLinear: LinearLayout
         ) {
             usernameTextLayout.isEnabled = false
             passwordInputLayout.isEnabled = false
@@ -75,6 +81,8 @@ interface ProfileUiState {
             repeatedTextLayout.isEnabled = false
             newPasswordEditText.text?.clear()
             repeatedPasswordEditText.text?.clear()
+            passwordEditText.text?.clear()
+            passwordLinear.visibility = View.GONE
         }
     }
 

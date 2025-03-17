@@ -72,7 +72,6 @@ class LoginRepository(
             val userCloud = loginService.fetchUser(dao.getToken() ?: "")
             return Result.SuccessUser(
                 userCloud.login,
-                userCloud.password,
                 userCloud.username
             )
         } catch (e: ConnectException) {
