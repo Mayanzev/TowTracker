@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.login.presentation
+package com.mayantsev_vs.towtracker.login.presentation.profile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

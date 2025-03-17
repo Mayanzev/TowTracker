@@ -93,6 +93,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/passwordTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -108,22 +109,103 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordEditText"
                 android:layout_width="match_parent"
-                android:enabled="false"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:inputType="textPassword"
                 android:text="@string/example_password"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
-    <Button
+    <!-- New Password Section -->
+    <LinearLayout
         app:layout_constraintTop_toBottomOf="@+id/passwordLinear"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/newPasswordLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Новый пароль"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/newPasswordTextLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/newPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="Введите новый пароль"
+                android:inputType="textPassword"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <!-- Repeated Password Section -->
+    <LinearLayout
+        app:layout_constraintTop_toBottomOf="@+id/newPasswordLinear"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/repeatedPasswordLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Подтвердите новый пароль"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/repeatedPasswordTextLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/repeatedPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="textPassword"
+                android:hint="Подтвердите новый пароль"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@+id/repeatedPasswordLinear"
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/editButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="@string/edit"
+        tools:visibility="visible" />
+
+    <Button
+        app:layout_constraintTop_toBottomOf="@+id/editButton"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/cancelButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Отмена"
+        android:visibility="gone"
         tools:visibility="visible" />
 
     <Button

@@ -1,7 +1,6 @@
-package com.mayantsev_vs.towtracker.login.presentation
+package com.mayantsev_vs.towtracker.login.presentation.login
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +34,7 @@ class LoginFragment : Fragment() {
 
 
         binding.loginButton.setOnClickListener {
-            if (loginViewModel.stateLiveData.value != UiState.Login) {
+            if (loginViewModel.stateLiveData.value != LoginUiState.Login) {
                 if (binding.emailTextView.text.toString().isEmpty()) {
                     showToast("E-mail не может быть пустым!")
                 } else if (binding.passwordTextView.text.toString().isEmpty()) {
@@ -64,7 +63,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.registered.setOnClickListener {
-            if (loginViewModel.stateLiveData.value != UiState.Login) {
+            if (loginViewModel.stateLiveData.value != LoginUiState.Login) {
                 loginViewModel.updateRegistered(true)
             } else {
                 loginViewModel.updateRegistered(false)

@@ -9,16 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentProfileBinding
-import com.mayantsev_vs.towtracker.login.presentation.LoginFragment
-import com.mayantsev_vs.towtracker.login.presentation.LoginViewModel
-import com.mayantsev_vs.towtracker.login.presentation.ProfileUiState
-import com.mayantsev_vs.towtracker.login.presentation.ProfileViewModel
-import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
+import com.mayantsev_vs.towtracker.login.presentation.login.LoginFragment
+import com.mayantsev_vs.towtracker.login.presentation.login.LoginViewModel
+import com.mayantsev_vs.towtracker.login.presentation.profile.ProfileUiState
+import com.mayantsev_vs.towtracker.login.presentation.profile.ProfileViewModel
 import com.mayantsev_vs.towtracker.main.utils.openFragment
 import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import kotlin.getValue
-import kotlin.math.log
 
 
 class ProfileFragment : Fragment() {
@@ -86,7 +84,15 @@ class ProfileFragment : Fragment() {
             profileState.apply(
                 binding.usernameTextLayout,
                 binding.passwordTextLayout,
-                binding.editButton
+                binding.editButton,
+                binding.cancelButton,
+                binding.passwordTextView,
+                binding.repeatedPasswordLinear,
+                binding.newPasswordLinear,
+                binding.newPasswordTextLayout,
+                binding.repeatedPasswordTextLayout,
+                binding.newPasswordEditText,
+                binding.repeatedPasswordEditText
             )
         }
 
@@ -95,6 +101,11 @@ class ProfileFragment : Fragment() {
                 showToast(error)
                 binding.errorTextView.visibility = View.VISIBLE
             }
+        }
+
+        binding.cancelButton.setOnClickListener {
+            loginViewModel.getUser()
+            profileViewModel.changeEdit(false)
         }
 
     }

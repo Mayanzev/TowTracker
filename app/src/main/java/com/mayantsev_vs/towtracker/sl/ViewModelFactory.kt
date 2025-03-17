@@ -7,8 +7,8 @@ import com.mayantsev_vs.towtracker.order.data.cloud.NominatimService
 import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
 import com.mayantsev_vs.towtracker.login.data.LoginRepository
 import com.mayantsev_vs.towtracker.login.data.cloud.LoginService
-import com.mayantsev_vs.towtracker.login.presentation.LoginViewModel
-import com.mayantsev_vs.towtracker.login.presentation.ProfileViewModel
+import com.mayantsev_vs.towtracker.login.presentation.login.LoginViewModel
+import com.mayantsev_vs.towtracker.login.presentation.profile.ProfileViewModel
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.map.presentation.MapViewModel
 import com.mayantsev_vs.towtracker.order.presentation.order.OrderViewModel

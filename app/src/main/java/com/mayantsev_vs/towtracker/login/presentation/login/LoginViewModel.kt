@@ -1,6 +1,5 @@
-package com.mayantsev_vs.towtracker.login.presentation
+package com.mayantsev_vs.towtracker.login.presentation.login
 
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,13 +8,14 @@ import com.mayantsev_vs.towtracker.login.data.LoginRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.mayantsev_vs.towtracker.login.data.Result
+import com.mayantsev_vs.towtracker.login.presentation.UserUiItem
 
 class LoginViewModel(
     private val repository: LoginRepository
 ) : ViewModel() {
 
-    private val _stateLiveData: MutableLiveData<UiState> = MutableLiveData()
-    val stateLiveData: LiveData<UiState> = _stateLiveData
+    private val _stateLiveData: MutableLiveData<LoginUiState> = MutableLiveData()
+    val stateLiveData: LiveData<LoginUiState> = _stateLiveData
 
     private val _navigationLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val navigationLiveData: LiveData<Boolean> = _navigationLiveData
@@ -65,9 +65,9 @@ class LoginViewModel(
 
     fun updateRegistered(isLogin: Boolean) {
         if (isLogin) {
-            _stateLiveData.value = UiState.Login
+            _stateLiveData.value = LoginUiState.Login
         } else {
-            _stateLiveData.value = UiState.Register
+            _stateLiveData.value = LoginUiState.Register
         }
     }
 
