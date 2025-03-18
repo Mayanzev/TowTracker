@@ -4,8 +4,9 @@ import com.mayantsev_vs.towtracker.login.data.cache.UserDao
 import com.mayantsev_vs.towtracker.login.data.cache.UserItem
 import com.mayantsev_vs.towtracker.login.data.cloud.LoginBody
 import com.mayantsev_vs.towtracker.login.data.cloud.LoginService
+import com.mayantsev_vs.towtracker.login.data.cloud.PasswordReceive
 import com.mayantsev_vs.towtracker.login.data.cloud.RegistrationBody
-import com.mayantsev_vs.towtracker.login.data.cloud.UserReceive
+import com.mayantsev_vs.towtracker.login.data.cloud.UsernameReceive
 import retrofit2.HttpException
 import java.net.ConnectException
 
@@ -83,12 +84,27 @@ class LoginRepository(
         }
     }
 
-    suspend fun updateUser(email: String, username: String, password: String) {
-        val userReceive = UserReceive(
+    suspend fun updateUser(email: String, username: String) {
+        val userReceive = UsernameReceive(
             login = email,
-            username = username,
-            password = password
+            username = username
         )
         loginService.updateUser(dao.getToken() ?: "", userReceive)
+    }
+
+    suspend fun updateUserPassword(email: String, password: String, newPassword: String): Result {
+        try {
+            val userPasswordReceive = PasswordReceive(
+                login = email,
+                password = password,
+                newPassword = newPassword
+            )
+            loginService.updateUserPassword(dao.getToken() ?: "", userPasswordReceive)
+            return Result.Success
+        } catch (e: ConnectException) {
+            return Result.Failure("Нет соединения с интернетом")
+        } catch (e: HttpException) {
+            return Result.Failure(e.response()?.errorBody()?.string() ?: "")
+        }
     }
 }

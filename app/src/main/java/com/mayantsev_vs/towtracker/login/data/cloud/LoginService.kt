@@ -14,8 +14,11 @@ interface LoginService {
     suspend fun login(@Body loginBody: LoginBody): LoginResponse
 
     @GET("user/fetch")
-    suspend fun fetchUser(@Header("Bearer-Authorization") token: String): UserResponse
+    suspend fun fetchUser(@Header("Bearer-Authorization") token: String): UsernameResponse
 
-    @POST("user/update")
-    suspend fun updateUser(@Header("Bearer-Authorization") token: String, @Body user: UserReceive)
+    @POST("user/update/username")
+    suspend fun updateUser(@Header("Bearer-Authorization") token: String, @Body user: UsernameReceive)
+
+    @POST("user/update/password")
+    suspend fun updateUserPassword(@Header("Bearer-Authorization") token: String, @Body user: PasswordReceive)
 }

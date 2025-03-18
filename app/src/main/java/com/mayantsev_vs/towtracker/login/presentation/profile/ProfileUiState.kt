@@ -44,13 +44,17 @@ interface ProfileUiState {
         ) {
             usernameTextLayout.isEnabled = true
             passwordInputLayout.isEnabled = true
+            newPasswordTextLayout.isEnabled = true
+            repeatedTextLayout.isEnabled = true
             editButton.text = editButton.context.getString(R.string.save_button)
             cancelButton.visibility = View.VISIBLE
             repeatedPasswordLinear.visibility = View.VISIBLE
             newPasswordLinear.visibility = View.VISIBLE
-            newPasswordTextLayout.isEnabled = true
-            repeatedTextLayout.isEnabled = true
             passwordLinear.visibility = View.VISIBLE
+
+//            newPasswordEditText.text?.clear()
+//            repeatedPasswordEditText.text?.clear()
+//            passwordEditText.text?.clear()
         }
     }
 
@@ -72,16 +76,12 @@ interface ProfileUiState {
         ) {
             usernameTextLayout.isEnabled = false
             passwordInputLayout.isEnabled = false
-            editButton.text = editButton.context.getString(R.string.edit)
-            cancelButton.visibility = View.GONE
-            passwordTextView.text = "Пароль"
-            repeatedPasswordLinear.visibility = View.GONE
-            newPasswordLinear.visibility = View.GONE
             newPasswordTextLayout.isEnabled = false
             repeatedTextLayout.isEnabled = false
-            newPasswordEditText.text?.clear()
-            repeatedPasswordEditText.text?.clear()
-            passwordEditText.text?.clear()
+            editButton.text = editButton.context.getString(R.string.edit)
+            cancelButton.visibility = View.GONE
+            repeatedPasswordLinear.visibility = View.GONE
+            newPasswordLinear.visibility = View.GONE
             passwordLinear.visibility = View.GONE
         }
     }

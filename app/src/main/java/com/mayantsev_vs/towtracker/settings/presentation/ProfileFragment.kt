@@ -59,17 +59,30 @@ class ProfileFragment : Fragment() {
 
         binding.editButton.setOnClickListener {
             if (profileViewModel.profileState.value == ProfileUiState.Edit) {
-                profileViewModel.changeEdit(profileViewModel.profileState.value != ProfileUiState.Edit)
                 if (binding.passwordEditText.text.toString().isEmpty()) {
                     profileViewModel.updateUser(
                         binding.emailEditText.text.toString(),
-                        binding.usernameEditText.text.toString(),
-                        binding.passwordEditText.text.toString()
+                        binding.usernameEditText.text.toString()
                     )
+                    profileViewModel.changeEdit(profileViewModel.profileState.value != ProfileUiState.Edit)
+                } else if (binding.usernameEditText.text.toString().isEmpty()) {
+                    if (binding.newPasswordEditText.text.toString() == binding.repeatedPasswordEditText.text.toString()) {
+                        profileViewModel.updateUserPassword(
+                            binding.emailEditText.text.toString(),
+                            binding.passwordEditText.text.toString(),
+                            binding.newPasswordEditText.text.toString()
+                        )
+                    } else {
+                        showToast("Пароли не совпадают!")
+                    }
                 }
             } else {
                 profileViewModel.changeEdit(profileViewModel.profileState.value != ProfileUiState.Edit)
             }
+        }
+
+        profileViewModel.error.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) showToast(it)
         }
 
         loginViewModel.userLiveData.observe(viewLifecycleOwner) {
