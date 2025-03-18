@@ -23,7 +23,7 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
     private val database by lazy { MainDb.getDatabase(context) }
     private val preferencesHelper = PreferencesHelper(context)
 
-    private val loginService = Retrofit.Builder().baseUrl("http://10.0.2.2:8080/").addConverterFactory(
+    private val loginService = Retrofit.Builder().baseUrl("https://d9a8-109-120-132-23.ngrok-free.app/").addConverterFactory(
         GsonConverterFactory.create()).build().create(LoginService::class.java)
     private val repository = LoginRepository(loginService, database.getDaoUser())
 
