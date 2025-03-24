@@ -11,7 +11,6 @@ import com.mayantsev_vs.towtracker.order.data.cache.ServiceItem
 import com.mayantsev_vs.towtracker.databinding.ServiceItemBinding
 
 
-// adapter for displaying a list of services using DiffUtil for efficient updates
 class ServiceAdapter(private val listener: Listener) : ListAdapter<ServiceItem, ServiceAdapter.Holder>(Comparator()) {
 
     class Holder(view: View, private val listener: Listener) : RecyclerView.ViewHolder(view), View.OnClickListener {

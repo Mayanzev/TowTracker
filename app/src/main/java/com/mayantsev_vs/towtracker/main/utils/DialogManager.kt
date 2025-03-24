@@ -14,7 +14,6 @@ import com.mayantsev_vs.towtracker.databinding.RouteDialogBinding
 
 object DialogManager {
 
-    // function that asks if the location is turned on if the user on their phone has turned the location completely off
     fun showLocationEnableDialog(context: Context, listener: SimpleListener) {
         val builder = AlertDialog.Builder(context)
         val dialog = builder.create()
@@ -29,7 +28,6 @@ object DialogManager {
         dialog.show()
     }
 
-    // function that asks for permission to run in the background
     fun showBackgroundPermissionDialog(context: Context, listener: SimpleListener) {
         val builder = AlertDialog.Builder(context)
         val dialog = builder.create()
@@ -44,7 +42,6 @@ object DialogManager {
         dialog.show()
     }
 
-    // shows the dialog box for saving a route
     fun showRouteDialog(context: Context, item: TrackItem?, listener: SimpleListener) {
         val builder = AlertDialog.Builder(context)
         val binding = RouteDialogBinding.inflate(LayoutInflater.from(context), null, false)
@@ -71,7 +68,6 @@ object DialogManager {
         dialog.show()
     }
 
-    // dialog for changing the price per kilometer of the route on the button
     fun showPriceDialog(context: Context, listener: PriceListener) {
         val builder = AlertDialog.Builder(context)
         val input = EditText(context)

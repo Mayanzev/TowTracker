@@ -43,7 +43,6 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
         getServices()
     }
 
-    // shows a dialog to input service details, then saves and inserts the service
     private fun setService() {
         showServiceDialog(requireContext(), object : ServiceListener {
             override fun onClick(serviceNameInput: String, servicePriceInput: String) {
@@ -57,13 +56,11 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
         })
     }
 
-    // binds the created click listener to the corresponding views in the layout using their IDs
     private fun setOnClicks() = with(binding) {
         val listener = onClicks()
         btnAddService.setOnClickListener(listener)
     }
 
-    // creates and returns a click listener that handles multiple button clicks based on their IDs
     private fun onClicks(): View.OnClickListener {
         return View.OnClickListener {
             when (it.id) {
@@ -72,7 +69,6 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
         }
     }
 
-    // returns a ServiceItem object
     private fun getServiceItem(): ServiceItem {
         return ServiceItem(
             null,
@@ -82,14 +78,12 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
         )
     }
 
-    // initializes RecyclerView with a LinearLayoutManager and sets the adapter
     private fun initRecyclerView() = with(binding) {
         adapter = ServiceAdapter(this@ServicesFragment)
         rcView.layoutManager = LinearLayoutManager(requireContext())
         rcView.adapter = adapter
     }
 
-    // observes track data and updates the adapter and empty state visibility
     private fun getServices() {
         servicesViewModel.services.observe(viewLifecycleOwner) {
             adapter.submitList(it)

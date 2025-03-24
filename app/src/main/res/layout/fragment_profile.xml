@@ -30,7 +30,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- E-mail Section -->
         <LinearLayout
             android:id="@+id/emailLinear"
             android:layout_width="match_parent"
@@ -63,7 +62,6 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- Username Section -->
         <LinearLayout
             android:id="@+id/usernameLinear"
             android:layout_width="match_parent"
@@ -96,7 +94,6 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- Password Section -->
         <LinearLayout
             android:id="@+id/passwordLinear"
             android:layout_width="match_parent"
@@ -132,7 +129,6 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- New Password Section -->
         <LinearLayout
             android:id="@+id/newPasswordLinear"
             android:layout_width="match_parent"
@@ -168,7 +164,6 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <!-- Repeated Password Section -->
         <LinearLayout
             android:id="@+id/repeatedPasswordLinear"
             android:layout_width="match_parent"

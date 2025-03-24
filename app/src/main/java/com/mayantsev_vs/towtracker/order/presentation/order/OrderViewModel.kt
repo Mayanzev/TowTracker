@@ -1,5 +1,6 @@
 package com.mayantsev_vs.towtracker.order.presentation.order
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
@@ -8,6 +9,7 @@ class OrderViewModel(private val preferencesHelper: PreferencesHelper) : ViewMod
 
     val isOrderStarted = MutableLiveData<Boolean>()
     val isOrderFinished = MutableLiveData<Boolean>()
+
 
     init {
         loadOrderState()

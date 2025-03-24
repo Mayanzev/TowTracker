@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mayantsev_vs.towtracker.order.data.cache.TrackItem
 import com.mayantsev_vs.towtracker.databinding.TrackItemBinding
 
-// adapter for displaying a list of track items with click handling for delete and open actions
+
 class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, TrackAdapter.Holder>(Comparator()) {
 
     class Holder(view: View, private val listener: Listener) : RecyclerView.ViewHolder(view),

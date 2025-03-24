@@ -18,6 +18,7 @@ import com.mayantsev_vs.towtracker.databinding.FragmentMainOrderBinding
 import com.mayantsev_vs.towtracker.main.presentation.MainFragment.CurrentScreen
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.map.presentation.MapFragment
+import com.mayantsev_vs.towtracker.map.presentation.MapViewModel
 import com.mayantsev_vs.towtracker.order.presentation.services.ServiceViewModel
 import com.mayantsev_vs.towtracker.order.presentation.services.ServicesFragment
 import com.mayantsev_vs.towtracker.order.presentation.tracks.TrackViewModel
@@ -44,6 +45,9 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
         ViewModelFactory(requireContext().applicationContext)
     }
     private val mainViewModel: MainViewModel by activityViewModels {
+        ViewModelFactory(requireContext().applicationContext)
+    }
+    private val mapViewModel: MapViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
 
@@ -85,7 +89,6 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
         }
     }
 
-    // An adapter for ViewPager2 that is responsible for creating and managing slices
     class ViewPagerAdapter(fragment: Fragment, private val list: List<Fragment>) : FragmentStateAdapter(fragment) {
         override fun getItemCount(): Int {
             return list.size
@@ -95,7 +98,6 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
         }
     }
 
-    // Calculates the total price by summing up the prices of services and tracks, then updates the UI
     private fun updateTotalPrice(serviceList: List<ServiceItem>, trackList: List<TrackItem>) {
         val totalServicePrice = serviceList.sumOf { it.price.toBigDecimalOrNull() ?: BigDecimal.ZERO }
         val totalTrackPrice = trackList.sumOf { it.price.toBigDecimalOrNull() ?: BigDecimal.ZERO }
@@ -108,6 +110,7 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
         binding.btnCompleteOrder.setOnClickListener {
             if (LocationService.isRunning) {
                 orderViewModel.updateFinishOrder(true)
+                mapViewModel.updateProgress(View.GONE)
                 openParentFragment(MapFragment.Companion.newInstance())
             } else {
                 orderViewModel.emptyOrder()

@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // handles notification permission result and shows a toast message.
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {

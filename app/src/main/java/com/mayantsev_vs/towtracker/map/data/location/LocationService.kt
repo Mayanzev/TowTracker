@@ -26,7 +26,6 @@ import com.mayantsev_vs.towtracker.main.presentation.MainActivity
 import org.osmdroid.util.GeoPoint
 import java.math.BigDecimal
 
-// service that is needed for the application to run in the background
 class LocationService : Service() {
     private lateinit var locationProvider: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -58,7 +57,6 @@ class LocationService : Service() {
         locationProvider.removeLocationUpdates(locCallBack)
     }
 
-    // starts a foreground notification for the service with a custom notification channel and content.
     private fun startNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val nChannel = NotificationChannel(
@@ -88,7 +86,6 @@ class LocationService : Service() {
         startForeground(99, notification)
     }
 
-    // function that initializes a class to get location information
     private fun initLocation() {
         val updateInterval = PreferenceManager.getDefaultSharedPreferences(
             this
@@ -99,7 +96,6 @@ class LocationService : Service() {
         locationProvider = LocationServices.getFusedLocationProviderClient(baseContext)
     }
 
-    // function whereby we begin to receive information about our location
     private fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -115,7 +111,6 @@ class LocationService : Service() {
         )
     }
 
-    // locationCallback to receive location updates
     private val locCallBack = object  : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
@@ -139,7 +134,6 @@ class LocationService : Service() {
         }
     }
 
-    // function to send location data via broadcast using LocalBroadcastManager
     private fun sendLocationData(locationModel: LocationModel) {
         val intent = Intent(LOC_MODEL_INTENT)
         intent.putExtra(LOC_MODEL_INTENT, locationModel)

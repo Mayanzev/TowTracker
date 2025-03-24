@@ -40,7 +40,6 @@ class AppearanceSettingsFragment : PreferenceFragmentCompat() {
 
     }
 
-    // function for displaying color and time changes in the settings
     private fun onChangeListener(): Preference.OnPreferenceChangeListener {
         return Preference.OnPreferenceChangeListener {
             pref, value ->
@@ -52,7 +51,6 @@ class AppearanceSettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    // function for adding time to the time header
     private fun onTimeChange(value: String) {
         val nameArray = resources.getStringArray(R.array.loc_time_update_name)
         val valueArray = resources.getStringArray(R.array.loc_time_update_value)
@@ -61,12 +59,10 @@ class AppearanceSettingsFragment : PreferenceFragmentCompat() {
         timePreference.title = "$title: ${nameArray[pos]}"
     }
 
-    // function for color change
     private fun onColorChange(pref: Preference, color: String) {
         pref.icon?.setTint(Color.parseColor(color))
     }
 
-    // function for initializing values at application startup
     private fun initPrefs() {
         val pref = timePreference.preferenceManager.sharedPreferences
         val nameArray = resources.getStringArray(R.array.loc_time_update_name)

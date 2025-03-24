@@ -59,7 +59,6 @@ class ViewTrackFragment : Fragment() {
 
     }
 
-    // configures OSM settings by loading preferences and setting the user agent
     private fun settingsOsm() {
         Configuration.getInstance().load(
             activity as ComponentActivity,
@@ -69,7 +68,6 @@ class ViewTrackFragment : Fragment() {
         Configuration.getInstance().userAgentValue = userAgent
     }
 
-    // observes the current track and updates UI elements with time, speed, distance, and price
     private fun getTrack() = with(binding) {
         tracksViewModel.currentTrack.observe(viewLifecycleOwner) {
 
@@ -91,7 +89,6 @@ class ViewTrackFragment : Fragment() {
         }
     }
 
-    // creates a Polyline from a string of geo-coordinates, setting its color and adding points
     private fun getPolyline(geoPoints: String): Polyline {
         val polyline = Polyline()
         polyline.outlinePaint.color = Color.parseColor(
@@ -107,13 +104,11 @@ class ViewTrackFragment : Fragment() {
         return polyline
     }
 
-    // moves the map to the start position with an animation and sets the zoom level to 15
     private fun goToStartPosition(startPosition: GeoPoint) {
         binding.map.controller.zoomTo(15.0)
         binding.map.controller.animateTo(startPosition)
     }
 
-    // adds start and finish markers to the map based on the provided list of GeoPoints
     private fun setMarkers(list: List<GeoPoint>) = with(binding) {
         val startMarker = Marker(map)
         val finishMarker = Marker(map)

@@ -43,14 +43,12 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
         }
     }
 
-    // initializes RecyclerView with a LinearLayoutManager and sets the adapter
     private fun initRecyclerView() = with(binding) {
         adapter = TrackAdapter(this@TracksFragment)
         rcView.layoutManager = LinearLayoutManager(requireContext())
         rcView.adapter = adapter
     }
 
-    // observes track data and updates the adapter and empty state visibility
     private fun getTracks() {
         tracksViewModel.tracks.observe(viewLifecycleOwner) {
             adapter.submitList(it)

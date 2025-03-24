@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -108,7 +107,6 @@ class MapFragment : Fragment() {
         firstStart = true
     }
 
-    // sets up OSM configuration by loading preferences and defining a custom User-Agent.
     private fun settingsOsm() {
         Configuration.getInstance().load(
             activity as ComponentActivity,
@@ -140,7 +138,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // registers a permission launcher to handle location permissions when requested.
     private fun registerPermissions() {
         permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -156,7 +153,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // determines the appropriate permission check logic based on the Android version.
     private fun checkLocationPermission() {
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> checkPermissionAfter11()
@@ -165,7 +161,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // checks location permissions for Android 11 (API 30) and above, including background location permission.
     @RequiresApi(Build.VERSION_CODES.R)
     private fun checkPermissionAfter11() {
         if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
@@ -184,7 +179,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // checks location permissions for Android 10 (API 29), including background location permission.
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun checkPermissionAfter10() {
         if ((checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
@@ -204,7 +198,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // checks location permissions for Android versions below 10 (API 29).
     private fun checkPermission10() {
         if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
             checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -221,7 +214,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // checks if the app has background location permission and prompts the user if not
     private fun checkBackgroundPermission() {
         if (!checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
             DialogManager.showBackgroundPermissionDialog(
@@ -238,7 +230,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // function that is triggered after all permissions have been granted, which asks for permission to use the location
     private fun checkLocationEnabled() {
         val lManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val isEnabled = lManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -256,7 +247,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // creates and returns a click listener that handles multiple button clicks based on their IDs
     private fun onClicks(): View.OnClickListener {
         return View.OnClickListener {
             when (it.id) {
@@ -267,7 +257,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // binds the created click listener to the corresponding views in the layout using their IDs
     private fun setOnClicks() = with(binding) {
         val listener = onClicks()
         ivStartStop.setOnClickListener(listener)
@@ -275,7 +264,6 @@ class MapFragment : Fragment() {
         btnSetPrice.setOnClickListener(listener)
     }
 
-    // starts or stops the location tracking service and handles related UI updates.
     private fun startStopService() {
         if (!LocationService.isRunning) {
             startService()
@@ -305,7 +293,6 @@ class MapFragment : Fragment() {
             })
     }
 
-    // starts the location tracking service in foreground mode and initializes the timer
     private fun startLocationService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             activity?.startForegroundService(Intent(activity, LocationService::class.java))
@@ -317,7 +304,6 @@ class MapFragment : Fragment() {
         startTimer()
     }
 
-    // updates the UI and starts the timer if the location service is running
     private fun checkServiceState() {
         if (LocationService.isRunning) {
             binding.ivStartStop.setImageResource(R.drawable.ic_stop)
@@ -325,7 +311,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // starts a timer to update the elapsed time in the UI every second
     private fun startTimer() {
         timer?.cancel()
         timer = Timer()
@@ -339,19 +324,16 @@ class MapFragment : Fragment() {
         }, 1000, 1000)
     }
 
-    // observes time data and updates the UI with the current elapsed time
     private fun updateTime() {
         mapViewModel.timeData.observe(viewLifecycleOwner) {
             binding.tvTime.text = it
         }
     }
 
-    // retrieves the current elapsed time as a formatted string
     private fun getCurrentTime(): String {
         return TimeUtils.getTime(System.currentTimeMillis() - startTime)
     }
 
-    // function for setting the price per route
     private fun setPrice() {
         showPriceDialog(requireContext(), object : PriceListener {
             override fun onClick(price: String) {
@@ -363,14 +345,11 @@ class MapFragment : Fragment() {
         })
     }
 
-    // function for loading the price per route
     private fun loadCurrentPrice() {
         val currentPrice = LocationService.startPrice
         binding.btnSetPrice.text = getString(R.string.price_format, currentPrice)
     }
 
-    // broadcastReceiver listens for location updates broad-casted by LocationService
-    // when receiving an intent with the location data, it extracts the LocationModel and updates the model with the new location
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == LocationService.LOC_MODEL_INTENT) {
@@ -390,7 +369,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    // Registers a receiver for location updates by creating an IntentFilter with the specified action
     private fun registerLocationReceiver() {
         val locationFilter = IntentFilter().apply {
             addAction(LocationService.LOC_MODEL_INTENT)
@@ -400,7 +378,6 @@ class MapFragment : Fragment() {
             .registerReceiver(receiver, locationFilter)
     }
 
-    // observes location updates and refreshes UI elements like distance, speed, polyline
     private fun locationUpdates() = with(binding) {
         mapViewModel.locationUpdates.observe(viewLifecycleOwner) {
             val distance = "${getString(R.string.distance)} ${String.format(Locale.US, "%.1f", it.distance / 1000)} ${getString(R.string.km)}"
@@ -417,33 +394,27 @@ class MapFragment : Fragment() {
         }
     }
 
-    // function for calculating the average speed
     private fun getAverageSpeed(distance: Float): String {
         return String.format(Locale.US, "%.1f", 3.6f * (distance / ((System.currentTimeMillis() - startTime) / 1000.0f))
         )
     }
 
-    // function for price calculation
     private fun getPrice(distance: Float, startPrice: BigDecimal): String {
         val distanceInKm = BigDecimal(distance.toDouble()).divide(BigDecimal(1000), 1, RoundingMode.HALF_UP)
         val price = distanceInKm.multiply(startPrice)
         return String.format(Locale.US, "%.1f", price)
     }
 
-    // adds the last point from the list to the polyline
     private fun addPoint(list: List<GeoPoint>) {
         if (list.isNotEmpty()) polyLine?.addPoint(list[list.size - 1])
     }
 
-    // adds all points from the list to the polyline
     private fun fillPolyline(list: List<GeoPoint>) {
         list.forEach {
             polyLine?.addPoint(it)
         }
     }
 
-    // updates the polyline by either adding all points (on the first start)
-    // or adding only the last point to extend the existing path.
     private fun updatePolyline(list: List<GeoPoint>) {
         if (list.size > 1 && firstStart) {
             fillPolyline(list)
@@ -453,15 +424,12 @@ class MapFragment : Fragment() {
         }
     }
 
-    // unregisters the location updates receiver when the fragment is detached
-    // to prevent memory leaks and unnecessary background updates
     override fun onDetach() {
         super.onDetach()
         LocalBroadcastManager.getInstance(activity as AppCompatActivity)
             .unregisterReceiver(receiver)
     }
 
-    // returns a TrackItem object with current time, date, distance, average speed, geo points, and price
     private fun getTrackItem(): TrackItem {
         return TrackItem(
             null,
@@ -476,7 +444,6 @@ class MapFragment : Fragment() {
         )
     }
 
-    // Converts a list of GeoPoints to a string in the format "lat1, lon1/lat2, lon2/..."
     private fun geoPointsToString(list: List<GeoPoint>): String {
         val stringBuilder = StringBuilder()
         list.forEach {
@@ -485,7 +452,6 @@ class MapFragment : Fragment() {
         return stringBuilder.toString()
     }
 
-    // centers the map on the user's current location and enables location follow mode
     private fun  centerLocation() {
         binding.map.controller.animateTo(myLocationOverlay.myLocation)
         myLocationOverlay.enableFollowLocation()
