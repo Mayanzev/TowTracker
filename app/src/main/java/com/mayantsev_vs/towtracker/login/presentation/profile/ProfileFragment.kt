@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.settings.presentation
+package com.mayantsev_vs.towtracker.login.presentation.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,6 @@ import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentProfileBinding
 import com.mayantsev_vs.towtracker.login.presentation.login.LoginFragment
 import com.mayantsev_vs.towtracker.login.presentation.login.LoginViewModel
-import com.mayantsev_vs.towtracker.login.presentation.profile.ProfileUiState
-import com.mayantsev_vs.towtracker.login.presentation.profile.ProfileViewModel
 import com.mayantsev_vs.towtracker.main.utils.openFragment
 import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
@@ -120,5 +118,8 @@ class ProfileFragment : Fragment() {
             profileViewModel.changeEdit(false)
         }
 
+        loginViewModel.progressLiveData.observe(viewLifecycleOwner) {
+            binding.profileProgress.visibility = it
+        }
     }
 }

@@ -1,72 +1,53 @@
 <resources>
     <string name="app_name">TowTracker</string>
-
     <string name="map">Карта</string>
     <string name="order">Заказ</string>
     <string name="main_settings">Настройки</string>
-
     <string name="location_preferences">Настройки местоположения</string>
-
     <string name="update_time">Скорость обновления</string>
     <string name="update_time_summary">Скорость обновления местоположения.</string>
-
     <string name="track_color">Цвет маршрута</string>
     <string name="track_color_summary">Цвет маршрута на карте.</string>
-
     <string name="location_disabled">Местоположение выключено</string>
     <string name="location_dialog_message">Вы хотите включить GPS?</string>
-
     <string name="background_mode_disabled">Разрешение на фоновое местоположение</string>
     <string name="background_mode_message">Для улучшения работы приложения нам нужен доступ к вашему местоположению даже в фоновом режиме. Пожалуйста, разрешите это в настройках приложения.</string>
-
     <string name="location_permission_denied">Вы не дали разрешение на использование местоположения!</string>
     <string name="location_permission_granted">Вы дали разрешение на использование местоположения!</string>
-
     <string name="notification_permission_granted">Вы дали разрешение на получение уведомлений!</string>
     <string name="notification_permission_denied">Вы не дали разрешение на получение уведомлений!</string>
-
     <string name="yes_button">Да</string>
     <string name="no_button">Нет</string>
     <string name="go_to_settings">Перейти в настройки</string>
     <string name="cancel_button">Отмена</string>
-
     <string name="km">км</string>
     <string name="km_h">км/ч</string>
     <string name="currency_symbol">р</string>
-
     <string name="time">Время:</string>
     <string name="average_speed">Средняя скорость:</string>
     <string name="speed">Скорость:</string>
     <string name="distance">Расстояние:</string>
     <string name="price">Цена:</string>
-
     <string name="time_label">00:00:00</string>
     <string name="average_speed_label">Средняя скорость: 0.0 км/ч</string>
     <string name="speed_label">Скорость: 0.0 км/ч</string>
     <string name="distance_label">Расстояние: 0.0 км</string>
     <string name="price_label">Цена: 0.0 р</string>
     <string name="price_format">%1$s р / км</string>
-
     <string name="price_change_message">Цена за километр маршрута изменена на %1$s р</string>
     <string name="enter_price_hint">Введите цену</string>
     <string name="price_dialog_title">Укажите цену</string>
     <string name="price_dialog_message">Введите стоимость за один километр маршрута:</string>
     <string name="ok_button">Ок</string>
-
     <string name="notification_title">Трекер активен!</string>
     <string name="notification_content">Ваше местоположение отслеживается.</string>
-
     <string name="track_saved">Маршрут сохранен</string>
-
     <string name="save_button">Сохранить</string>
     <string name="save_track_title">Сохранить этот маршрут?</string>
-
     <string name="enter_service_name_hint">Введите название услуги</string>
     <string name="add_service_dialog_title">Добавление услуги</string>
     <string name="add_service_dialog_message">Пожалуйста, укажите детали услуги</string>
-
     <string name="service_saved">Услуга сохранена</string>
-
     <string name="date_format_label">дд/мм/гггг чч:мм</string>
     <string name="time_format_label">чч:мм:cc</string>
     <string name="price_format_label">0</string>
@@ -76,16 +57,18 @@
     <string name="arrow">→</string>
     <string name="total_price_label">ИТОГ: %1$s р</string>
     <string name="complete_order_button">Завершить заказ</string>
-
     <string name="empty_message">Список пуст</string>
     <string name="profile_button">Профиль</string>
     <string name="settings_button">Настройки</string>
-
     <string name="new_order">Новый заказ</string>
-
     <string name="email">E-mail</string>
     <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
+    <string name="old_password">Старый пароль</string>
+    <string name="enter_old_password">Введите старый пароль</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="enter_new_password">Введите новый пароль</string>
+    <string name="confirm_new_password">Подтвердите новый пароль</string>
     <string name="repeat_password">Повторите пароль</string>
     <string name="login">Зарегистрироваться</string>
     <string name="registered">У меня уже есть аккаунт</string>
@@ -96,5 +79,10 @@
     <string name="exit">Выйти из аккаунта</string>
     <string name="enter">Войти</string>
     <string name="edit">Редактировать</string>
-
+    <string name="profile_settings">Настройки профиля</string>
+    <string name="no_internet_connection_message">Невозможно отобразить данные без соединения с интернетом</string>
+    <string name="address_error_message">Не удалось получить адрес. Проверьте интернет-соединение.</string>
+    <string name="app_description">Мобильное приложение для водителей эвакуаторов</string>
+    <string name="no_internet_connection_error">Нет соединения с интернетом</string>
+    <string name="server_connection_error">Ошибка соединения с сервером</string>
 </resources>

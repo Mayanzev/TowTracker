@@ -58,8 +58,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        openFragment(LoginFragment())
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (!checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
                 requestPermissions(

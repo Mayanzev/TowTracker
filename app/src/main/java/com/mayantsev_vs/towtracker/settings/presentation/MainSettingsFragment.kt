@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.mayantsev_vs.towtracker.main.utils.openParentFragmentBackstack
 import com.mayantsev_vs.towtracker.databinding.FragmentMainSettingsBinding
+import com.mayantsev_vs.towtracker.login.presentation.profile.ProfileFragment
 
 class MainSettingsFragment : Fragment() {
     private lateinit var binding: FragmentMainSettingsBinding

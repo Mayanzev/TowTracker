@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ import com.mayantsev_vs.towtracker.order.presentation.order.OrderViewModel
 import com.mayantsev_vs.towtracker.order.presentation.tracks.TrackViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
@@ -94,6 +96,10 @@ class MapFragment : Fragment() {
         loadCurrentPrice()
         observeOrderFinish()
         observeOrderState()
+
+        mapViewModel.progressLiveData.observe(viewLifecycleOwner) {
+            binding.mapProgress.visibility = it
+        }
     }
 
     override fun onResume() {
@@ -120,6 +126,7 @@ class MapFragment : Fragment() {
         )
         map.controller.setZoom(15.0)
 
+        map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
         map.setMultiTouchControls(true)
 
         val myLocationProvider = GpsMyLocationProvider(activity)
@@ -276,6 +283,7 @@ class MapFragment : Fragment() {
     }
 
     private fun startService() {
+        mapViewModel.updateProgress(View.VISIBLE)
         startLocationService()
         if (orderViewModel.isOrderStarted.value == false) {
             orderViewModel.activeOrder()
@@ -361,7 +369,7 @@ class MapFragment : Fragment() {
         binding.btnSetPrice.text = getString(R.string.price_format, currentPrice)
     }
 
-    // broadcastReceiver listens for location updates broadcasted by LocationService
+    // broadcastReceiver listens for location updates broad-casted by LocationService
     // when receiving an intent with the location data, it extracts the LocationModel and updates the model with the new location
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -376,13 +384,18 @@ class MapFragment : Fragment() {
                     )
                 }
                 mapViewModel.locationUpdates.value = locationModel
+            } else if (intent?.action == LocationService.PROGRESS_INTENT) {
+                mapViewModel.updateProgress(View.GONE)
             }
         }
     }
 
     // Registers a receiver for location updates by creating an IntentFilter with the specified action
     private fun registerLocationReceiver() {
-        val locationFilter = IntentFilter(LocationService.LOC_MODEL_INTENT)
+        val locationFilter = IntentFilter().apply {
+            addAction(LocationService.LOC_MODEL_INTENT)
+            addAction(LocationService.PROGRESS_INTENT)
+        }
         LocalBroadcastManager.getInstance(activity as AppCompatActivity)
             .registerReceiver(receiver, locationFilter)
     }
@@ -401,7 +414,6 @@ class MapFragment : Fragment() {
             tvPrice.text = price
             locationModel = it
             updatePolyline(it.geoPointsList)
-
         }
     }
 

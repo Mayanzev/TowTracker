@@ -1,5 +1,6 @@
 package com.mayantsev_vs.towtracker.login.presentation.login
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,6 +30,10 @@ class LoginViewModel(
     private val _error: MutableLiveData<String> = MutableLiveData()
     val error: MutableLiveData<String> = _error
 
+    val _progressLiveData = MutableLiveData<Int>()
+    val progressLiveData: LiveData<Int> = _progressLiveData
+
+
     fun register(email: String, username: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.register(email, username, password)
@@ -57,9 +62,11 @@ class LoginViewModel(
     }
 
     fun init() {
+        _progressLiveData.value = View.VISIBLE
         viewModelScope.launch(Dispatchers.IO) {
             val token = repository.getToken()
             _registeredLiveData.postValue(token != null)
+            _progressLiveData.postValue(View.GONE)
         }
     }
 
@@ -79,6 +86,7 @@ class LoginViewModel(
     }
 
     fun getUser() {
+        _progressLiveData.value = View.VISIBLE
         _error.value = ""
         viewModelScope.launch(Dispatchers.IO) {
             val userData = repository.getUser()
@@ -93,6 +101,7 @@ class LoginViewModel(
                 val failure = userData as Result.Failure
                 _error.postValue(failure.message)
             }
+            _progressLiveData.postValue(View.GONE)
         }
     }
 }

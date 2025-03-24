@@ -28,11 +28,11 @@ class LoginRepository(
             )
             dao.insertUser(userItem)
             return Result.Success
-        } catch (e: ConnectException) {
+        } catch (_: ConnectException) {
             return Result.Failure("Нет соединения с интернетом")
         } catch (e: HttpException) {
             return Result.Failure(e.response()?.errorBody()?.string() ?: "")
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             return Result.Failure("Ошибка соединения с сервером")
         }
     }
@@ -51,11 +51,11 @@ class LoginRepository(
             )
             dao.insertUser(userItem)
             return Result.Success
-        } catch (e: ConnectException) {
+        } catch (_: ConnectException) {
             return Result.Failure("Нет соединения с интернетом")
         } catch (e: HttpException) {
             return Result.Failure(e.response()?.errorBody()?.string() ?: "")
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             return Result.Failure("Ошибка соединения с сервером")
         }
     }
@@ -75,11 +75,11 @@ class LoginRepository(
                 userCloud.login,
                 userCloud.username
             )
-        } catch (e: ConnectException) {
+        } catch (_: ConnectException) {
             return Result.Failure("Нет соединения с интернетом")
         } catch (e: HttpException) {
             return Result.Failure(e.response()?.errorBody()?.string() ?: "")
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             return Result.Failure("Ошибка соединения с сервером")
         }
     }
@@ -101,7 +101,7 @@ class LoginRepository(
             )
             loginService.updateUserPassword(dao.getToken() ?: "", userPasswordReceive)
             return Result.Success
-        } catch (e: ConnectException) {
+        } catch (_: ConnectException) {
             return Result.Failure("Нет соединения с интернетом")
         } catch (e: HttpException) {
             return Result.Failure(e.response()?.errorBody()?.string() ?: "")

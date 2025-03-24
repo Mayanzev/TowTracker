@@ -1,11 +1,9 @@
 package com.mayantsev_vs.towtracker.order.presentation.tracks
 
-import android.util.Log
 import androidx.lifecycle.*
+import com.mayantsev_vs.towtracker.order.data.cache.TrackItem
 import com.mayantsev_vs.towtracker.order.data.cloud.Address
 import com.mayantsev_vs.towtracker.order.data.cloud.NominatimService
-import com.mayantsev_vs.towtracker.order.data.cache.TrackItem
-import com.mayantsev_vs.towtracker.order.data.cloud.GeocodeResponse
 import com.mayantsev_vs.towtracker.sl.MainDb
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
@@ -24,19 +22,13 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
 
         val latitudeSecondCity = geoPointList.last().latitude
         val longitudeSecondCity = geoPointList.last().longitude
+
         try {
-
-            Log.d("mylog", "$latitudeFirstCity, $longitudeFirstCity")
-            Log.d("mylog", "$latitudeSecondCity, $longitudeSecondCity")
-
             val responseFirst = nominatimService.reverseGeocode(latitudeFirstCity, longitudeFirstCity)
             val responseSecond = nominatimService.reverseGeocode(latitudeSecondCity, longitudeSecondCity)
 
             val firstCityAddress = buildFullAddress(responseFirst.address)
             val secondCityAddress = buildFullAddress(responseSecond.address)
-
-            Log.d("mylog", firstCityAddress)
-            Log.d("mylog", secondCityAddress)
 
             newTrackItem = TrackItem(
                 newTrackItem.id,
@@ -49,9 +41,20 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
                 firstCityAddress,
                 secondCityAddress
             )
-        } catch (e: Exception) {
+        } catch (_: Exception) {
+            val errorMessage = "Не удалось получить адрес. Проверьте интернет-соединение."
+            newTrackItem = TrackItem(
+                newTrackItem.id,
+                newTrackItem.time,
+                newTrackItem.date,
+                newTrackItem.distance,
+                newTrackItem.speed,
+                newTrackItem.geoPoints,
+                newTrackItem.price,
+                errorMessage,
+                errorMessage
+            )
         }
-
         dao.insertTrack(newTrackItem)
     }
 

@@ -94,5 +94,10 @@ class LoginFragment : Fragment() {
                 showToast(error)
             }
         }
+
+        loginViewModel.progressLiveData.observe(viewLifecycleOwner) {
+            binding.loginProgress.visibility = it
+        }
+
     }
 }

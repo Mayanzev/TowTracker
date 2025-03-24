@@ -143,13 +143,17 @@ class LocationService : Service() {
     private fun sendLocationData(locationModel: LocationModel) {
         val intent = Intent(LOC_MODEL_INTENT)
         intent.putExtra(LOC_MODEL_INTENT, locationModel)
-        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+        val broadcast = LocalBroadcastManager.getInstance(applicationContext).apply { sendBroadcast(intent) }
+
+        val progressIntent = Intent(PROGRESS_INTENT)
+        broadcast.sendBroadcast(progressIntent)
     }
 
 
     companion object {
         const val CHANNEL_ID = "channel_1"
         const val LOC_MODEL_INTENT = "loc_intent"
+        const val PROGRESS_INTENT = "progress_intent"
         var isRunning = false
         var startTime = 0L
         var startPrice: BigDecimal = BigDecimal("0.0")

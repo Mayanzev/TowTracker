@@ -54,6 +54,9 @@ class ViewTrackFragment : Fragment() {
             }
         )
 
+        binding.map.setMultiTouchControls(true)
+        binding.map.zoomController.setVisibility(org.osmdroid.views.CustomZoomButtonsController.Visibility.NEVER)
+
     }
 
     // configures OSM settings by loading preferences and setting the user agent
@@ -125,8 +128,6 @@ class ViewTrackFragment : Fragment() {
     }
 
     companion object {
-        @JvmStatic
-        fun newInstance() = ViewTrackFragment()
         const val KEY_COLOR = "color_key"
     }
 }
