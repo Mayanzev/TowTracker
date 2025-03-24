@@ -33,6 +33,14 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         getTracks()
+
+        binding.swipeLayout.setOnRefreshListener {
+            tracksViewModel.updateErrorTracks()
+        }
+
+        tracksViewModel.swipeLiveData.observe(viewLifecycleOwner) {
+            binding.swipeLayout.isRefreshing = it
+        }
     }
 
     // initializes RecyclerView with a LinearLayoutManager and sets the adapter

@@ -65,4 +65,6 @@ dependencies {
 
     implementation(libs.converter.gson)
     implementation(libs.retrofit)
+
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
 }
