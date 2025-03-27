@@ -52,9 +52,9 @@ interface ProfileUiState {
             newPasswordLinear.visibility = View.VISIBLE
             passwordLinear.visibility = View.VISIBLE
 
-//            newPasswordEditText.text?.clear()
-//            repeatedPasswordEditText.text?.clear()
-//            passwordEditText.text?.clear()
+            newPasswordEditText.text?.clear()
+            repeatedPasswordEditText.text?.clear()
+            passwordEditText.text?.clear()
         }
     }
 

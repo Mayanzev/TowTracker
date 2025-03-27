@@ -1,5 +1,6 @@
 package com.mayantsev_vs.towtracker.main.utils
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +44,10 @@ fun AppCompatActivity.openFragment(f: Fragment) {
 
 fun Fragment.showToast(s: String) {
     Toast.makeText(activity, s, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
 fun AppCompatActivity.showToast(s: String) {

@@ -9,8 +9,8 @@ import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.LinearLayout
 import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.order.data.cache.TrackItem
 import com.mayantsev_vs.towtracker.databinding.RouteDialogBinding
+import com.mayantsev_vs.towtracker.order.data.cache.TrackItem
 
 object DialogManager {
 
@@ -90,33 +90,63 @@ object DialogManager {
     fun showServiceDialog(context: Context, listener: ServiceListener) {
         val builder = AlertDialog.Builder(context)
 
-        val layout = LinearLayout(context)
-        layout.orientation = LinearLayout.VERTICAL
+        val layout = LinearLayout(context).apply {
+            orientation = LinearLayout.VERTICAL
+        }
 
-        val serviceNameInput = EditText(context)
-        serviceNameInput.hint = context.getString(R.string.enter_service_name_hint)
+        val serviceNameInput = EditText(context).apply {
+            hint = context.getString(R.string.enter_service_name_hint)
+        }
 
-        val servicePriceInput = EditText(context)
-        servicePriceInput.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-        servicePriceInput.hint = context.getString(R.string.enter_price_hint)
+        val servicePriceInput = EditText(context).apply {
+            inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+            hint = context.getString(R.string.enter_price_hint)
+            filters = arrayOf(
+                android.text.InputFilter { source, start, end, dest, dstart, dend ->
+                    val result = dest.toString().substring(0, dstart) + source + dest.toString().substring(dend)
+                    if (result.matches(Regex("^\\d{0,6}(\\.\\d{0,2})?\$"))) {
+                        null
+                    } else {
+                        ""
+                    }
+                }
+            )
+        }
 
         layout.addView(serviceNameInput)
         layout.addView(servicePriceInput)
 
-        builder.setTitle(context.getString(R.string.add_service_dialog_title))
+        val dialog = builder.setTitle(context.getString(R.string.add_service_dialog_title))
             .setMessage(context.getString(R.string.add_service_dialog_message))
             .setView(layout)
-            .setPositiveButton(context.getString(R.string.ok_button)) { _, _ ->
-                val serviceName = serviceNameInput.text.toString()
-                val servicePrice = servicePriceInput.text.toString()
-                listener.onClick(serviceName, servicePrice)
-            }
+            .setPositiveButton(context.getString(R.string.ok_button), null)
             .setNegativeButton(context.getString(R.string.cancel_button)) { dialog, _ ->
                 dialog.dismiss()
             }
+            .create()
 
-        builder.create().show()
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positiveButton.setOnClickListener {
+                val serviceName = serviceNameInput.text.toString().trim()
+                val servicePrice = servicePriceInput.text.toString().trim()
+
+                if (serviceName.isNotEmpty() && servicePrice.isNotEmpty()) {
+                    listener.onClick(serviceName, servicePrice)
+                    dialog.dismiss()
+                } else {
+                    if (serviceName.isEmpty()) {
+                        context.showToast(context.getString(R.string.enter_service_name_hint))
+                    }
+                    if (servicePrice.isEmpty()) {
+                        context.showToast(context.getString(R.string.enter_price_hint))
+                    }
+                }
+            }
+        }
+        dialog.show()
     }
+
 
 
 

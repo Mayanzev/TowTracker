@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentLoginScreenBinding
-import com.mayantsev_vs.towtracker.main.utils.openMainFragment
 import com.mayantsev_vs.towtracker.main.presentation.MainFragment
+import com.mayantsev_vs.towtracker.main.utils.openMainFragment
 import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import kotlin.getValue
@@ -31,7 +31,6 @@ class LoginFragment : Fragment() {
         val loginViewModel: LoginViewModel by activityViewModels {
             ViewModelFactory(requireContext().applicationContext)
         }
-
 
         binding.loginButton.setOnClickListener {
             if (loginViewModel.stateLiveData.value != LoginUiState.Login) {
