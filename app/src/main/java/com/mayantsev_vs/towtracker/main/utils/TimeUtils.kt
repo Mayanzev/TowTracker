@@ -8,7 +8,7 @@ import java.util.*
 @SuppressLint("SimpleDateFormat")
 object TimeUtils {
     private val timeFormatter = SimpleDateFormat("HH:mm:ss")
-    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy HH:mm")
+    private val dateFormatter = SimpleDateFormat("dd.MM.yyyy HH:mm")
 
     fun getTime(timeInMillis: Long): String {
         val cv = Calendar.getInstance()

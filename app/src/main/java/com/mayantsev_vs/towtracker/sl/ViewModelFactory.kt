@@ -26,7 +26,8 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
     private val baseUrl = "http://10.0.2.2:8080/"
     private val baseUrlState = "https://e60c-94-142-136-113.ngrok-free.app/"
     private val loginService = Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(
-        GsonConverterFactory.create()).build().create(LoginService::class.java)
+        GsonConverterFactory.create()
+    ).build().create(LoginService::class.java)
     private val repository = LoginRepository(loginService, database.getDaoUser())
 
     val retrofit = Retrofit.Builder()
@@ -37,10 +38,20 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(TrackViewModel::class.java) -> TrackViewModel(database, nominatimService) as T
+            modelClass.isAssignableFrom(TrackViewModel::class.java) -> TrackViewModel(
+                database,
+                nominatimService
+            ) as T
+
             modelClass.isAssignableFrom(ServiceViewModel::class.java) -> ServiceViewModel(database) as T
             modelClass.isAssignableFrom(MapViewModel::class.java) -> MapViewModel() as T
-            modelClass.isAssignableFrom(OrderViewModel::class.java) -> OrderViewModel(preferencesHelper) as T
+            modelClass.isAssignableFrom(OrderViewModel::class.java) -> OrderViewModel(
+                preferencesHelper,
+                database.getDaoUser(),
+                database.getDaoService(),
+                database.getDaoTrack()
+            ) as T
+
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(repository) as T
             modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel() as T
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> ProfileViewModel(repository) as T

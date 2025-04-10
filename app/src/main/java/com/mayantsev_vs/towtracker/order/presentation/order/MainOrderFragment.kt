@@ -1,9 +1,11 @@
 package com.mayantsev_vs.towtracker.order.presentation.order
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -17,6 +19,7 @@ import com.mayantsev_vs.towtracker.main.utils.openParentFragmentBackstack
 import com.mayantsev_vs.towtracker.databinding.FragmentMainOrderBinding
 import com.mayantsev_vs.towtracker.main.presentation.MainFragment.CurrentScreen
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
+import com.mayantsev_vs.towtracker.main.utils.TimeUtils
 import com.mayantsev_vs.towtracker.map.presentation.MapFragment
 import com.mayantsev_vs.towtracker.map.presentation.MapViewModel
 import com.mayantsev_vs.towtracker.order.presentation.services.ServiceViewModel
@@ -59,6 +62,7 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -66,6 +70,11 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
         observeData()
         onCompleteOrderClick()
         observeOrderState()
+
+        binding.ivSavePdf.setOnClickListener {
+            val fileName = TimeUtils.getDate()
+            orderViewModel.savePdf(true, requireContext(), fileName)
+        }
     }
 
     private fun setupViewPager() {

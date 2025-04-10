@@ -19,4 +19,6 @@ interface TrackDao {
     suspend fun deleteAllTracks()
     @Query("SELECT * FROM TRACK")
     fun getAllTracksList(): List<TrackItem>
+    @Query("SELECT * FROM TRACK")
+    fun getAllTracksPrint(): List<TrackItem>
 }

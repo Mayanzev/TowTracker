@@ -18,4 +18,7 @@ interface UserDao {
 
     @Query("DELETE FROM users_table")
     suspend fun clearUser()
+
+    @Query("SELECT username FROM users_table")
+    suspend fun getUsername(): String?
 }
