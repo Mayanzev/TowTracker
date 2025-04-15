@@ -3,6 +3,9 @@ package com.mayantsev_vs.towtracker.sl
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mayantsev_vs.towtracker.history.data.HistoryRepository
+import com.mayantsev_vs.towtracker.history.data.cloud.HistoryService
+import com.mayantsev_vs.towtracker.history.presentation.HistoryViewModel
 import com.mayantsev_vs.towtracker.order.data.cloud.NominatimService
 import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
 import com.mayantsev_vs.towtracker.login.data.LoginRepository
@@ -25,9 +28,12 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
 
     private val baseUrl = "http://10.0.2.2:8080/"
     private val baseUrlState = "https://e60c-94-142-136-113.ngrok-free.app/"
-    private val loginService = Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(
-        GsonConverterFactory.create()
-    ).build().create(LoginService::class.java)
+
+    private val loginService = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(LoginService::class.java)
     private val repository = LoginRepository(loginService, database.getDaoUser())
 
     val retrofit = Retrofit.Builder()
@@ -35,6 +41,13 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     val nominatimService = retrofit.create(NominatimService::class.java)
+
+    val historyService = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(HistoryService::class.java)
+    val historyRepository = HistoryRepository(historyService, database.getDaoUser())
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
@@ -55,6 +68,7 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(repository) as T
             modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel() as T
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> ProfileViewModel(repository) as T
+            modelClass.isAssignableFrom(HistoryViewModel::class.java) -> HistoryViewModel(historyRepository) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
