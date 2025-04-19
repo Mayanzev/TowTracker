@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.RouteDialogBinding
-import com.mayantsev_vs.towtracker.order.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
 
 object DialogManager {
 

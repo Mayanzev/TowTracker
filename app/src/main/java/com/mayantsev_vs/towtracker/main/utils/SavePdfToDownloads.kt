@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.utils
+package com.mayantsev_vs.towtracker.main.utils
 
 import android.content.ContentValues
 import android.content.Context
@@ -9,8 +9,11 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
-import com.mayantsev_vs.towtracker.order.data.cache.ServiceDao
-import com.mayantsev_vs.towtracker.order.data.cache.TrackDao
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceDao
+import com.mayantsev_vs.towtracker.track.data.cache.TrackDao
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

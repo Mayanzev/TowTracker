@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.presentation.order
+package com.mayantsev_vs.towtracker.order.presentation
 
 import android.content.Context
 import android.os.Build
@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mayantsev_vs.towtracker.login.data.cache.UserDao
 import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
-import com.mayantsev_vs.towtracker.order.data.cache.ServiceDao
-import com.mayantsev_vs.towtracker.order.data.cache.TrackDao
-import com.mayantsev_vs.towtracker.order.utils.generateAndSavePdf
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceDao
+import com.mayantsev_vs.towtracker.track.data.cache.TrackDao
+import com.mayantsev_vs.towtracker.main.utils.generateAndSavePdf
 
 class OrderViewModel(
     private val preferencesHelper: PreferencesHelper,

@@ -2,7 +2,7 @@
     <string name="app_name">TowTracker</string>
     <string name="map">Карта</string>
     <string name="order">Заказ</string>
-    <string name="main_settings">Настройки</string>
+    <string name="profile">Профиль</string>
     <string name="location_preferences">Настройки местоположения</string>
     <string name="update_time">Скорость обновления</string>
     <string name="update_time_summary">Скорость обновления местоположения.</string>
@@ -58,7 +58,7 @@
     <string name="total_price_label">ИТОГ: %1$s р</string>
     <string name="complete_order_button">Завершить заказ</string>
     <string name="empty_message">Список пуст</string>
-    <string name="profile_button">Профиль</string>
+    <string name="profile_button">Профиль пользователя</string>
     <string name="settings_button">Настройки</string>
     <string name="new_order">Новый заказ</string>
     <string name="email">E-mail</string>

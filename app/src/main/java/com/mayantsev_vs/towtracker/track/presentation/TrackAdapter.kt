@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.presentation.tracks
+package com.mayantsev_vs.towtracker.track.presentation
 
 import com.mayantsev_vs.towtracker.R
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mayantsev_vs.towtracker.order.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
 import com.mayantsev_vs.towtracker.databinding.TrackItemBinding
 
 

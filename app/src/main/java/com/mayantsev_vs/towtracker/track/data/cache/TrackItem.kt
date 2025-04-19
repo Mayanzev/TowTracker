@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.data.cache
+package com.mayantsev_vs.towtracker.track.data.cache
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

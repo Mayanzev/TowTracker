@@ -25,7 +25,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
 import com.mayantsev_vs.towtracker.databinding.FragmentMapBinding
-import com.mayantsev_vs.towtracker.order.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
 import com.mayantsev_vs.towtracker.map.data.location.LocationModel
 import com.mayantsev_vs.towtracker.map.data.location.LocationService
 import com.mayantsev_vs.towtracker.main.utils.DialogManager
@@ -38,8 +38,8 @@ import com.mayantsev_vs.towtracker.main.utils.checkPermission
 import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.main.presentation.MainFragment.CurrentScreen
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
-import com.mayantsev_vs.towtracker.order.presentation.order.OrderViewModel
-import com.mayantsev_vs.towtracker.order.presentation.tracks.TrackViewModel
+import com.mayantsev_vs.towtracker.order.presentation.OrderViewModel
+import com.mayantsev_vs.towtracker.track.presentation.TrackViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController

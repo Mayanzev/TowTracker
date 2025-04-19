@@ -10,19 +10,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ProfileViewModel(
+class UserProfileViewModel(
     private val repository: LoginRepository
 ): ViewModel() {
 
-    private val _profileState = MutableLiveData<ProfileUiState>()
-    val profileState: LiveData<ProfileUiState> = _profileState
+    private val _profileState = MutableLiveData<UserProfileUiState>()
+    val profileState: LiveData<UserProfileUiState> = _profileState
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
     fun changeEdit(isEdit: Boolean) {
-        if (isEdit) _profileState.value = ProfileUiState.Edit
-        else _profileState.value = ProfileUiState.Read
+        if (isEdit) _profileState.value = UserProfileUiState.Edit
+        else _profileState.value = UserProfileUiState.Read
     }
 
     fun updateUser(email: String, username: String) {

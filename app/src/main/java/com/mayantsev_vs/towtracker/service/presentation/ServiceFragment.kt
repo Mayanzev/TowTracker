@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.presentation.services
+package com.mayantsev_vs.towtracker.service.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,18 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.order.data.cache.ServiceItem
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceItem
 import com.mayantsev_vs.towtracker.main.utils.DialogManager.ServiceListener
 import com.mayantsev_vs.towtracker.main.utils.DialogManager.showServiceDialog
 import com.mayantsev_vs.towtracker.main.utils.TimeUtils
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.main.utils.showToast
-import com.mayantsev_vs.towtracker.databinding.FragmentServicesBinding
+import com.mayantsev_vs.towtracker.databinding.FragmentServiceBinding
 import kotlin.getValue
 
 
-class ServicesFragment : Fragment(), ServiceAdapter.Listener {
-    private lateinit var binding: FragmentServicesBinding
+class ServiceFragment : Fragment(), ServiceAdapter.Listener {
+    private lateinit var binding: FragmentServiceBinding
     private var serviceName: String? = null
     private var servicePrice: String? = null
     private var serviceDate: String? = null
@@ -32,7 +32,7 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentServicesBinding.inflate(inflater, container, false)
+        binding = FragmentServiceBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -79,7 +79,7 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
     }
 
     private fun initRecyclerView() = with(binding) {
-        adapter = ServiceAdapter(this@ServicesFragment)
+        adapter = ServiceAdapter(this@ServiceFragment)
         rcView.layoutManager = LinearLayoutManager(requireContext())
         rcView.adapter = adapter
     }
@@ -98,6 +98,6 @@ class ServicesFragment : Fragment(), ServiceAdapter.Listener {
 
     companion object {
         @JvmStatic
-        fun newInstance() = ServicesFragment()
+        fun newInstance() = ServiceFragment()
     }
 }

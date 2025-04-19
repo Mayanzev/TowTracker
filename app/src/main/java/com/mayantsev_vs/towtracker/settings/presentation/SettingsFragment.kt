@@ -9,7 +9,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.mayantsev_vs.towtracker.R
 
 
-class AppearanceSettingsFragment : PreferenceFragmentCompat() {
+class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var timePreference: Preference
     private lateinit var colorPreference: Preference
 

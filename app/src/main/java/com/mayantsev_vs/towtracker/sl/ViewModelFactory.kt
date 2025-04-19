@@ -11,12 +11,12 @@ import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
 import com.mayantsev_vs.towtracker.login.data.LoginRepository
 import com.mayantsev_vs.towtracker.login.data.cloud.LoginService
 import com.mayantsev_vs.towtracker.login.presentation.login.LoginViewModel
-import com.mayantsev_vs.towtracker.login.presentation.profile.ProfileViewModel
+import com.mayantsev_vs.towtracker.login.presentation.profile.UserProfileViewModel
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.map.presentation.MapViewModel
-import com.mayantsev_vs.towtracker.order.presentation.order.OrderViewModel
-import com.mayantsev_vs.towtracker.order.presentation.services.ServiceViewModel
-import com.mayantsev_vs.towtracker.order.presentation.tracks.TrackViewModel
+import com.mayantsev_vs.towtracker.order.presentation.OrderViewModel
+import com.mayantsev_vs.towtracker.service.presentation.ServiceViewModel
+import com.mayantsev_vs.towtracker.track.presentation.TrackViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -67,7 +67,7 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
 
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(repository) as T
             modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel() as T
-            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> ProfileViewModel(repository) as T
+            modelClass.isAssignableFrom(UserProfileViewModel::class.java) -> UserProfileViewModel(repository) as T
             modelClass.isAssignableFrom(HistoryViewModel::class.java) -> HistoryViewModel(historyRepository) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }

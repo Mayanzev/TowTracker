@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.presentation.order
+package com.mayantsev_vs.towtracker.order.presentation
 
 import android.os.Build
 import android.os.Bundle
@@ -11,8 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.order.data.cache.ServiceItem
-import com.mayantsev_vs.towtracker.order.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
 import com.mayantsev_vs.towtracker.map.data.location.LocationService
 import com.mayantsev_vs.towtracker.main.utils.openParentFragment
 import com.mayantsev_vs.towtracker.main.utils.openParentFragmentBackstack
@@ -22,10 +22,10 @@ import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.main.utils.TimeUtils
 import com.mayantsev_vs.towtracker.map.presentation.MapFragment
 import com.mayantsev_vs.towtracker.map.presentation.MapViewModel
-import com.mayantsev_vs.towtracker.order.presentation.services.ServiceViewModel
-import com.mayantsev_vs.towtracker.order.presentation.services.ServicesFragment
-import com.mayantsev_vs.towtracker.order.presentation.tracks.TrackViewModel
-import com.mayantsev_vs.towtracker.order.presentation.tracks.TracksFragment
+import com.mayantsev_vs.towtracker.service.presentation.ServiceViewModel
+import com.mayantsev_vs.towtracker.service.presentation.ServiceFragment
+import com.mayantsev_vs.towtracker.track.presentation.TrackViewModel
+import com.mayantsev_vs.towtracker.track.presentation.TrackFragment
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import java.math.BigDecimal
 import java.util.Locale
@@ -34,8 +34,8 @@ import kotlin.getValue
 
 class MainOrderFragment : Fragment(), FragmentNavigationListener {
     private val fragList = listOf(
-        TracksFragment.Companion.newInstance(),
-        ServicesFragment.Companion.newInstance()
+        TrackFragment.Companion.newInstance(),
+        ServiceFragment.Companion.newInstance()
     )
     private lateinit var binding: FragmentMainOrderBinding
     private val servicesViewModel: ServiceViewModel by activityViewModels {

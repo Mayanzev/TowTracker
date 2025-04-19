@@ -11,10 +11,10 @@ import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.main.utils.openFragment
 import com.mayantsev_vs.towtracker.databinding.FragmentMainBinding
 import com.mayantsev_vs.towtracker.map.presentation.MapFragment
-import com.mayantsev_vs.towtracker.order.presentation.order.MainOrderFragment
-import com.mayantsev_vs.towtracker.order.presentation.order.NewOrderFragment
-import com.mayantsev_vs.towtracker.order.presentation.order.OrderViewModel
-import com.mayantsev_vs.towtracker.settings.presentation.MainSettingsFragment
+import com.mayantsev_vs.towtracker.order.presentation.MainOrderFragment
+import com.mayantsev_vs.towtracker.order.presentation.NewOrderFragment
+import com.mayantsev_vs.towtracker.order.presentation.OrderViewModel
+import com.mayantsev_vs.towtracker.profile.presentation.ProfileFragment
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import kotlin.getValue
 
@@ -89,7 +89,7 @@ class MainFragment : Fragment() {
 
                 R.id.id_main_settings -> {
                     if (mainViewModel.bottomNavigation.value != CurrentScreen.SETTINGS) {
-                        openFragment(MainSettingsFragment())
+                        openFragment(ProfileFragment())
                         mainViewModel.changeBottomNavigation(CurrentScreen.SETTINGS)
                     }
                 }

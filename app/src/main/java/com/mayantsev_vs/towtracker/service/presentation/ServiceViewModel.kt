@@ -1,7 +1,7 @@
-package com.mayantsev_vs.towtracker.order.presentation.services
+package com.mayantsev_vs.towtracker.service.presentation
 
 import androidx.lifecycle.*
-import com.mayantsev_vs.towtracker.order.data.cache.ServiceItem
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceItem
 import com.mayantsev_vs.towtracker.sl.MainDb
 import kotlinx.coroutines.launch
 

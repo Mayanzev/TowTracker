@@ -8,7 +8,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mayantsev_vs.towtracker.R
 
-interface ProfileUiState {
+interface UserProfileUiState {
 
     fun apply(
         usernameTextLayout: TextInputLayout,
@@ -26,7 +26,7 @@ interface ProfileUiState {
         passwordLinear: LinearLayout
     )
 
-    object Edit: ProfileUiState {
+    object Edit: UserProfileUiState {
         override fun apply(
             usernameTextLayout: TextInputLayout,
             passwordInputLayout: TextInputLayout,
@@ -58,7 +58,7 @@ interface ProfileUiState {
         }
     }
 
-    object Read: ProfileUiState {
+    object Read: UserProfileUiState {
         override fun apply(
             usernameTextLayout: TextInputLayout,
             passwordInputLayout: TextInputLayout,

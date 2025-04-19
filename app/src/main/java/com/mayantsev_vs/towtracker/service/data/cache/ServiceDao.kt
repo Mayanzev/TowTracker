@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.data.cache
+package com.mayantsev_vs.towtracker.service.data.cache
 
 import androidx.room.Dao
 import androidx.room.Delete

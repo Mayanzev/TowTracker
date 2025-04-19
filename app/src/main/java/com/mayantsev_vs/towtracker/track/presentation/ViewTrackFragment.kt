@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.presentation.tracks
+package com.mayantsev_vs.towtracker.track.presentation
 
 import android.content.Context
 import android.graphics.Color
@@ -17,6 +17,7 @@ import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.databinding.FragmentViewTrackBinding
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.CustomZoomButtonsController
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 import kotlin.getValue
@@ -55,7 +56,7 @@ class ViewTrackFragment : Fragment() {
         )
 
         binding.map.setMultiTouchControls(true)
-        binding.map.zoomController.setVisibility(org.osmdroid.views.CustomZoomButtonsController.Visibility.NEVER)
+        binding.map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
 
     }
 

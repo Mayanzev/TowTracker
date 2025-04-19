@@ -8,7 +8,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.mayantsev_vs.towtracker.databinding.FragmentProfileBinding
+import com.mayantsev_vs.towtracker.databinding.FragmentUserProfileBinding
 import com.mayantsev_vs.towtracker.login.presentation.login.LoginFragment
 import com.mayantsev_vs.towtracker.login.presentation.login.LoginViewModel
 import com.mayantsev_vs.towtracker.main.utils.openFragment
@@ -17,12 +17,12 @@ import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import kotlin.getValue
 
 
-class ProfileFragment : Fragment() {
-    private lateinit var binding: FragmentProfileBinding
+class UserProfileFragment : Fragment() {
+    private lateinit var binding: FragmentUserProfileBinding
     private val loginViewModel: LoginViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
-    private val profileViewModel: ProfileViewModel by activityViewModels {
+    private val profileViewModel: UserProfileViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
 
@@ -30,7 +30,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        binding = FragmentUserProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -56,13 +56,13 @@ class ProfileFragment : Fragment() {
         }
 
         binding.editButton.setOnClickListener {
-            if (profileViewModel.profileState.value == ProfileUiState.Edit) {
+            if (profileViewModel.profileState.value == UserProfileUiState.Edit) {
                 if (binding.passwordEditText.text.toString().isEmpty()) {
                     profileViewModel.updateUser(
                         binding.emailEditText.text.toString(),
                         binding.usernameEditText.text.toString()
                     )
-                    profileViewModel.changeEdit(profileViewModel.profileState.value != ProfileUiState.Edit)
+                    profileViewModel.changeEdit(profileViewModel.profileState.value != UserProfileUiState.Edit)
                 } else {
                     if (binding.newPasswordEditText.text.toString() == binding.repeatedPasswordEditText.text.toString()) {
                         if (binding.newPasswordEditText.text.toString() != binding.passwordEditText.text.toString()) {
@@ -83,7 +83,7 @@ class ProfileFragment : Fragment() {
                     }
                 }
             } else {
-                profileViewModel.changeEdit(profileViewModel.profileState.value != ProfileUiState.Edit)
+                profileViewModel.changeEdit(profileViewModel.profileState.value != UserProfileUiState.Edit)
             }
         }
 

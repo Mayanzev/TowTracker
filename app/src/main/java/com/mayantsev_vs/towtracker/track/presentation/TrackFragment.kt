@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.presentation.tracks
+package com.mayantsev_vs.towtracker.track.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mayantsev_vs.towtracker.order.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
-import com.mayantsev_vs.towtracker.databinding.FragmentTracksBinding
-import com.mayantsev_vs.towtracker.order.presentation.order.FragmentNavigationListener
+import com.mayantsev_vs.towtracker.databinding.FragmentTrackBinding
+import com.mayantsev_vs.towtracker.order.presentation.FragmentNavigationListener
 import kotlin.getValue
 
-class TracksFragment : Fragment(), TrackAdapter.Listener {
-    private lateinit var binding: FragmentTracksBinding
+class TrackFragment : Fragment(), TrackAdapter.Listener {
+    private lateinit var binding: FragmentTrackBinding
     private lateinit var adapter: TrackAdapter
     private val tracksViewModel: TrackViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
@@ -25,7 +25,7 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTracksBinding.inflate(inflater, container, false)
+        binding = FragmentTrackBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,7 +44,7 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
     }
 
     private fun initRecyclerView() = with(binding) {
-        adapter = TrackAdapter(this@TracksFragment)
+        adapter = TrackAdapter(this@TrackFragment)
         rcView.layoutManager = LinearLayoutManager(requireContext())
         rcView.adapter = adapter
     }
@@ -69,6 +69,6 @@ class TracksFragment : Fragment(), TrackAdapter.Listener {
 
     companion object {
         @JvmStatic
-        fun newInstance() = TracksFragment()
+        fun newInstance() = TrackFragment()
     }
 }
