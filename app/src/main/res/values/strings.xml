@@ -10,8 +10,6 @@
     <string name="track_color_summary">Цвет маршрута на карте.</string>
     <string name="location_disabled">Местоположение выключено</string>
     <string name="location_dialog_message">Вы хотите включить GPS?</string>
-    <string name="background_mode_disabled">Разрешение на фоновое местоположение</string>
-    <string name="background_mode_message">Для улучшения работы приложения нам нужен доступ к вашему местоположению даже в фоновом режиме. Пожалуйста, разрешите это в настройках приложения.</string>
     <string name="location_permission_denied">Вы не дали разрешение на использование местоположения!</string>
     <string name="location_permission_granted">Вы дали разрешение на использование местоположения!</string>
     <string name="notification_permission_granted">Вы дали разрешение на получение уведомлений!</string>

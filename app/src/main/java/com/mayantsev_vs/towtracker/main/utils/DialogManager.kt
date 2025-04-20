@@ -28,20 +28,6 @@ object DialogManager {
         dialog.show()
     }
 
-    fun showBackgroundPermissionDialog(context: Context, listener: SimpleListener) {
-        val builder = AlertDialog.Builder(context)
-        val dialog = builder.create()
-        dialog.setTitle(context.getString(R.string.background_mode_disabled))
-        dialog.setMessage(context.getString(R.string.background_mode_message))
-        dialog.setButton(AlertDialog.BUTTON_POSITIVE, context.getString(R.string.go_to_settings)) { _, _ ->
-            listener.onClick()
-        }
-        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, context.getString(R.string.cancel_button)) { _, _ ->
-            dialog.dismiss()
-        }
-        dialog.show()
-    }
-
     fun showRouteDialog(context: Context, item: TrackItem?, listener: SimpleListener) {
         val builder = AlertDialog.Builder(context)
         val binding = RouteDialogBinding.inflate(LayoutInflater.from(context), null, false)

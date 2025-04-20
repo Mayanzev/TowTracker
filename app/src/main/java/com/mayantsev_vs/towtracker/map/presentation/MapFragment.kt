@@ -2,13 +2,11 @@ package com.mayantsev_vs.towtracker.map.presentation
 
 import android.Manifest
 import android.content.BroadcastReceiver
-import com.mayantsev_vs.towtracker.R
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -18,27 +16,27 @@ import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.preference.PreferenceManager
+import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.FragmentMapBinding
-import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
-import com.mayantsev_vs.towtracker.map.data.location.LocationModel
-import com.mayantsev_vs.towtracker.map.data.location.LocationService
+import com.mayantsev_vs.towtracker.main.presentation.MainFragment.CurrentScreen
+import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.main.utils.DialogManager
 import com.mayantsev_vs.towtracker.main.utils.DialogManager.PriceListener
 import com.mayantsev_vs.towtracker.main.utils.DialogManager.SimpleListener
 import com.mayantsev_vs.towtracker.main.utils.DialogManager.showPriceDialog
 import com.mayantsev_vs.towtracker.main.utils.TimeUtils
-import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.main.utils.checkPermission
 import com.mayantsev_vs.towtracker.main.utils.showToast
-import com.mayantsev_vs.towtracker.main.presentation.MainFragment.CurrentScreen
-import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
+import com.mayantsev_vs.towtracker.map.data.location.LocationModel
+import com.mayantsev_vs.towtracker.map.data.location.LocationService
 import com.mayantsev_vs.towtracker.order.presentation.OrderViewModel
+import com.mayantsev_vs.towtracker.sl.ViewModelFactory
+import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
 import com.mayantsev_vs.towtracker.track.presentation.TrackViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
@@ -154,51 +152,6 @@ class MapFragment : Fragment() {
     }
 
     private fun checkLocationPermission() {
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> checkPermissionAfter11()
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.Q -> checkPermissionAfter10()
-            else -> checkPermission10()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun checkPermissionAfter11() {
-        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
-            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-        ) {
-            initOSM()
-            checkLocationEnabled()
-            checkBackgroundPermission()
-        } else {
-            permissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            )
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun checkPermissionAfter10() {
-        if ((checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
-                    checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) &&
-            checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-        ) {
-            initOSM()
-            checkLocationEnabled()
-        } else {
-            permissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                )
-            )
-        }
-    }
-
-    private fun checkPermission10() {
         if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) ||
             checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
         ) {
@@ -210,22 +163,6 @@ class MapFragment : Fragment() {
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 )
-            )
-        }
-    }
-
-    private fun checkBackgroundPermission() {
-        if (!checkPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-            DialogManager.showBackgroundPermissionDialog(
-                activity as AppCompatActivity,
-                object : SimpleListener {
-                    override fun onClick() {
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.fromParts("package", requireActivity().packageName, null)
-                        }
-                        startActivity(intent)
-                    }
-                }
             )
         }
     }
