@@ -9,7 +9,6 @@ import com.mayantsev_vs.towtracker.login.data.LoginRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.mayantsev_vs.towtracker.login.data.Result
-import com.mayantsev_vs.towtracker.login.presentation.UserUiItem
 
 class LoginViewModel(
     private val repository: LoginRepository
@@ -23,9 +22,6 @@ class LoginViewModel(
 
     private val _registeredLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val registeredLiveData: LiveData<Boolean> = _registeredLiveData
-
-    private val _userLiveData: MutableLiveData<UserUiItem> = MutableLiveData()
-    val userLiveData: LiveData<UserUiItem> = _userLiveData
 
     private val _error: MutableLiveData<String> = MutableLiveData()
     val error: MutableLiveData<String> = _error
@@ -78,30 +74,8 @@ class LoginViewModel(
         }
     }
 
-    fun clearUser() {
-        _navigationLiveData.value = false
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.clearUser()
-        }
+    fun updateNavigation(value: Boolean) {
+        _navigationLiveData.value = value
     }
 
-    fun getUser() {
-        _progressLiveData.value = View.VISIBLE
-        _error.value = ""
-        viewModelScope.launch(Dispatchers.IO) {
-            val userData = repository.getUser()
-            if (userData is Result.SuccessUser) {
-                _userLiveData.postValue(
-                    UserUiItem(
-                        userData.login,
-                        userData.username
-                    )
-                )
-            } else {
-                val failure = userData as Result.Failure
-                _error.postValue(failure.message)
-            }
-            _progressLiveData.postValue(View.GONE)
-        }
-    }
 }

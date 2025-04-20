@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.mayantsev_vs.towtracker.main.utils.openParentFragmentBackstack
 import com.mayantsev_vs.towtracker.databinding.FragmentProfileBinding
 import com.mayantsev_vs.towtracker.history.presentation.HistoryFragment
-import com.mayantsev_vs.towtracker.login.presentation.profile.UserProfileFragment
+import com.mayantsev_vs.towtracker.userProfile.presentation.UserProfileFragment
 import com.mayantsev_vs.towtracker.settings.presentation.SettingsFragment
 
 class ProfileFragment : Fragment() {

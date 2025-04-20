@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.login.presentation.profile
+package com.mayantsev_vs.towtracker.userProfile.presentation
 
 import android.view.View
 import android.widget.Button

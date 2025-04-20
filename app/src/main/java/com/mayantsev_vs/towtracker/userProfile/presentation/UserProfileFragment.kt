@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.login.presentation.profile
+package com.mayantsev_vs.towtracker.userProfile.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,10 +19,10 @@ import kotlin.getValue
 
 class UserProfileFragment : Fragment() {
     private lateinit var binding: FragmentUserProfileBinding
-    private val loginViewModel: LoginViewModel by activityViewModels {
+    private val userProfileViewModel: UserProfileViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
-    private val profileViewModel: UserProfileViewModel by activityViewModels {
+    private val loginViewModel: LoginViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
 
@@ -46,32 +46,33 @@ class UserProfileFragment : Fragment() {
             }
         )
 
-        loginViewModel.getUser()
+        userProfileViewModel.getUser()
 
-        profileViewModel.changeEdit(false)
+        userProfileViewModel.changeEdit(false)
 
         binding.exitButton.setOnClickListener {
-            loginViewModel.clearUser()
+            userProfileViewModel.clearUser()
+            loginViewModel.updateNavigation(false)
             (requireActivity() as AppCompatActivity).openFragment(LoginFragment())
         }
 
         binding.editButton.setOnClickListener {
-            if (profileViewModel.profileState.value == UserProfileUiState.Edit) {
+            if (userProfileViewModel.profileState.value == UserProfileUiState.Edit) {
                 if (binding.passwordEditText.text.toString().isEmpty()) {
-                    profileViewModel.updateUser(
+                    userProfileViewModel.updateUser(
                         binding.emailEditText.text.toString(),
                         binding.usernameEditText.text.toString()
                     )
-                    profileViewModel.changeEdit(profileViewModel.profileState.value != UserProfileUiState.Edit)
+                    userProfileViewModel.changeEdit(userProfileViewModel.profileState.value != UserProfileUiState.Edit)
                 } else {
                     if (binding.newPasswordEditText.text.toString() == binding.repeatedPasswordEditText.text.toString()) {
                         if (binding.newPasswordEditText.text.toString() != binding.passwordEditText.text.toString()) {
-                            profileViewModel.updateUserPassword(
+                            userProfileViewModel.updateUserPassword(
                                 binding.emailEditText.text.toString(),
                                 binding.passwordEditText.text.toString(),
                                 binding.newPasswordEditText.text.toString()
                             )
-                            profileViewModel.updateUser(
+                            userProfileViewModel.updateUser(
                                 binding.emailEditText.text.toString(),
                                 binding.usernameEditText.text.toString()
                             )
@@ -83,20 +84,20 @@ class UserProfileFragment : Fragment() {
                     }
                 }
             } else {
-                profileViewModel.changeEdit(profileViewModel.profileState.value != UserProfileUiState.Edit)
+                userProfileViewModel.changeEdit(userProfileViewModel.profileState.value != UserProfileUiState.Edit)
             }
         }
 
-        profileViewModel.error.observe(viewLifecycleOwner) {
+        userProfileViewModel.error.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) showToast(it)
         }
 
-        loginViewModel.userLiveData.observe(viewLifecycleOwner) {
+        userProfileViewModel.userLiveData.observe(viewLifecycleOwner) {
             binding.emailEditText.setText(it.login)
             binding.usernameEditText.setText(it.username)
         }
 
-        profileViewModel.profileState.observe(viewLifecycleOwner) { profileState ->
+        userProfileViewModel.profileState.observe(viewLifecycleOwner) { profileState ->
             profileState.apply(
                 binding.usernameTextLayout,
                 binding.passwordTextLayout,
@@ -114,19 +115,19 @@ class UserProfileFragment : Fragment() {
             )
         }
 
-        loginViewModel.error.observe(viewLifecycleOwner) { error ->
-            if (loginViewModel.error.value?.isNotEmpty() == true) {
+        userProfileViewModel.networkError.observe(viewLifecycleOwner) { error ->
+            if (userProfileViewModel.networkError.value?.isNotEmpty() == true) {
                 showToast(error)
                 binding.errorTextView.visibility = View.VISIBLE
             }
         }
 
         binding.cancelButton.setOnClickListener {
-            loginViewModel.getUser()
-            profileViewModel.changeEdit(false)
+            userProfileViewModel.getUser()
+            userProfileViewModel.changeEdit(false)
         }
 
-        loginViewModel.progressLiveData.observe(viewLifecycleOwner) {
+        userProfileViewModel.progressLiveData.observe(viewLifecycleOwner) {
             binding.profileProgress.visibility = it
         }
     }
