@@ -4,11 +4,11 @@ import com.mayantsev_vs.towtracker.history.data.cloud.HistoryService
 import com.mayantsev_vs.towtracker.history.presentation.HistoryUiItem
 import com.mayantsev_vs.towtracker.history.presentation.ServiceUiItem
 import com.mayantsev_vs.towtracker.history.presentation.TrackUiItem
-import com.mayantsev_vs.towtracker.login.data.cache.UserDao
+import com.mayantsev_vs.towtracker.auth.data.cache.AuthDao
 
 class HistoryRepository(
     private val historyService: HistoryService,
-    private val userDao: UserDao
+    private val userDao: AuthDao
 ) {
     suspend fun getHistory(): List<HistoryUiItem> {
         val result = historyService.getHistory(userDao.getToken() ?: "").orders.map { order ->

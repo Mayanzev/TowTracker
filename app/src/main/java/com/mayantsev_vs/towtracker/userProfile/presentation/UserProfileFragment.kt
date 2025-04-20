@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentUserProfileBinding
-import com.mayantsev_vs.towtracker.login.presentation.login.LoginFragment
-import com.mayantsev_vs.towtracker.login.presentation.login.LoginViewModel
+import com.mayantsev_vs.towtracker.auth.presentation.auth.AuthFragment
+import com.mayantsev_vs.towtracker.auth.presentation.auth.AuthViewModel
 import com.mayantsev_vs.towtracker.main.utils.openFragment
 import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
@@ -22,7 +22,7 @@ class UserProfileFragment : Fragment() {
     private val userProfileViewModel: UserProfileViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
-    private val loginViewModel: LoginViewModel by activityViewModels {
+    private val loginViewModel: AuthViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
 
@@ -53,7 +53,7 @@ class UserProfileFragment : Fragment() {
         binding.exitButton.setOnClickListener {
             userProfileViewModel.clearUser()
             loginViewModel.updateNavigation(false)
-            (requireActivity() as AppCompatActivity).openFragment(LoginFragment())
+            (requireActivity() as AppCompatActivity).openFragment(AuthFragment())
         }
 
         binding.editButton.setOnClickListener {

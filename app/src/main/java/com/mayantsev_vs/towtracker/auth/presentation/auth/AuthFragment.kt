@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.login.presentation.login
+package com.mayantsev_vs.towtracker.auth.presentation.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,34 +6,34 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.mayantsev_vs.towtracker.databinding.FragmentLoginScreenBinding
+import com.mayantsev_vs.towtracker.databinding.FragmentAuthBinding
 import com.mayantsev_vs.towtracker.main.presentation.MainFragment
 import com.mayantsev_vs.towtracker.main.utils.openMainFragment
 import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import kotlin.getValue
 
-class LoginFragment : Fragment() {
+class AuthFragment : Fragment() {
 
-    private lateinit var binding: FragmentLoginScreenBinding
+    private lateinit var binding: FragmentAuthBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLoginScreenBinding.inflate(inflater, container, false)
+        binding = FragmentAuthBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val loginViewModel: LoginViewModel by activityViewModels {
+        val loginViewModel: AuthViewModel by activityViewModels {
             ViewModelFactory(requireContext().applicationContext)
         }
 
         binding.loginButton.setOnClickListener {
-            if (loginViewModel.stateLiveData.value != LoginUiState.Login) {
+            if (loginViewModel.stateLiveData.value != AuthUiState.Login) {
                 if (binding.emailTextView.text.toString().isEmpty()) {
                     showToast("E-mail не может быть пустым!")
                 } else if (binding.passwordTextView.text.toString().isEmpty()) {
@@ -62,7 +62,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.registered.setOnClickListener {
-            if (loginViewModel.stateLiveData.value != LoginUiState.Login) {
+            if (loginViewModel.stateLiveData.value != AuthUiState.Login) {
                 loginViewModel.updateRegistered(true)
             } else {
                 loginViewModel.updateRegistered(false)

@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.login.data.cloud
+package com.mayantsev_vs.towtracker.auth.data.cloud
 
 data class RegistrationBody (
     val login: String,

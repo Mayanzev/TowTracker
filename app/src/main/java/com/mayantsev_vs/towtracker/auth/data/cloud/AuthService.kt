@@ -1,9 +1,9 @@
-package com.mayantsev_vs.towtracker.login.data.cloud
+package com.mayantsev_vs.towtracker.auth.data.cloud
 
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface LoginService {
+interface AuthService {
 
     @POST("register")
     suspend fun register(@Body registrationBody: RegistrationBody): RegistrationResponse

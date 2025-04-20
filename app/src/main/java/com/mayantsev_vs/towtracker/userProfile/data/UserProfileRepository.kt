@@ -1,7 +1,7 @@
 package com.mayantsev_vs.towtracker.userProfile.data
 
 
-import com.mayantsev_vs.towtracker.login.data.cache.UserDao
+import com.mayantsev_vs.towtracker.auth.data.cache.AuthDao
 import com.mayantsev_vs.towtracker.userProfile.data.cloud.PasswordReceive
 import com.mayantsev_vs.towtracker.userProfile.data.cloud.UserProfileService
 import com.mayantsev_vs.towtracker.userProfile.data.cloud.UsernameReceive
@@ -10,7 +10,7 @@ import java.net.ConnectException
 
 class UserProfileRepository (
     private val userProfileService: UserProfileService,
-    private val dao: UserDao
+    private val dao: AuthDao
 ) {
     suspend fun clearUser() {
         return dao.clearUser()

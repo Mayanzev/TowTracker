@@ -8,9 +8,9 @@ import com.mayantsev_vs.towtracker.history.data.cloud.HistoryService
 import com.mayantsev_vs.towtracker.history.presentation.HistoryViewModel
 import com.mayantsev_vs.towtracker.order.data.cloud.NominatimService
 import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
-import com.mayantsev_vs.towtracker.login.data.LoginRepository
-import com.mayantsev_vs.towtracker.login.data.cloud.LoginService
-import com.mayantsev_vs.towtracker.login.presentation.login.LoginViewModel
+import com.mayantsev_vs.towtracker.auth.data.AuthRepository
+import com.mayantsev_vs.towtracker.auth.data.cloud.AuthService
+import com.mayantsev_vs.towtracker.auth.presentation.auth.AuthViewModel
 import com.mayantsev_vs.towtracker.userProfile.presentation.UserProfileViewModel
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.map.presentation.MapViewModel
@@ -35,8 +35,8 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-        .create(LoginService::class.java)
-    private val repository = LoginRepository(loginService, database.getDaoUser())
+        .create(AuthService::class.java)
+    private val repository = AuthRepository(loginService, database.getDaoUser())
 
     val retrofit = Retrofit.Builder()
         .baseUrl("https://nominatim.openstreetmap.org/")
@@ -74,7 +74,7 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
                 database.getDaoTrack()
             ) as T
 
-            modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(repository) as T
+            modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(repository) as T
             modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel() as T
             modelClass.isAssignableFrom(UserProfileViewModel::class.java) -> UserProfileViewModel(userProfileRepository) as T
             modelClass.isAssignableFrom(HistoryViewModel::class.java) -> HistoryViewModel(historyRepository) as T

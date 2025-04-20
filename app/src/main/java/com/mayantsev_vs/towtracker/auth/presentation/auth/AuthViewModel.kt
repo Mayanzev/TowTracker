@@ -1,21 +1,21 @@
-package com.mayantsev_vs.towtracker.login.presentation.login
+package com.mayantsev_vs.towtracker.auth.presentation.auth
 
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mayantsev_vs.towtracker.login.data.LoginRepository
+import com.mayantsev_vs.towtracker.auth.data.AuthRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import com.mayantsev_vs.towtracker.login.data.Result
+import com.mayantsev_vs.towtracker.auth.data.AuthResult
 
-class LoginViewModel(
-    private val repository: LoginRepository
+class AuthViewModel(
+    private val repository: AuthRepository
 ) : ViewModel() {
 
-    private val _stateLiveData: MutableLiveData<LoginUiState> = MutableLiveData()
-    val stateLiveData: LiveData<LoginUiState> = _stateLiveData
+    private val _stateLiveData: MutableLiveData<AuthUiState> = MutableLiveData()
+    val stateLiveData: LiveData<AuthUiState> = _stateLiveData
 
     private val _navigationLiveData: MutableLiveData<Boolean> = MutableLiveData()
     val navigationLiveData: LiveData<Boolean> = _navigationLiveData
@@ -33,12 +33,12 @@ class LoginViewModel(
     fun register(email: String, username: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.register(email, username, password)
-            if (result == Result.Success) {
+            if (result == AuthResult.Success) {
                 _navigationLiveData.postValue(true)
                 _error.postValue("")
             }
             else {
-                val failure = result as Result.Failure
+                val failure = result as AuthResult.Failure
                 _error.postValue(failure.message)
             }
         }
@@ -47,11 +47,11 @@ class LoginViewModel(
     fun login(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.login(email, password)
-            if (result == Result.Success) {
+            if (result == AuthResult.Success) {
                 _navigationLiveData.postValue(true)
                 _error.postValue("")
             } else {
-                val failure = result as Result.Failure
+                val failure = result as AuthResult.Failure
                 _error.postValue(failure.message)
             }
         }
@@ -68,9 +68,9 @@ class LoginViewModel(
 
     fun updateRegistered(isLogin: Boolean) {
         if (isLogin) {
-            _stateLiveData.value = LoginUiState.Login
+            _stateLiveData.value = AuthUiState.Login
         } else {
-            _stateLiveData.value = LoginUiState.Register
+            _stateLiveData.value = AuthUiState.Register
         }
     }
 

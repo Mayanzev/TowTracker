@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.login.presentation.login
+package com.mayantsev_vs.towtracker.auth.presentation.auth
 
 import com.mayantsev_vs.towtracker.R
 import android.view.View
@@ -7,7 +7,7 @@ import android.widget.TextView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-abstract class LoginUiState {
+abstract class AuthUiState {
 
     abstract fun apply(
         emailTextView: TextInputEditText,
@@ -32,7 +32,7 @@ abstract class LoginUiState {
         repeatedPasswordTextView.text?.clear()
     }
 
-    object Login : LoginUiState() {
+    object Login : AuthUiState() {
         override fun apply(
             emailTextView: TextInputEditText,
             usernameTextView: TextInputEditText,
@@ -53,7 +53,7 @@ abstract class LoginUiState {
         }
     }
 
-    object Register : LoginUiState() {
+    object Register : AuthUiState() {
         override fun apply(
             emailTextView: TextInputEditText,
             usernameTextView: TextInputEditText,

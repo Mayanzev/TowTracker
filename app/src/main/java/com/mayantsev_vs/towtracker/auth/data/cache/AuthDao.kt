@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.login.data.cache
+package com.mayantsev_vs.towtracker.auth.data.cache
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -6,13 +6,13 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface UserDao {
+interface AuthDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: UserItem)
+    suspend fun insertUser(user: AuthItem)
 
-    @Query("SELECT token FROM users_table")
+    @Query("SELECT token FROM auth_table")
     suspend fun getToken(): String?
 
-    @Query("DELETE FROM users_table")
+    @Query("DELETE FROM auth_table")
     suspend fun clearUser()
 }

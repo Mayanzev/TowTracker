@@ -16,8 +16,8 @@ import com.mayantsev_vs.towtracker.databinding.ActivityMainBinding
 import com.mayantsev_vs.towtracker.main.utils.openFragment
 import com.mayantsev_vs.towtracker.main.utils.checkPermission
 import com.mayantsev_vs.towtracker.main.utils.showToast
-import com.mayantsev_vs.towtracker.login.presentation.login.LoginFragment
-import com.mayantsev_vs.towtracker.login.presentation.login.LoginViewModel
+import com.mayantsev_vs.towtracker.auth.presentation.auth.AuthFragment
+import com.mayantsev_vs.towtracker.auth.presentation.auth.AuthViewModel
 import kotlin.getValue
 
 class MainActivity : AppCompatActivity() {
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        val loginViewModel: LoginViewModel by viewModels {
+        val loginViewModel: AuthViewModel by viewModels {
             ViewModelFactory(applicationContext)
         }
 
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             if (it) {
                 openFragment(MainFragment())
             } else {
-                openFragment(LoginFragment())
+                openFragment(AuthFragment())
             }
         }
 
