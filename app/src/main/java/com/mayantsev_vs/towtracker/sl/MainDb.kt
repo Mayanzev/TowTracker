@@ -14,7 +14,7 @@ import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
 @Database(entities = [TrackItem::class, ServiceItem::class, AuthItem::class], version = 1)
 abstract class MainDb : RoomDatabase() {
 
-    abstract fun getDaoUser(): AuthDao
+    abstract fun getDaoAuth(): AuthDao
     abstract fun getDaoTrack(): TrackDao
     abstract fun getDaoService(): ServiceDao
 

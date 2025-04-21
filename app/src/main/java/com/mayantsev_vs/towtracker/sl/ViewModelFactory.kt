@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.mayantsev_vs.towtracker.history.data.HistoryRepository
 import com.mayantsev_vs.towtracker.history.data.cloud.HistoryService
 import com.mayantsev_vs.towtracker.history.presentation.HistoryViewModel
-import com.mayantsev_vs.towtracker.order.data.cloud.NominatimService
+import com.mayantsev_vs.towtracker.track.data.cloud.NominatimService
 import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
 import com.mayantsev_vs.towtracker.auth.data.AuthRepository
 import com.mayantsev_vs.towtracker.auth.data.cloud.AuthService
@@ -36,7 +36,7 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(AuthService::class.java)
-    private val repository = AuthRepository(loginService, database.getDaoUser())
+    private val repository = AuthRepository(loginService, database.getDaoAuth())
 
     val retrofit = Retrofit.Builder()
         .baseUrl("https://nominatim.openstreetmap.org/")
@@ -49,14 +49,14 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(HistoryService::class.java)
-    val historyRepository = HistoryRepository(historyService, database.getDaoUser())
+    val historyRepository = HistoryRepository(historyService, database.getDaoAuth())
 
     private val userProfileService = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(UserProfileService::class.java)
-    private val userProfileRepository = UserProfileRepository(userProfileService, database.getDaoUser())
+    private val userProfileRepository = UserProfileRepository(userProfileService, database.getDaoAuth())
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
@@ -64,12 +64,10 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
                 database,
                 nominatimService
             ) as T
-
             modelClass.isAssignableFrom(ServiceViewModel::class.java) -> ServiceViewModel(database) as T
             modelClass.isAssignableFrom(MapViewModel::class.java) -> MapViewModel() as T
             modelClass.isAssignableFrom(OrderViewModel::class.java) -> OrderViewModel(
                 preferencesHelper,
-                database.getDaoUser(),
                 database.getDaoService(),
                 database.getDaoTrack()
             ) as T

@@ -7,15 +7,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mayantsev_vs.towtracker.auth.data.cache.AuthDao
 import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
+import com.mayantsev_vs.towtracker.main.utils.generateAndSavePdf
 import com.mayantsev_vs.towtracker.service.data.cache.ServiceDao
 import com.mayantsev_vs.towtracker.track.data.cache.TrackDao
-import com.mayantsev_vs.towtracker.main.utils.generateAndSavePdf
 
 class OrderViewModel(
     private val preferencesHelper: PreferencesHelper,
-    private val userDao: AuthDao,
     private val serviceDao: ServiceDao,
     private val trackDao: TrackDao
 ) : ViewModel() {

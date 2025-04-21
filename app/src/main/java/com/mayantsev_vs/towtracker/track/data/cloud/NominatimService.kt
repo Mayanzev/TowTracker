@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.data.cloud
+package com.mayantsev_vs.towtracker.track.data.cloud
 
 import retrofit2.http.GET
 import retrofit2.http.Query

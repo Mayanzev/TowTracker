@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.order.data.cloud
+package com.mayantsev_vs.towtracker.track.data.cloud
 
 import com.google.gson.annotations.SerializedName
 
