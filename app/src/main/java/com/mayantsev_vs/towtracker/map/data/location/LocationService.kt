@@ -54,7 +54,7 @@ class LocationService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         isRunning = false
-        locationProvider.removeLocationUpdates(locCallBack)
+        locationProvider.removeLocationUpdates(locationCallBack)
     }
 
     private fun startNotification() {
@@ -106,12 +106,12 @@ class LocationService : Service() {
         }
         locationProvider.requestLocationUpdates(
             locationRequest,
-            locCallBack,
+            locationCallBack,
             Looper.myLooper()
         )
     }
 
-    private val locCallBack = object  : LocationCallback() {
+    private val locationCallBack = object  : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             val currentLocation = locationResult.lastLocation

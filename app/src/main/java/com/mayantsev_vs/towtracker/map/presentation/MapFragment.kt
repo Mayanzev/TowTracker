@@ -45,16 +45,12 @@ import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.Locale
-import java.util.Timer
-import java.util.TimerTask
+
 
 class MapFragment : Fragment() {
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var binding: FragmentMapBinding
-    private var timer: Timer? = null
-    private var startTime = 0L
     private var polyLine: Polyline? = null
     private var firstStart = true
     private var locationModel: LocationModel? = null
@@ -105,6 +101,12 @@ class MapFragment : Fragment() {
         firstStart = true
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        LocalBroadcastManager.getInstance(activity as AppCompatActivity)
+            .unregisterReceiver(receiver)
+    }
+
     private fun settingsOsm() {
         Configuration.getInstance().load(
             activity as ComponentActivity,
@@ -121,10 +123,8 @@ class MapFragment : Fragment() {
                 .getString(KEY_COLOR, "#0077FF")
         )
         map.controller.setZoom(15.0)
-
         map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
         map.setMultiTouchControls(true)
-
         val myLocationProvider = GpsMyLocationProvider(activity)
         myLocationOverlay = MyLocationNewOverlay(myLocationProvider, map)
         myLocationOverlay.enableMyLocation()
@@ -134,6 +134,11 @@ class MapFragment : Fragment() {
             map.overlays.add(polyLine)
             map.overlays.add(myLocationOverlay)
         }
+    }
+
+    private fun  centerLocation() {
+        binding.map.controller.animateTo(myLocationOverlay.myLocation)
+        myLocationOverlay.enableFollowLocation()
     }
 
     private fun registerPermissions() {
@@ -184,23 +189,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun onClicks(): View.OnClickListener {
-        return View.OnClickListener {
-            when (it.id) {
-                R.id.ivStartStop -> startStopService()
-                R.id.ivCenter -> centerLocation()
-                R.id.btnSetPrice -> setPrice()
-            }
-        }
-    }
-
-    private fun setOnClicks() = with(binding) {
-        val listener = onClicks()
-        ivStartStop.setOnClickListener(listener)
-        ivCenter.setOnClickListener(listener)
-        btnSetPrice.setOnClickListener(listener)
-    }
-
     private fun startStopService() {
         if (!LocationService.isRunning) {
             startService()
@@ -218,7 +206,7 @@ class MapFragment : Fragment() {
     private fun stopService() {
         activity?.stopService(Intent(activity, LocationService::class.java))
         binding.ivStartStop.setImageResource(R.drawable.ic_play)
-        timer?.cancel()
+        mapViewModel.stopTracking()
         val track = getTrackItem()
         val geoPointList = locationModel?.geoPointsList ?: arrayListOf()
         DialogManager.showRouteDialog(requireContext(),
@@ -238,37 +226,37 @@ class MapFragment : Fragment() {
         }
         binding.ivStartStop.setImageResource(R.drawable.ic_stop)
         LocationService.startTime = System.currentTimeMillis()
-        startTimer()
+        mapViewModel.startTracking(LocationService.startTime)
     }
 
     private fun checkServiceState() {
         if (LocationService.isRunning) {
             binding.ivStartStop.setImageResource(R.drawable.ic_stop)
-            startTimer()
+            mapViewModel.startTracking(LocationService.startTime)
         }
     }
 
-    private fun startTimer() {
-        timer?.cancel()
-        timer = Timer()
-        startTime = LocationService.startTime
-        timer?.schedule(object : TimerTask() {
-            override fun run() {
-                activity?.runOnUiThread {
-                    mapViewModel.timeData.value = getCurrentTime()
-                }
+    private fun setOnClicks() = with(binding) {
+        val listener = onClicks()
+        ivStartStop.setOnClickListener(listener)
+        ivCenter.setOnClickListener(listener)
+        btnSetPrice.setOnClickListener(listener)
+    }
+
+    private fun onClicks(): View.OnClickListener {
+        return View.OnClickListener {
+            when (it.id) {
+                R.id.ivStartStop -> startStopService()
+                R.id.ivCenter -> centerLocation()
+                R.id.btnSetPrice -> setPrice()
             }
-        }, 1000, 1000)
+        }
     }
 
     private fun updateTime() {
         mapViewModel.timeData.observe(viewLifecycleOwner) {
             binding.tvTime.text = it
         }
-    }
-
-    private fun getCurrentTime(): String {
-        return TimeUtils.getTime(System.currentTimeMillis() - startTime)
     }
 
     private fun setPrice() {
@@ -299,7 +287,7 @@ class MapFragment : Fragment() {
                         LocationModel::class.java
                     )
                 }
-                mapViewModel.locationUpdates.value = locationModel
+                mapViewModel.updateLocation(locationModel!!)
             } else if (intent?.action == LocationService.PROGRESS_INTENT) {
                 mapViewModel.updateProgress(View.GONE)
             }
@@ -319,8 +307,10 @@ class MapFragment : Fragment() {
         mapViewModel.locationUpdates.observe(viewLifecycleOwner) {
             val distance = "${getString(R.string.distance)} ${String.format(Locale.US, "%.1f", it.distance / 1000)} ${getString(R.string.km)}"
             val speed = "${getString(R.string.speed)} ${String.format(Locale.US, "%.1f", 3.6f * it.speed)} ${getString(R.string.km_h)}"
-            val averageSpeed = "${getString(R.string.average_speed)} ${getAverageSpeed(it.distance)} ${getString(R.string.km_h)}"
-            val price = "${getString(R.string.price)} ${getPrice(it.distance, LocationService.startPrice)} ${getString(R.string.currency_symbol)}"
+            val averageSpeed = "${getString(R.string.average_speed)} ${mapViewModel.getAverageSpeed(it.distance)} ${getString(R.string.km_h)}"
+            val price = "${getString(R.string.price)} ${mapViewModel.getPrice(it.distance, LocationService.startPrice)} ${getString(R.string.currency_symbol)}"
+
+
 
             tvDistance.text = distance
             tvSpeed.text = speed
@@ -329,17 +319,6 @@ class MapFragment : Fragment() {
             locationModel = it
             updatePolyline(it.geoPointsList)
         }
-    }
-
-    private fun getAverageSpeed(distance: Float): String {
-        return String.format(Locale.US, "%.1f", 3.6f * (distance / ((System.currentTimeMillis() - startTime) / 1000.0f))
-        )
-    }
-
-    private fun getPrice(distance: Float, startPrice: BigDecimal): String {
-        val distanceInKm = BigDecimal(distance.toDouble()).divide(BigDecimal(1000), 1, RoundingMode.HALF_UP)
-        val price = distanceInKm.multiply(startPrice)
-        return String.format(Locale.US, "%.1f", price)
     }
 
     private fun addPoint(list: List<GeoPoint>) {
@@ -361,21 +340,15 @@ class MapFragment : Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        LocalBroadcastManager.getInstance(activity as AppCompatActivity)
-            .unregisterReceiver(receiver)
-    }
-
     private fun getTrackItem(): TrackItem {
         return TrackItem(
             null,
-            getCurrentTime(),
+            mapViewModel.timeData.value ?: "00:00:00",
             TimeUtils.getDate(),
             String.format(Locale.US, "%.1f", (locationModel?.distance?.div(1000.0) ?: 0.0)),
-            getAverageSpeed(locationModel?.distance ?: 0.0f),
+            mapViewModel.getAverageSpeed(locationModel?.distance ?: 0.0f),
             geoPointsToString(locationModel?.geoPointsList ?: listOf()),
-            getPrice(locationModel?.distance ?: 0.0f, LocationService.startPrice),
+            mapViewModel.getPrice(locationModel?.distance ?: 0.0f, LocationService.startPrice),
             null,
             null
         )
@@ -387,11 +360,6 @@ class MapFragment : Fragment() {
             stringBuilder.append("${it.latitude}, ${it.longitude}/")
         }
         return stringBuilder.toString()
-    }
-
-    private fun  centerLocation() {
-        binding.map.controller.animateTo(myLocationOverlay.myLocation)
-        myLocationOverlay.enableFollowLocation()
     }
 
     private fun observeOrderFinish() {
