@@ -3,7 +3,6 @@ package com.mayantsev_vs.towtracker.track.presentation
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import com.mayantsev_vs.towtracker.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,9 @@ import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.preference.PreferenceManager
-import com.mayantsev_vs.towtracker.sl.ViewModelFactory
+import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.FragmentViewTrackBinding
+import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -24,7 +24,8 @@ import kotlin.getValue
 
 class ViewTrackFragment : Fragment() {
     private var startPoint: GeoPoint? = null
-    private lateinit var binding: FragmentViewTrackBinding
+    private var _binding: FragmentViewTrackBinding? = null
+    private val binding get() = _binding!!
     private val tracksViewModel: TrackViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
@@ -35,7 +36,7 @@ class ViewTrackFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         settingsOsm()
-        binding = FragmentViewTrackBinding.inflate(inflater, container, false)
+        _binding = FragmentViewTrackBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -58,6 +59,11 @@ class ViewTrackFragment : Fragment() {
         binding.map.setMultiTouchControls(true)
         binding.map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun settingsOsm() {

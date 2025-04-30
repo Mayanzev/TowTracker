@@ -9,20 +9,14 @@ import com.mayantsev_vs.towtracker.databinding.HistoryItemBinding
 
 class HistoryAdapter(private val listener: ClickListener) : ListAdapter<HistoryListItem, RecyclerView.ViewHolder>(DiffUtilCallback()) {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return HistoryViewHolder(
             HistoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             listener
         )
     }
 
-    override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is HistoryViewHolder) {
             holder.bind(getItem(position))
         }

@@ -13,8 +13,9 @@ import com.mayantsev_vs.towtracker.databinding.FragmentTrackBinding
 import com.mayantsev_vs.towtracker.order.presentation.FragmentNavigationListener
 import kotlin.getValue
 
-class TrackFragment : Fragment(), TrackAdapter.Listener {
-    private lateinit var binding: FragmentTrackBinding
+class TrackFragment : Fragment(), TrackAdapter.ClickListener {
+    private var _binding: FragmentTrackBinding? = null
+    private val binding get() = _binding!!
     private lateinit var adapter: TrackAdapter
     private val tracksViewModel: TrackViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
@@ -25,7 +26,7 @@ class TrackFragment : Fragment(), TrackAdapter.Listener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTrackBinding.inflate(inflater, container, false)
+        _binding = FragmentTrackBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,6 +42,11 @@ class TrackFragment : Fragment(), TrackAdapter.Listener {
         tracksViewModel.swipeLiveData.observe(viewLifecycleOwner) {
             binding.swipeLayout.isRefreshing = it
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun initRecyclerView() = with(binding) {

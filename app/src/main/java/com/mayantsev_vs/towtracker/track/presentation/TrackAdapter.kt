@@ -1,71 +1,46 @@
 package com.mayantsev_vs.towtracker.track.presentation
 
-import com.mayantsev_vs.towtracker.R
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
 import com.mayantsev_vs.towtracker.databinding.TrackItemBinding
+import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
 
 
-class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, TrackAdapter.Holder>(Comparator()) {
+class TrackAdapter(private val listener: ClickListener) : ListAdapter<TrackItem, TrackAdapter.TrackViewHolder>(DiffUtilCallback()) {
 
-    class Holder(view: View, private val listener: Listener) : RecyclerView.ViewHolder(view),
-        View.OnClickListener {
-        private val binding = TrackItemBinding.bind(view)
-        private var trackTemp: TrackItem? = null
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
+        val binding = TrackItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return TrackViewHolder(binding, listener)
+    }
 
-        init {
-            binding.ivDelete.setOnClickListener(this)
-            binding.item.setOnClickListener(this)
-        }
+    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    class TrackViewHolder(private val binding: TrackItemBinding, private val listener: ClickListener) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(track: TrackItem) = with(binding) {
-            trackTemp = track
             tvDate.text = track.date
             tvTime.text = track.time
             tvDistance.text = track.distance
             tvPrice.text = track.price
             tvCityFrom.text = track.firstCity
             tvCityTo.text = track.secondCity
-        }
 
-        override fun onClick(view: View) {
-            val type = when (view.id) {
-                R.id.ivDelete -> ClickType.DELETE
-                R.id.item -> ClickType.OPEN
-                else -> ClickType.OPEN
+            item.setOnClickListener {
+                listener.onClick(track, ClickType.OPEN)
             }
-            trackTemp?.let { listener.onClick(it, type) }
+
+            ivDelete.setOnClickListener {
+                listener.onClick(track, ClickType.DELETE)
+            }
         }
-
     }
 
-    class Comparator : DiffUtil.ItemCallback<TrackItem>() {
-        override fun areItemsTheSame(oldItem: TrackItem, newItem: TrackItem): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: TrackItem, newItem: TrackItem): Boolean {
-            return oldItem == newItem
-        }
-
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.track_item, parent, false)
-        return Holder(view, listener)
-    }
-
-    override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(getItem(position))
-    }
-
-    interface Listener {
+    interface ClickListener {
         fun onClick(track: TrackItem, type: ClickType)
     }
 
@@ -74,4 +49,13 @@ class TrackAdapter(private val listener: Listener) : ListAdapter<TrackItem, Trac
         OPEN
     }
 
+    class DiffUtilCallback : DiffUtil.ItemCallback<TrackItem>() {
+        override fun areItemsTheSame(oldItem: TrackItem, newItem: TrackItem): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: TrackItem, newItem: TrackItem): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
