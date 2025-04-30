@@ -23,6 +23,7 @@ class MapViewModel : ViewModel() {
     val progressLiveData: LiveData<Int> = _progressLiveData
 
     fun startTracking(startTimeFromService: Long) {
+        timer?.cancel()
         startTime = startTimeFromService
         timer = Timer()
         timer?.schedule(object : TimerTask() {

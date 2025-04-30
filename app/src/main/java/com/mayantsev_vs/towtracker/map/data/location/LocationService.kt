@@ -59,13 +59,13 @@ class LocationService : Service() {
 
     private fun startNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val nChannel = NotificationChannel(
+            val notificationChannel = NotificationChannel(
                 CHANNEL_ID,
                 "Location Service",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
             val notificationManager = getSystemService(NotificationManager::class.java) as NotificationManager
-            notificationManager.createNotificationChannel(nChannel)
+            notificationManager.createNotificationChannel(notificationChannel)
         }
         val notificationIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

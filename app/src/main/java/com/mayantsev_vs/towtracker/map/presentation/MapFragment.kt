@@ -50,7 +50,8 @@ import java.util.Locale
 
 class MapFragment : Fragment() {
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
-    private lateinit var binding: FragmentMapBinding
+    private var _binding: FragmentMapBinding? = null
+    private val binding get() = _binding!!
     private var polyLine: Polyline? = null
     private var firstStart = true
     private var locationModel: LocationModel? = null
@@ -74,7 +75,7 @@ class MapFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         settingsOsm()
-        binding = FragmentMapBinding.inflate(inflater, container, false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -107,6 +108,11 @@ class MapFragment : Fragment() {
             .unregisterReceiver(receiver)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun settingsOsm() {
         Configuration.getInstance().load(
             activity as ComponentActivity,
@@ -136,7 +142,7 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun  centerLocation() {
+    private fun centerLocation() {
         binding.map.controller.animateTo(myLocationOverlay.myLocation)
         myLocationOverlay.enableFollowLocation()
     }
@@ -173,8 +179,8 @@ class MapFragment : Fragment() {
     }
 
     private fun checkLocationEnabled() {
-        val lManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val isEnabled = lManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val isEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (!isEnabled) {
             DialogManager.showLocationEnableDialog(
                 activity as AppCompatActivity,
@@ -309,9 +315,6 @@ class MapFragment : Fragment() {
             val speed = "${getString(R.string.speed)} ${String.format(Locale.US, "%.1f", 3.6f * it.speed)} ${getString(R.string.km_h)}"
             val averageSpeed = "${getString(R.string.average_speed)} ${mapViewModel.getAverageSpeed(it.distance)} ${getString(R.string.km_h)}"
             val price = "${getString(R.string.price)} ${mapViewModel.getPrice(it.distance, LocationService.startPrice)} ${getString(R.string.currency_symbol)}"
-
-
-
             tvDistance.text = distance
             tvSpeed.text = speed
             tvAverageSpeed.text = averageSpeed
