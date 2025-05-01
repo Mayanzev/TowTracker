@@ -36,7 +36,7 @@ import com.mayantsev_vs.towtracker.map.data.location.LocationModel
 import com.mayantsev_vs.towtracker.map.data.location.LocationService
 import com.mayantsev_vs.towtracker.order.presentation.OrderViewModel
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
-import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackDBO
 import com.mayantsev_vs.towtracker.track.presentation.TrackViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
@@ -343,8 +343,8 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun getTrackItem(): TrackItem {
-        return TrackItem(
+    private fun getTrackItem(): TrackDBO {
+        return TrackDBO(
             null,
             mapViewModel.timeData.value ?: "00:00:00",
             TimeUtils.getDate(),

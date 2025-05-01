@@ -10,15 +10,15 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TrackDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTrack(track: TrackItem)
+    suspend fun insertTrack(track: TrackDBO)
     @Query("SELECT * FROM TRACK")
-    fun getAllTracks(): Flow<List<TrackItem>>
+    fun getAllTracks(): Flow<List<TrackDBO>>
     @Delete
-    suspend fun deleteTrack(trackItem: TrackItem)
+    suspend fun deleteTrack(trackDBO: TrackDBO)
     @Query("DELETE FROM TRACK")
     suspend fun deleteAllTracks()
     @Query("SELECT * FROM TRACK")
-    fun getAllTracksList(): List<TrackItem>
+    fun getAllTracksList(): List<TrackDBO>
     @Query("SELECT * FROM TRACK")
-    fun getAllTracksPrint(): List<TrackItem>
+    fun getAllTracksPrint(): List<TrackDBO>
 }

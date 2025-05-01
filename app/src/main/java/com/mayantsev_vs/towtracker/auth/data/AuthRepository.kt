@@ -1,7 +1,7 @@
 package com.mayantsev_vs.towtracker.auth.data
 
 import com.mayantsev_vs.towtracker.auth.data.cache.AuthDao
-import com.mayantsev_vs.towtracker.auth.data.cache.AuthItem
+import com.mayantsev_vs.towtracker.auth.data.cache.AuthDBO
 import com.mayantsev_vs.towtracker.auth.data.cloud.LoginBody
 import com.mayantsev_vs.towtracker.auth.data.cloud.AuthService
 import com.mayantsev_vs.towtracker.auth.data.cloud.RegistrationBody
@@ -18,7 +18,7 @@ class AuthRepository(
                 email, password
             )
             val token = loginService.login(loginBody).token
-            val userItem = AuthItem(
+            val userItem = AuthDBO(
                 token
             )
             dao.insertUser(userItem)
@@ -38,7 +38,7 @@ class AuthRepository(
                 email, password, username
             )
             val token = loginService.register(registrationBody).token
-            val userItem = AuthItem(
+            val userItem = AuthDBO(
                 token
             )
             dao.insertUser(userItem)

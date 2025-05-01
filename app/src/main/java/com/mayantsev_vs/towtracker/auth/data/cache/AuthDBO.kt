@@ -5,6 +5,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "auth_table")
-data class AuthItem(
+data class AuthDBO(
     @PrimaryKey @ColumnInfo(name = "token") val token: String
 )

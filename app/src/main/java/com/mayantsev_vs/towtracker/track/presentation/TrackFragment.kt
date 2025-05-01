@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackDBO
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.databinding.FragmentTrackBinding
 import com.mayantsev_vs.towtracker.order.presentation.FragmentNavigationListener
@@ -62,7 +62,7 @@ class TrackFragment : Fragment(), TrackAdapter.ClickListener {
         }
     }
 
-    override fun onClick(track: TrackItem, type: TrackAdapter.ClickType) {
+    override fun onClick(track: TrackDBO, type: TrackAdapter.ClickType) {
         when (type) {
             TrackAdapter.ClickType.DELETE -> tracksViewModel.deleteTrack(track)
             TrackAdapter.ClickType.OPEN -> {

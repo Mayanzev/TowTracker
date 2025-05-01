@@ -1,7 +1,7 @@
 package com.mayantsev_vs.towtracker.track.presentation
 
 import androidx.lifecycle.*
-import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackDBO
 import com.mayantsev_vs.towtracker.track.data.cloud.Address
 import com.mayantsev_vs.towtracker.track.data.cloud.NominatimService
 import com.mayantsev_vs.towtracker.sl.MainDb
@@ -13,14 +13,14 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
 
     private val dao = db.getDaoTrack()
     val tracks = dao.getAllTracks().asLiveData()
-    val currentTrack = MutableLiveData<TrackItem>()
+    val currentTrack = MutableLiveData<TrackDBO>()
     private val _swipeLiveData = MutableLiveData<Boolean>()
     val swipeLiveData: LiveData<Boolean> = _swipeLiveData
 
-    fun insertTrack(trackItem: TrackItem, geoPointList: ArrayList<GeoPoint>) =
+    fun insertTrack(trackDBO: TrackDBO, geoPointList: ArrayList<GeoPoint>) =
         viewModelScope.launch {
 
-            var newTrackItem = trackItem
+            var newTrackItem = trackDBO
             val latitudeFirstCity = geoPointList.first().latitude
             val longitudeFirstCity = geoPointList.first().longitude
 
@@ -36,7 +36,7 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
                 val firstCityAddress = buildFullAddress(responseFirst.address)
                 val secondCityAddress = buildFullAddress(responseSecond.address)
 
-                newTrackItem = TrackItem(
+                newTrackItem = TrackDBO(
                     newTrackItem.id,
                     newTrackItem.time,
                     newTrackItem.date,
@@ -49,7 +49,7 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
                 )
             } catch (_: Exception) {
                 val errorMessage = "Не удалось получить адрес. Проверьте интернет-соединение."
-                newTrackItem = TrackItem(
+                newTrackItem = TrackDBO(
                     newTrackItem.id,
                     newTrackItem.time,
                     newTrackItem.date,
@@ -75,8 +75,8 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
         return nonNullParts.joinToString(", ")
     }
 
-    fun deleteTrack(trackItem: TrackItem) = viewModelScope.launch {
-        dao.deleteTrack(trackItem)
+    fun deleteTrack(trackDBO: TrackDBO) = viewModelScope.launch {
+        dao.deleteTrack(trackDBO)
     }
 
     fun deleteAllTracks() = viewModelScope.launch {
@@ -106,7 +106,7 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
                 val firstCityAddress = buildFullAddress(responseFirst.address)
                 val secondCityAddress = buildFullAddress(responseSecond.address)
 
-                newTrackItem = TrackItem(
+                newTrackItem = TrackDBO(
                     newTrackItem.id,
                     newTrackItem.time,
                     newTrackItem.date,
@@ -119,7 +119,7 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
                 )
             } catch (_: Exception) {
                 val errorMessage = "Не удалось получить адрес. Проверьте интернет-соединение."
-                newTrackItem = TrackItem(
+                newTrackItem = TrackDBO(
                     newTrackItem.id,
                     newTrackItem.time,
                     newTrackItem.date,

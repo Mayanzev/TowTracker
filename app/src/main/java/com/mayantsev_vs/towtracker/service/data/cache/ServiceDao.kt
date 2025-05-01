@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ServiceDao {
     @Insert
-    suspend fun insertService(service: ServiceItem)
+    suspend fun insertService(service: ServiceDBO)
     @Query("SELECT * FROM SERVICE")
-    fun getAllServices(): Flow<List<ServiceItem>>
+    fun getAllServices(): Flow<List<ServiceDBO>>
     @Delete
-    suspend fun deleteService(serviceItem: ServiceItem)
+    suspend fun deleteService(serviceDBO: ServiceDBO)
     @Query("DELETE FROM SERVICE")
     suspend fun deleteAllServices()
     @Query("SELECT * FROM SERVICE")
-    fun getAllServicesPrint(): List<ServiceItem>
+    fun getAllServicesPrint(): List<ServiceDBO>
 }

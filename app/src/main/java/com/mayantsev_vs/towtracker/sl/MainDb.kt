@@ -5,13 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.mayantsev_vs.towtracker.auth.data.cache.AuthDao
-import com.mayantsev_vs.towtracker.auth.data.cache.AuthItem
+import com.mayantsev_vs.towtracker.auth.data.cache.AuthDBO
 import com.mayantsev_vs.towtracker.service.data.cache.ServiceDao
-import com.mayantsev_vs.towtracker.service.data.cache.ServiceItem
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceDBO
 import com.mayantsev_vs.towtracker.track.data.cache.TrackDao
-import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackDBO
 
-@Database(entities = [TrackItem::class, ServiceItem::class, AuthItem::class], version = 1)
+@Database(entities = [TrackDBO::class, ServiceDBO::class, AuthDBO::class], version = 1)
 abstract class MainDb : RoomDatabase() {
 
     abstract fun getDaoAuth(): AuthDao

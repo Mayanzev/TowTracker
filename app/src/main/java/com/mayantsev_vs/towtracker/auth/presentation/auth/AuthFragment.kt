@@ -15,13 +15,14 @@ import kotlin.getValue
 
 class AuthFragment : Fragment() {
 
-    private lateinit var binding: FragmentAuthBinding
+    private var _binding: FragmentAuthBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAuthBinding.inflate(inflater, container, false)
+        _binding = FragmentAuthBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -98,5 +99,10 @@ class AuthFragment : Fragment() {
             binding.loginProgress.visibility = it
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

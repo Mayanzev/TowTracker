@@ -7,22 +7,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mayantsev_vs.towtracker.service.data.cache.ServiceItem
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceDBO
 import com.mayantsev_vs.towtracker.databinding.ServiceItemBinding
 
 
-class ServiceAdapter(private val listener: Listener) : ListAdapter<ServiceItem, ServiceAdapter.Holder>(Comparator()) {
+class ServiceAdapter(private val listener: Listener) : ListAdapter<ServiceDBO, ServiceAdapter.Holder>(Comparator()) {
 
     class Holder(view: View, private val listener: Listener) : RecyclerView.ViewHolder(view), View.OnClickListener {
 
         private val binding = ServiceItemBinding.bind(view)
-        private var serviceTemp: ServiceItem? = null
+        private var serviceTemp: ServiceDBO? = null
 
         init {
             binding.ivDelete.setOnClickListener(this)
         }
 
-        fun bind(service: ServiceItem) = with(binding) {
+        fun bind(service: ServiceDBO) = with(binding) {
             serviceTemp = service
             tvServiceName.text = service.name
             tvPrice.text = service.price
@@ -35,12 +35,12 @@ class ServiceAdapter(private val listener: Listener) : ListAdapter<ServiceItem, 
 
     }
 
-    class Comparator : DiffUtil.ItemCallback<ServiceItem>() {
-        override fun areItemsTheSame(oldItem: ServiceItem, newItem: ServiceItem): Boolean {
+    class Comparator : DiffUtil.ItemCallback<ServiceDBO>() {
+        override fun areItemsTheSame(oldItem: ServiceDBO, newItem: ServiceDBO): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ServiceItem, newItem: ServiceItem): Boolean {
+        override fun areContentsTheSame(oldItem: ServiceDBO, newItem: ServiceDBO): Boolean {
             return oldItem == newItem
         }
     }
@@ -55,7 +55,7 @@ class ServiceAdapter(private val listener: Listener) : ListAdapter<ServiceItem, 
     }
 
     interface Listener {
-        fun onClick(service: ServiceItem)
+        fun onClick(service: ServiceDBO)
     }
 
 }

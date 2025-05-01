@@ -11,8 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.service.data.cache.ServiceItem
-import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceDBO
+import com.mayantsev_vs.towtracker.track.data.cache.TrackDBO
 import com.mayantsev_vs.towtracker.map.data.location.LocationService
 import com.mayantsev_vs.towtracker.main.utils.openParentFragment
 import com.mayantsev_vs.towtracker.main.utils.openParentFragmentBackstack
@@ -107,7 +107,7 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
         }
     }
 
-    private fun updateTotalPrice(serviceList: List<ServiceItem>, trackList: List<TrackItem>) {
+    private fun updateTotalPrice(serviceList: List<ServiceDBO>, trackList: List<TrackDBO>) {
         val totalServicePrice = serviceList.sumOf { it.price.toBigDecimalOrNull() ?: BigDecimal.ZERO }
         val totalTrackPrice = trackList.sumOf { it.price.toBigDecimalOrNull() ?: BigDecimal.ZERO }
         val totalPrice = totalServicePrice + totalTrackPrice

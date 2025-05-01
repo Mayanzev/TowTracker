@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mayantsev_vs.towtracker.databinding.TrackItemBinding
-import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackDBO
 
 
-class TrackAdapter(private val listener: ClickListener) : ListAdapter<TrackItem, TrackAdapter.TrackViewHolder>(DiffUtilCallback()) {
+class TrackAdapter(private val listener: ClickListener) : ListAdapter<TrackDBO, TrackAdapter.TrackViewHolder>(DiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val binding = TrackItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,7 +22,7 @@ class TrackAdapter(private val listener: ClickListener) : ListAdapter<TrackItem,
 
     class TrackViewHolder(private val binding: TrackItemBinding, private val listener: ClickListener) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(track: TrackItem) = with(binding) {
+        fun bind(track: TrackDBO) = with(binding) {
             tvDate.text = track.date
             tvTime.text = track.time
             tvDistance.text = track.distance
@@ -41,7 +41,7 @@ class TrackAdapter(private val listener: ClickListener) : ListAdapter<TrackItem,
     }
 
     interface ClickListener {
-        fun onClick(track: TrackItem, type: ClickType)
+        fun onClick(track: TrackDBO, type: ClickType)
     }
 
     enum class ClickType {
@@ -49,12 +49,12 @@ class TrackAdapter(private val listener: ClickListener) : ListAdapter<TrackItem,
         OPEN
     }
 
-    class DiffUtilCallback : DiffUtil.ItemCallback<TrackItem>() {
-        override fun areItemsTheSame(oldItem: TrackItem, newItem: TrackItem): Boolean {
+    class DiffUtilCallback : DiffUtil.ItemCallback<TrackDBO>() {
+        override fun areItemsTheSame(oldItem: TrackDBO, newItem: TrackDBO): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: TrackItem, newItem: TrackItem): Boolean {
+        override fun areContentsTheSame(oldItem: TrackDBO, newItem: TrackDBO): Boolean {
             return oldItem == newItem
         }
     }

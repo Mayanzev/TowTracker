@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import com.mayantsev_vs.towtracker.R
 import com.mayantsev_vs.towtracker.databinding.RouteDialogBinding
-import com.mayantsev_vs.towtracker.track.data.cache.TrackItem
+import com.mayantsev_vs.towtracker.track.data.cache.TrackDBO
 
 object DialogManager {
 
@@ -28,7 +28,7 @@ object DialogManager {
         dialog.show()
     }
 
-    fun showRouteDialog(context: Context, item: TrackItem?, listener: SimpleListener) {
+    fun showRouteDialog(context: Context, item: TrackDBO?, listener: SimpleListener) {
         val builder = AlertDialog.Builder(context)
         val binding = RouteDialogBinding.inflate(LayoutInflater.from(context), null, false)
         builder.setView(binding.root)

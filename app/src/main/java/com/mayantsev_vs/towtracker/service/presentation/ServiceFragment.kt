@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.service.data.cache.ServiceItem
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceDBO
 import com.mayantsev_vs.towtracker.main.utils.DialogManager.ServiceListener
 import com.mayantsev_vs.towtracker.main.utils.DialogManager.showServiceDialog
 import com.mayantsev_vs.towtracker.main.utils.TimeUtils
@@ -69,8 +69,8 @@ class ServiceFragment : Fragment(), ServiceAdapter.Listener {
         }
     }
 
-    private fun getServiceItem(): ServiceItem {
-        return ServiceItem(
+    private fun getServiceItem(): ServiceDBO {
+        return ServiceDBO(
             null,
             serviceName ?: "",
             servicePrice ?: "",
@@ -91,7 +91,7 @@ class ServiceFragment : Fragment(), ServiceAdapter.Listener {
         }
     }
 
-    override fun onClick(service: ServiceItem) {
+    override fun onClick(service: ServiceDBO) {
         servicesViewModel.deleteService(service)
     }
 
