@@ -5,5 +5,5 @@ import retrofit2.http.Header
 
 interface HistoryService {
     @GET("order/get")
-    suspend fun getHistory(@Header("Bearer-Authorization") token: String): OrderListCloud
+    suspend fun getHistory(@Header("Bearer-Authorization") token: String): OrderListResponseDTO
 }

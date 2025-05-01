@@ -2,7 +2,7 @@ package com.mayantsev_vs.towtracker.track.presentation
 
 import androidx.lifecycle.*
 import com.mayantsev_vs.towtracker.track.data.cache.TrackDBO
-import com.mayantsev_vs.towtracker.track.data.cloud.Address
+import com.mayantsev_vs.towtracker.track.data.cloud.GeocodeAddressDTO
 import com.mayantsev_vs.towtracker.track.data.cloud.NominatimService
 import com.mayantsev_vs.towtracker.sl.MainDb
 import kotlinx.coroutines.Dispatchers
@@ -33,8 +33,8 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
                 val responseSecond =
                     nominatimService.reverseGeocode(latitudeSecondCity, longitudeSecondCity)
 
-                val firstCityAddress = buildFullAddress(responseFirst.address)
-                val secondCityAddress = buildFullAddress(responseSecond.address)
+                val firstCityAddress = buildFullAddress(responseFirst.geocodeAddressDTO)
+                val secondCityAddress = buildFullAddress(responseSecond.geocodeAddressDTO)
 
                 newTrackItem = TrackDBO(
                     newTrackItem.id,
@@ -64,13 +64,13 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
             dao.insertTrack(newTrackItem)
         }
 
-    fun buildFullAddress(address: Address): String {
+    fun buildFullAddress(geocodeAddressDTO: GeocodeAddressDTO): String {
         val nonNullParts = listOfNotNull(
-            address.city,
-            address.town,
-            address.village,
-            address.road,
-            address.houseNumber
+            geocodeAddressDTO.city,
+            geocodeAddressDTO.town,
+            geocodeAddressDTO.village,
+            geocodeAddressDTO.road,
+            geocodeAddressDTO.houseNumber
         ).distinct()
         return nonNullParts.joinToString(", ")
     }
@@ -103,8 +103,8 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
                 val responseSecond =
                     nominatimService.reverseGeocode(latitudeSecondCity, longitudeSecondCity)
 
-                val firstCityAddress = buildFullAddress(responseFirst.address)
-                val secondCityAddress = buildFullAddress(responseSecond.address)
+                val firstCityAddress = buildFullAddress(responseFirst.geocodeAddressDTO)
+                val secondCityAddress = buildFullAddress(responseSecond.geocodeAddressDTO)
 
                 newTrackItem = TrackDBO(
                     newTrackItem.id,

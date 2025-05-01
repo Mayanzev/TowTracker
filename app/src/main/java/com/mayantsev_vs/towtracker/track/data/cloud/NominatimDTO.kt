@@ -2,11 +2,11 @@ package com.mayantsev_vs.towtracker.track.data.cloud
 
 import com.google.gson.annotations.SerializedName
 
-data class GeocodeResponse(
-    val address: Address
+data class GeocodeResponseDTO(
+    val geocodeAddressDTO: GeocodeAddressDTO
 )
 
-data class Address(
+data class GeocodeAddressDTO(
     val city: String?,
     val town: String?,
     val village: String?,

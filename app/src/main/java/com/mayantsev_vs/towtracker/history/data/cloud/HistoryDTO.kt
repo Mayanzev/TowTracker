@@ -1,16 +1,16 @@
 package com.mayantsev_vs.towtracker.history.data.cloud
 
-data class OrderListCloud (
-    val orders: List<OrderCloud>
+data class OrderListResponseDTO (
+    val orders: List<OrderDTO>
 )
 
-data class OrderCloud (
-    val tracks: List<TrackCloud>,
-    val services: List<ServiceCloud>,
+data class OrderDTO (
+    val tracks: List<TrackDTO>,
+    val services: List<ServiceDTO>,
     val date: String
 )
 
-data class TrackCloud (
+data class TrackDTO (
     val time: String,
     val date: String,
     val distance: String,
@@ -20,7 +20,7 @@ data class TrackCloud (
     val secondCity: String
 )
 
-data class ServiceCloud (
+data class ServiceDTO (
     val name: String,
     val price: String,
     val date: String

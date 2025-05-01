@@ -2,9 +2,9 @@ package com.mayantsev_vs.towtracker.userProfile.data
 
 
 import com.mayantsev_vs.towtracker.auth.data.cache.AuthDao
-import com.mayantsev_vs.towtracker.userProfile.data.cloud.PasswordReceive
+import com.mayantsev_vs.towtracker.userProfile.data.cloud.PasswordRequestDTO
 import com.mayantsev_vs.towtracker.userProfile.data.cloud.UserProfileService
-import com.mayantsev_vs.towtracker.userProfile.data.cloud.UsernameReceive
+import com.mayantsev_vs.towtracker.userProfile.data.cloud.UsernameRequestDTO
 import retrofit2.HttpException
 import java.net.ConnectException
 
@@ -33,7 +33,7 @@ class UserProfileRepository (
     }
 
     suspend fun updateUser(email: String, username: String) {
-        val userReceive = UsernameReceive(
+        val userReceive = UsernameRequestDTO(
             login = email,
             username = username
         )
@@ -42,12 +42,12 @@ class UserProfileRepository (
 
     suspend fun updateUserPassword(email: String, password: String, newPassword: String): UserProfileResult {
         try {
-            val userPasswordReceive = PasswordReceive(
+            val userPasswordRequestDTO = PasswordRequestDTO(
                 login = email,
                 password = password,
                 newPassword = newPassword
             )
-            userProfileService.updateUserPassword(dao.getToken() ?: "", userPasswordReceive)
+            userProfileService.updateUserPassword(dao.getToken() ?: "", userPasswordRequestDTO)
             return UserProfileResult.Success
         } catch (_: ConnectException) {
             return UserProfileResult.Failure("Нет соединения с интернетом")

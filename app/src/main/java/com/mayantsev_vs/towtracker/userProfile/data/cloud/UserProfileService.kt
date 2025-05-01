@@ -7,11 +7,11 @@ import retrofit2.http.POST
 
 interface UserProfileService {
     @GET("user/fetch")
-    suspend fun fetchUser(@Header("Bearer-Authorization") token: String): UsernameResponse
+    suspend fun fetchUser(@Header("Bearer-Authorization") token: String): UsernameResponseDTO
 
     @POST("user/update/username")
-    suspend fun updateUser(@Header("Bearer-Authorization") token: String, @Body user: UsernameReceive)
+    suspend fun updateUser(@Header("Bearer-Authorization") token: String, @Body user: UsernameRequestDTO)
 
     @POST("user/update/password")
-    suspend fun updateUserPassword(@Header("Bearer-Authorization") token: String, @Body user: PasswordReceive)
+    suspend fun updateUserPassword(@Header("Bearer-Authorization") token: String, @Body user: PasswordRequestDTO)
 }

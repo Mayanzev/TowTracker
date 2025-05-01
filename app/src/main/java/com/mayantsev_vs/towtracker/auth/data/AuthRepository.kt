@@ -2,9 +2,9 @@ package com.mayantsev_vs.towtracker.auth.data
 
 import com.mayantsev_vs.towtracker.auth.data.cache.AuthDao
 import com.mayantsev_vs.towtracker.auth.data.cache.AuthDBO
-import com.mayantsev_vs.towtracker.auth.data.cloud.LoginBody
+import com.mayantsev_vs.towtracker.auth.data.cloud.LoginRequestDTO
 import com.mayantsev_vs.towtracker.auth.data.cloud.AuthService
-import com.mayantsev_vs.towtracker.auth.data.cloud.RegistrationBody
+import com.mayantsev_vs.towtracker.auth.data.cloud.RegistrationRequestDTO
 import retrofit2.HttpException
 import java.net.ConnectException
 
@@ -14,10 +14,10 @@ class AuthRepository(
 ) {
     suspend fun login(email: String, password: String): AuthResult {
         try {
-            val loginBody = LoginBody(
+            val loginRequestDTO = LoginRequestDTO(
                 email, password
             )
-            val token = loginService.login(loginBody).token
+            val token = loginService.login(loginRequestDTO).token
             val userItem = AuthDBO(
                 token
             )
@@ -34,10 +34,10 @@ class AuthRepository(
 
     suspend fun register(email: String, username: String, password: String): AuthResult {
         try {
-            val registrationBody = RegistrationBody(
+            val registrationRequestDTO = RegistrationRequestDTO(
                 email, password, username
             )
-            val token = loginService.register(registrationBody).token
+            val token = loginService.register(registrationRequestDTO).token
             val userItem = AuthDBO(
                 token
             )

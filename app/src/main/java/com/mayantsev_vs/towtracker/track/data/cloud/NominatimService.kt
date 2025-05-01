@@ -9,5 +9,5 @@ interface NominatimService {
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("format") format: String = "json",
-    ): GeocodeResponse
+    ): GeocodeResponseDTO
 }
