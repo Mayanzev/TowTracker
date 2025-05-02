@@ -18,10 +18,12 @@ object TimeUtils {
         dateFormatter.timeZone = TimeZone.getDefault()
     }
 
-    fun getTime(timeInMillis: Long): String {
-        val cv = Calendar.getInstance()
-        cv.timeInMillis = timeInMillis
-        return timeFormatter.format(cv.time)
+    fun getTime(elapsedMillis: Long): String {
+        val seconds = elapsedMillis / 1000 % 60
+        val minutes = elapsedMillis / (1000 * 60) % 60
+        val hours = elapsedMillis / (1000 * 60 * 60)
+
+        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     fun getDate(): String {

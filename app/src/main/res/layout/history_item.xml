@@ -18,7 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Заказ от"
-            android:textSize="12sp"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +30,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="4dp"
             android:text="@string/date_format_label"
-            android:textSize="12sp"
+            android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvOrder"
             app:layout_constraintTop_toTopOf="parent" />

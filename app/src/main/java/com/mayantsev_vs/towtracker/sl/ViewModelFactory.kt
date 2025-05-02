@@ -29,7 +29,7 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
     private val preferencesHelper = PreferencesHelper(context)
 
     private val baseUrl = "http://10.0.2.2:8080/"
-    private val baseUrlState = "https://e60c-94-142-136-113.ngrok-free.app/"
+    private val baseUrlState = "https://b0c2-109-120-132-23.ngrok-free.app/"
 
     private val loginService = Retrofit.Builder()
         .baseUrl(baseUrl)
