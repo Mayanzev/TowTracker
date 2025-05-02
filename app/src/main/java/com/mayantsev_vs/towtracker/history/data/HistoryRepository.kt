@@ -6,6 +6,7 @@ import com.mayantsev_vs.towtracker.history.data.cloud.OrderRequestDTO
 import com.mayantsev_vs.towtracker.history.data.cloud.ServiceDTO
 import com.mayantsev_vs.towtracker.history.data.cloud.TrackDTO
 import com.mayantsev_vs.towtracker.history.presentation.HistoryUiItem
+import com.mayantsev_vs.towtracker.main.utils.TimeUtils
 import com.mayantsev_vs.towtracker.service.data.cache.ServiceDao
 import com.mayantsev_vs.towtracker.track.data.cache.TrackDao
 
@@ -17,8 +18,9 @@ class HistoryRepository(
 ) {
     suspend fun getHistory(): List<HistoryUiItem> {
         val result = historyService.getHistory(authDao.getToken() ?: "").orders.map { order ->
+            val date = TimeUtils.formatIsoDateToReadable(order.date)
             HistoryUiItem(
-                date = order.date,
+                date = date,
                 price = order.price
             )
         }
