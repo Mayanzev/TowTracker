@@ -14,6 +14,7 @@ import com.mayantsev_vs.towtracker.service.data.cache.ServiceDao
 import com.mayantsev_vs.towtracker.track.data.cache.TrackDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class OrderViewModel(
     private val preferencesHelper: PreferencesHelper,
@@ -63,6 +64,8 @@ class OrderViewModel(
     fun postHistory() {
         viewModelScope.launch(Dispatchers.IO) {
             historyRepository.postHistory()
+            serviceDao.deleteAllServices()
+            trackDao.deleteAllTracks()
         }
     }
 }

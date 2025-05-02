@@ -123,10 +123,8 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
                 mapViewModel.updateProgress(View.GONE)
                 openParentFragment(MapFragment.Companion.newInstance())
             } else {
-                orderViewModel.emptyOrder()
-                servicesViewModel.deleteAllServices()
-                tracksViewModel.deleteAllTracks()
                 orderViewModel.postHistory()
+                orderViewModel.emptyOrder()
                 openParentFragment(NewOrderFragment.Companion.newInstance())
             }
         }
