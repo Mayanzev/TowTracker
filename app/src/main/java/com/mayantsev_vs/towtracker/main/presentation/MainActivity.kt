@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.mayantsev_vs.towtracker.R
@@ -47,6 +48,8 @@ class MainActivity : AppCompatActivity() {
             )
             WindowInsetsCompat.CONSUMED
         }
+
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
 
         loginViewModel.init()
 
