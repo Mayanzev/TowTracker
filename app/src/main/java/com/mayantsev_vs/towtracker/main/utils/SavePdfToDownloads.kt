@@ -25,8 +25,8 @@ fun generateAndSavePdf(
 ) {
     coroutineScope.launch(Dispatchers.IO) {
 
-        val services = serviceDao.getAllServicesPrint()
-        val tracks = trackDao.getAllTracksPrint()
+        val services = serviceDao.getAllServicesList()
+        val tracks = trackDao.getAllTracksList()
         var price = 0.0
 
         val pdfDocument = PdfDocument()

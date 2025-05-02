@@ -3,7 +3,7 @@ package com.mayantsev_vs.towtracker.track.data.cloud
 import com.google.gson.annotations.SerializedName
 
 data class GeocodeResponseDTO(
-    val geocodeAddressDTO: GeocodeAddressDTO
+    val address: GeocodeAddressDTO
 )
 
 data class GeocodeAddressDTO(

@@ -17,5 +17,5 @@ interface ServiceDao {
     @Query("DELETE FROM SERVICE")
     suspend fun deleteAllServices()
     @Query("SELECT * FROM SERVICE")
-    fun getAllServicesPrint(): List<ServiceDBO>
+    fun getAllServicesList(): List<ServiceDBO>
 }

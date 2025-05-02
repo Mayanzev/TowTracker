@@ -7,15 +7,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mayantsev_vs.towtracker.history.data.HistoryRepository
 import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
 import com.mayantsev_vs.towtracker.main.utils.generateAndSavePdf
 import com.mayantsev_vs.towtracker.service.data.cache.ServiceDao
 import com.mayantsev_vs.towtracker.track.data.cache.TrackDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class OrderViewModel(
     private val preferencesHelper: PreferencesHelper,
     private val serviceDao: ServiceDao,
-    private val trackDao: TrackDao
+    private val trackDao: TrackDao,
+    private val historyRepository: HistoryRepository
 ) : ViewModel() {
 
     val isOrderStarted = MutableLiveData<Boolean>()
@@ -54,5 +58,11 @@ class OrderViewModel(
     fun savePdf(value: Boolean, context: Context, fileName: String) {
         _savePdfLiveData.value = value
         generateAndSavePdf(context, fileName, serviceDao, trackDao, viewModelScope)
+    }
+
+    fun postHistory() {
+        viewModelScope.launch(Dispatchers.IO) {
+            historyRepository.postHistory()
+        }
     }
 }

@@ -33,8 +33,8 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
                 val responseSecond =
                     nominatimService.reverseGeocode(latitudeSecondCity, longitudeSecondCity)
 
-                val firstCityAddress = buildFullAddress(responseFirst.geocodeAddressDTO)
-                val secondCityAddress = buildFullAddress(responseSecond.geocodeAddressDTO)
+                val firstCityAddress = buildFullAddress(responseFirst.address)
+                val secondCityAddress = buildFullAddress(responseSecond.address)
 
                 newTrackItem = TrackDBO(
                     newTrackItem.id,
@@ -103,8 +103,8 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
                 val responseSecond =
                     nominatimService.reverseGeocode(latitudeSecondCity, longitudeSecondCity)
 
-                val firstCityAddress = buildFullAddress(responseFirst.geocodeAddressDTO)
-                val secondCityAddress = buildFullAddress(responseSecond.geocodeAddressDTO)
+                val firstCityAddress = buildFullAddress(responseFirst.address)
+                val secondCityAddress = buildFullAddress(responseSecond.address)
 
                 newTrackItem = TrackDBO(
                     newTrackItem.id,

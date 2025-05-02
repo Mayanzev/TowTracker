@@ -16,8 +16,8 @@ import com.mayantsev_vs.towtracker.databinding.ActivityMainBinding
 import com.mayantsev_vs.towtracker.main.utils.openFragment
 import com.mayantsev_vs.towtracker.main.utils.checkPermission
 import com.mayantsev_vs.towtracker.main.utils.showToast
-import com.mayantsev_vs.towtracker.auth.presentation.auth.AuthFragment
-import com.mayantsev_vs.towtracker.auth.presentation.auth.AuthViewModel
+import com.mayantsev_vs.towtracker.auth.presentation.AuthFragment
+import com.mayantsev_vs.towtracker.auth.presentation.AuthViewModel
 import kotlin.getValue
 
 class MainActivity : AppCompatActivity() {

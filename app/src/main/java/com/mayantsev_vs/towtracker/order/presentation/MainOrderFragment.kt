@@ -17,6 +17,7 @@ import com.mayantsev_vs.towtracker.map.data.location.LocationService
 import com.mayantsev_vs.towtracker.main.utils.openParentFragment
 import com.mayantsev_vs.towtracker.main.utils.openParentFragmentBackstack
 import com.mayantsev_vs.towtracker.databinding.FragmentMainOrderBinding
+import com.mayantsev_vs.towtracker.history.data.HistoryRepository
 import com.mayantsev_vs.towtracker.main.presentation.MainFragment.CurrentScreen
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.main.utils.TimeUtils
@@ -125,6 +126,7 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
                 orderViewModel.emptyOrder()
                 servicesViewModel.deleteAllServices()
                 tracksViewModel.deleteAllTracks()
+                orderViewModel.postHistory()
                 openParentFragment(NewOrderFragment.Companion.newInstance())
             }
         }

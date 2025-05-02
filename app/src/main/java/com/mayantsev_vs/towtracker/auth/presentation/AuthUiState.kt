@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.auth.presentation.auth
+package com.mayantsev_vs.towtracker.auth.presentation
 
 import com.mayantsev_vs.towtracker.R
 import android.view.View

@@ -30,24 +30,13 @@ class HistoryFragment: Fragment() {
             ViewModelFactory(requireContext().applicationContext)
         }
         historyViewModel.getHistory()
-        val adapter = HistoryAdapter(object : HistoryAdapter.ClickListener {
-            override fun onClick(historyListItem: HistoryListItem) {
-                // переход внутрь
-            }
-        })
+        val adapter = HistoryAdapter()
         binding.historyList.adapter = adapter
         historyViewModel.historyLiveData.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list.map {
-                var totalPrice = 0.0
-                it.tracks.forEach { track ->
-                    totalPrice += track.price.toDouble()
-                }
-                it.services.forEach { service ->
-                    totalPrice += service.price.toDouble()
-                }
-                HistoryListItem(
+                HistoryUiItem(
                     it.date,
-                    totalPrice.toString()
+                    it.price
                 )
             })
         }

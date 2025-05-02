@@ -1,4 +1,4 @@
-package com.mayantsev_vs.towtracker.auth.presentation.auth
+package com.mayantsev_vs.towtracker.auth.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater

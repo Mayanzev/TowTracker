@@ -5,12 +5,17 @@ data class OrderListResponseDTO (
 )
 
 data class OrderDTO (
-    val tracks: List<TrackDTO>,
-    val services: List<ServiceDTO>,
-    val date: String
+    val date: String,
+    val price: String
 )
 
-data class TrackDTO (
+data class OrderRequestDTO(
+    val tracks: List<TrackDTO>,
+    val services: List<ServiceDTO>
+)
+
+data class TrackDTO(
+    val id: Int,
     val time: String,
     val date: String,
     val distance: String,
@@ -20,7 +25,8 @@ data class TrackDTO (
     val secondCity: String
 )
 
-data class ServiceDTO (
+data class ServiceDTO(
+    val id: Int,
     val name: String,
     val price: String,
     val date: String

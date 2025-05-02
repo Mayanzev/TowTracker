@@ -10,7 +10,7 @@ import com.mayantsev_vs.towtracker.track.data.cloud.NominatimService
 import com.mayantsev_vs.towtracker.main.utils.PreferencesHelper
 import com.mayantsev_vs.towtracker.auth.data.AuthRepository
 import com.mayantsev_vs.towtracker.auth.data.cloud.AuthService
-import com.mayantsev_vs.towtracker.auth.presentation.auth.AuthViewModel
+import com.mayantsev_vs.towtracker.auth.presentation.AuthViewModel
 import com.mayantsev_vs.towtracker.userProfile.presentation.UserProfileViewModel
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.map.presentation.MapViewModel
@@ -49,7 +49,7 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(HistoryService::class.java)
-    val historyRepository = HistoryRepository(historyService, database.getDaoAuth())
+    val historyRepository = HistoryRepository(historyService, database.getDaoAuth(), database.getDaoTrack(), database.getDaoService())
 
     private val userProfileService = Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -69,7 +69,8 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
             modelClass.isAssignableFrom(OrderViewModel::class.java) -> OrderViewModel(
                 preferencesHelper,
                 database.getDaoService(),
-                database.getDaoTrack()
+                database.getDaoTrack(),
+                historyRepository
             ) as T
 
             modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(repository) as T

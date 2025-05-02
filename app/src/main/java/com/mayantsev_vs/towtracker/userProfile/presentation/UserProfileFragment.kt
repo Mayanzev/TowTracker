@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentUserProfileBinding
-import com.mayantsev_vs.towtracker.auth.presentation.auth.AuthFragment
-import com.mayantsev_vs.towtracker.auth.presentation.auth.AuthViewModel
+import com.mayantsev_vs.towtracker.auth.presentation.AuthFragment
+import com.mayantsev_vs.towtracker.auth.presentation.AuthViewModel
 import com.mayantsev_vs.towtracker.main.utils.openFragment
 import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
