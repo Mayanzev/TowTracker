@@ -12,13 +12,14 @@ import com.mayantsev_vs.towtracker.userProfile.presentation.UserProfileFragment
 import com.mayantsev_vs.towtracker.settings.presentation.SettingsFragment
 
 class ProfileFragment : Fragment() {
-    private lateinit var binding: FragmentProfileBinding
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         onBottomClick()
         return binding.root
     }
@@ -33,5 +34,10 @@ class ProfileFragment : Fragment() {
         binding.btnSettings.setOnClickListener {
             openParentFragmentBackstack(SettingsFragment())
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
