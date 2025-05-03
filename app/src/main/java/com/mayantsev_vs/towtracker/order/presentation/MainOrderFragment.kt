@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.mayantsev_vs.towtracker.R
+import com.mayantsev_vs.towtracker.databinding.FragmentAuthBinding
 import com.mayantsev_vs.towtracker.service.data.cache.ServiceDBO
 import com.mayantsev_vs.towtracker.track.data.cache.TrackDBO
 import com.mayantsev_vs.towtracker.map.data.location.LocationService
@@ -33,12 +34,13 @@ import java.util.Locale
 import kotlin.getValue
 
 
-class MainOrderFragment : Fragment(), FragmentNavigationListener {
+class MainOrderFragment : Fragment() {
     private val fragList = listOf(
         TrackFragment.Companion.newInstance(),
         ServiceFragment.Companion.newInstance()
     )
-    private lateinit var binding: FragmentMainOrderBinding
+    private var _binding: FragmentMainOrderBinding? = null
+    private val binding get() = _binding!!
     private val servicesViewModel: ServiceViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
@@ -59,7 +61,7 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMainOrderBinding.inflate(inflater, container, false)
+        _binding = FragmentMainOrderBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -76,6 +78,11 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
             val fileName = TimeUtils.getDate()
             orderViewModel.savePdf(true, requireContext(), fileName)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setupViewPager() {
@@ -134,10 +141,6 @@ class MainOrderFragment : Fragment(), FragmentNavigationListener {
         orderViewModel.isOrderStarted.observe(viewLifecycleOwner) {
             mainViewModel.changeBottomNavigation(CurrentScreen.ORDER)
         }
-    }
-
-    override fun openNewFragment(f: Fragment) {
-        openParentFragmentBackstack(f)
     }
 
     companion object {

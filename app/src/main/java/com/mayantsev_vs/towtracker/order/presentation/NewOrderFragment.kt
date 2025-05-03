@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.mayantsev_vs.towtracker.databinding.FragmentAuthBinding
 import com.mayantsev_vs.towtracker.databinding.FragmentNewOrderBinding
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 import com.mayantsev_vs.towtracker.main.utils.openParentFragment
@@ -14,7 +15,8 @@ import kotlin.getValue
 
 class NewOrderFragment : Fragment() {
 
-    private lateinit var binding: FragmentNewOrderBinding
+    private var _binding: FragmentNewOrderBinding? = null
+    private val binding get() = _binding!!
     private val orderViewModel: OrderViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
@@ -23,8 +25,7 @@ class NewOrderFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentNewOrderBinding.inflate(inflater, container, false)
-
+        _binding = FragmentNewOrderBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -32,6 +33,11 @@ class NewOrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         onNewOrderClick()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun onNewOrderClick() {

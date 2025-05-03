@@ -58,7 +58,7 @@ class MainFragment : Fragment() {
             binding.bottomNavigation.selectedItemId = when (it) {
                 CurrentScreen.MAP -> R.id.id_map
                 CurrentScreen.ORDER -> R.id.id_order
-                CurrentScreen.SETTINGS -> R.id.id_main_settings
+                CurrentScreen.PROFILE -> R.id.id_main_settings
             }
         }
 
@@ -88,9 +88,9 @@ class MainFragment : Fragment() {
                 }
 
                 R.id.id_main_settings -> {
-                    if (mainViewModel.bottomNavigation.value != CurrentScreen.SETTINGS) {
+                    if (mainViewModel.bottomNavigation.value != CurrentScreen.PROFILE) {
                         openFragment(ProfileFragment())
-                        mainViewModel.changeBottomNavigation(CurrentScreen.SETTINGS)
+                        mainViewModel.changeBottomNavigation(CurrentScreen.PROFILE)
                     }
                 }
             }
@@ -100,6 +100,6 @@ class MainFragment : Fragment() {
 
 
     enum class CurrentScreen {
-        MAP, ORDER, SETTINGS
+        MAP, ORDER, PROFILE
     }
 }
