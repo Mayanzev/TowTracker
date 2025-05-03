@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentHistoryBinding
@@ -40,6 +41,24 @@ class HistoryFragment: Fragment() {
                 )
             })
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        )
+
+        historyViewModel.error.observe(viewLifecycleOwner) {
+            binding.errorTextView.visibility = it
+        }
+
+        historyViewModel.progressLiveData.observe(viewLifecycleOwner) {
+            binding.historyProgress.visibility = it
+        }
+
     }
 
     override fun onDestroyView() {
