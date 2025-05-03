@@ -79,10 +79,6 @@ class TrackViewModel(db: MainDb, private val nominatimService: NominatimService)
         dao.deleteTrack(trackDBO)
     }
 
-    fun deleteAllTracks() = viewModelScope.launch {
-        dao.deleteAllTracks()
-    }
-
     fun updateErrorTracks() = viewModelScope.launch(Dispatchers.IO) {
         _swipeLiveData.postValue(true)
         dao.getAllTracksList().filter {

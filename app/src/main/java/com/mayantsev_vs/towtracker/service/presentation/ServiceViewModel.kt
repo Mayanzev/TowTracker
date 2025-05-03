@@ -17,8 +17,4 @@ class ServiceViewModel(db: MainDb) : ViewModel() {
     fun deleteService(serviceDBO: ServiceDBO) = viewModelScope.launch {
         dao.deleteService(serviceDBO)
     }
-
-    fun deleteAllServices() = viewModelScope.launch {
-        dao.deleteAllServices()
-    }
 }

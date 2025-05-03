@@ -8,21 +8,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mayantsev_vs.towtracker.R
-import com.mayantsev_vs.towtracker.service.data.cache.ServiceDBO
-import com.mayantsev_vs.towtracker.main.utils.DialogManager.ServiceListener
-import com.mayantsev_vs.towtracker.main.utils.DialogManager.showServiceDialog
-import com.mayantsev_vs.towtracker.main.utils.TimeUtils
-import com.mayantsev_vs.towtracker.sl.ViewModelFactory
-import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.databinding.FragmentServiceBinding
-import kotlin.getValue
+import com.mayantsev_vs.towtracker.main.utils.DialogManager
+import com.mayantsev_vs.towtracker.main.utils.TimeUtils
+import com.mayantsev_vs.towtracker.main.utils.showToast
+import com.mayantsev_vs.towtracker.service.data.cache.ServiceDBO
+import com.mayantsev_vs.towtracker.sl.ViewModelFactory
 
+class ServiceFragment : Fragment(), ServiceAdapter.ClickListener {
 
-class ServiceFragment : Fragment(), ServiceAdapter.Listener {
-    private lateinit var binding: FragmentServiceBinding
-    private var serviceName: String? = null
-    private var servicePrice: String? = null
-    private var serviceDate: String? = null
+    private var _binding: FragmentServiceBinding? = null
+    private val binding get() = _binding!!
     private lateinit var adapter: ServiceAdapter
     private val servicesViewModel: ServiceViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
@@ -32,50 +28,34 @@ class ServiceFragment : Fragment(), ServiceAdapter.Listener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentServiceBinding.inflate(inflater, container, false)
+        _binding = FragmentServiceBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setOnClicks()
         initRecyclerView()
-        getServices()
-    }
+        observeServices()
 
-    private fun setService() {
-        showServiceDialog(requireContext(), object : ServiceListener {
-            override fun onClick(serviceNameInput: String, servicePriceInput: String) {
-                serviceName = serviceNameInput
-                servicePrice = servicePriceInput
-                serviceDate = TimeUtils.getDate()
-                val service = getServiceItem()
-                showToast(getString(R.string.service_saved))
-                servicesViewModel.insertService(service)
-            }
-        })
-    }
-
-    private fun setOnClicks() = with(binding) {
-        val listener = onClicks()
-        btnAddService.setOnClickListener(listener)
-    }
-
-    private fun onClicks(): View.OnClickListener {
-        return View.OnClickListener {
-            when (it.id) {
-                R.id.btnAddService -> setService()
-            }
+        binding.btnAddService.setOnClickListener {
+            DialogManager.showServiceDialog(requireContext(), object : DialogManager.ServiceListener {
+                override fun onClick(serviceNameInput: String, servicePriceInput: String) {
+                    val service = ServiceDBO(
+                        id = null,
+                        name = serviceNameInput,
+                        price = servicePriceInput,
+                        date = TimeUtils.getDate()
+                    )
+                    showToast(getString(R.string.service_saved))
+                    servicesViewModel.insertService(service)
+                }
+            })
         }
     }
 
-    private fun getServiceItem(): ServiceDBO {
-        return ServiceDBO(
-            null,
-            serviceName ?: "",
-            servicePrice ?: "",
-            serviceDate ?: ""
-        )
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun initRecyclerView() = with(binding) {
@@ -84,17 +64,18 @@ class ServiceFragment : Fragment(), ServiceAdapter.Listener {
         rcView.adapter = adapter
     }
 
-    private fun getServices() {
+    private fun observeServices() {
         servicesViewModel.services.observe(viewLifecycleOwner) {
             adapter.submitList(it)
             binding.tvEmptyServices.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
-    override fun onClick(service: ServiceDBO) {
-        servicesViewModel.deleteService(service)
+    override fun onClick(service: ServiceDBO, type: ServiceAdapter.ClickType) {
+        when (type) {
+            ServiceAdapter.ClickType.DELETE -> servicesViewModel.deleteService(service)
+        }
     }
-
 
     companion object {
         @JvmStatic
