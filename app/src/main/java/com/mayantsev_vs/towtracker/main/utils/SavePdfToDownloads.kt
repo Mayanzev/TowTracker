@@ -2,6 +2,7 @@ package com.mayantsev_vs.towtracker.main.utils
 
 import android.content.ContentValues
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
@@ -24,47 +25,91 @@ fun generateAndSavePdf(
     coroutineScope: CoroutineScope
 ) {
     coroutineScope.launch(Dispatchers.IO) {
-
         val services = serviceDao.getAllServicesList()
         val tracks = trackDao.getAllTracksList()
-        var price = 0.0
+
+        var totalPrice = 0.0
+        val maxY = 800f
 
         val pdfDocument = PdfDocument()
-        val paint = Paint()
-        paint.textSize = 16f
-        paint.color = Color.BLACK
+        val paint = Paint().apply {
+            textSize = 15f
+            color = Color.BLACK
+        }
 
-        val lineHeight = paint.textSize + 8f
-        var yPosition = 100f
+        val lineHeight = paint.textSize + 6f
+        var yPosition = 60f
 
         val pageInfo = PdfDocument.PageInfo.Builder(595, 842, 1).create()
-        val page = pdfDocument.startPage(pageInfo)
-        val canvas = page.canvas
+        var page = pdfDocument.startPage(pageInfo)
+        var canvas = page.canvas
 
-        canvas.drawText("Список услуг:", 100f, yPosition, paint)
+        fun checkPageSpace(lines: Int = 1): Boolean {
+            return yPosition + lines * lineHeight > maxY
+        }
+
+        fun newPage() {
+            pdfDocument.finishPage(page)
+            page = pdfDocument.startPage(pageInfo)
+            canvas = page.canvas
+            yPosition = 60f
+        }
+
+        val currentDate = TimeUtils.getDate()
+        yPosition = canvas.drawWrappedText(
+            text = "Дата формирования чека: $currentDate",
+            x = 40f,
+            startY = yPosition,
+            paint = paint,
+            maxWidth = 400f,
+            lineHeight = lineHeight
+        )
         yPosition += lineHeight
 
-        services.forEach {
-            canvas.drawText("- ${it.name}", 100f, yPosition, paint)
-            yPosition += lineHeight
-            price += it.price.toDouble()
+        yPosition = canvas.drawWrappedText(
+            text = "Выполненные маршруты:",
+            x = 40f,
+            startY = yPosition,
+            paint = paint,
+            maxWidth = 400f,
+            lineHeight = lineHeight
+        )
+
+        for (track in tracks) {
+            val fields = listOf(
+                "• Дата: ${track.date ?: "неизвестно"}",
+                "  Время: ${track.time ?: "неизвестно"}",
+                "  Дистанция: ${track.distance ?: "0"} км",
+                "  Цена: ${track.price ?: "0"} ₽",
+                "  Откуда: ${track.firstCity ?: "неизвестно"}",
+                "  Куда: ${track.secondCity ?: "неизвестно"}"
+            )
+
+            for (field in fields) {
+                if (checkPageSpace()) newPage()
+                yPosition = canvas.drawWrappedText(field, 80f, yPosition, paint, 360f, lineHeight)
+            }
+
+            yPosition += lineHeight * 0.5f
+            totalPrice += track.price.toDoubleOrNull() ?: 0.0
+        }
+
+        // Услуги
+        if (checkPageSpace()) newPage()
+        yPosition = canvas.drawWrappedText("Выполненные услуги:", 40f, yPosition, paint, 400f, lineHeight)
+
+        for (service in services) {
+            val text = "• ${service.name ?: "неизвестно"} — ${service.price ?: "0"} ₽ (Дата: ${service.date ?: "неизвестно"})"
+            if (checkPageSpace(2)) newPage()
+            yPosition = canvas.drawWrappedText(text, 80f, yPosition, paint, 360f, lineHeight)
+            totalPrice += service.price?.toDoubleOrNull() ?: 0.0
         }
 
         yPosition += lineHeight
-        canvas.drawText("Список маршрутов:", 100f, yPosition, paint)
-        yPosition += lineHeight
 
-        tracks.forEach {
-            val firstCity = it.firstCity ?: "Неизвестный город"
-            val secondCity = it.secondCity ?: "Неизвестный город"
-            canvas.drawText("- $firstCity -> $secondCity", 100f, yPosition, paint)
-            yPosition += lineHeight
-            price += it.price.toDouble()
-        }
-
-        yPosition += lineHeight
-        canvas.drawText("Итоговая стоимость: $price", 100f, yPosition, paint)
-        yPosition += lineHeight
+        if (checkPageSpace()) newPage()
+        val formattedPrice = String.format("%.2f", totalPrice)
+        canvas.drawText("ИТОГО: $formattedPrice ₽", 40f, yPosition, paint)
 
         pdfDocument.finishPage(page)
         savePdfToDownloads(context, fileName, pdfDocument)
@@ -82,14 +127,40 @@ fun savePdfToDownloads(context: Context, fileName: String, pdfDocument: PdfDocum
     }
 
     val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-
     uri?.let {
         contentResolver.openOutputStream(it)?.use { outputStream ->
             pdfDocument.writeTo(outputStream)
-            //Toast.makeText(context, "PDF сохранен в Загрузки!", Toast.LENGTH_LONG).show()
         }
-    } ?: run {
-        //Toast.makeText(context, "Ошибка сохранения PDF", Toast.LENGTH_LONG).show()
     }
 }
 
+fun Canvas.drawWrappedText(
+    text: String,
+    x: Float,
+    startY: Float,
+    paint: Paint,
+    maxWidth: Float,
+    lineHeight: Float
+): Float {
+    var y = startY
+    val words = text.split(" ")
+    var currentLine = ""
+
+    for (word in words) {
+        val testLine = if (currentLine.isEmpty()) word else "$currentLine $word"
+        if (paint.measureText(testLine) > maxWidth) {
+            drawText(currentLine, x, y, paint)
+            y += lineHeight
+            currentLine = word
+        } else {
+            currentLine = testLine
+        }
+    }
+
+    if (currentLine.isNotEmpty()) {
+        drawText(currentLine, x, y, paint)
+        y += lineHeight
+    }
+
+    return y
+}
