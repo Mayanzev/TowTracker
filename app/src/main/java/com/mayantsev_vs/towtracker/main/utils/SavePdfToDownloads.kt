@@ -80,6 +80,7 @@ fun generateAndSavePdf(
                 "• Дата: ${track.date ?: "неизвестно"}",
                 "  Время: ${track.time ?: "неизвестно"}",
                 "  Дистанция: ${track.distance ?: "0"} км",
+                "  Средняя скорость: ${track.speed ?: "0"} км/ч",
                 "  Цена: ${track.price ?: "0"} ₽",
                 "  Откуда: ${track.firstCity ?: "неизвестно"}",
                 "  Куда: ${track.secondCity ?: "неизвестно"}"
