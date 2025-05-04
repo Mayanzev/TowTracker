@@ -31,12 +31,12 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
     private val baseUrl = "http://10.0.2.2:8080/"
     private val baseUrlState = "https://b0c2-109-120-132-23.ngrok-free.app/"
 
-    private val loginService = Retrofit.Builder()
+    private val authService = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(AuthService::class.java)
-    private val repository = AuthRepository(loginService, database.getDaoAuth())
+    private val authRepository = AuthRepository(authService, database.getDaoAuth())
 
     val retrofit = Retrofit.Builder()
         .baseUrl("https://nominatim.openstreetmap.org/")
@@ -60,20 +60,11 @@ class ViewModelFactory(context: Context) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(TrackViewModel::class.java) -> TrackViewModel(
-                database,
-                nominatimService
-            ) as T
+            modelClass.isAssignableFrom(TrackViewModel::class.java) -> TrackViewModel(database, nominatimService) as T
             modelClass.isAssignableFrom(ServiceViewModel::class.java) -> ServiceViewModel(database) as T
             modelClass.isAssignableFrom(MapViewModel::class.java) -> MapViewModel() as T
-            modelClass.isAssignableFrom(OrderViewModel::class.java) -> OrderViewModel(
-                preferencesHelper,
-                database.getDaoService(),
-                database.getDaoTrack(),
-                historyRepository
-            ) as T
-
-            modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(repository) as T
+            modelClass.isAssignableFrom(OrderViewModel::class.java) -> OrderViewModel(preferencesHelper, database.getDaoService(), database.getDaoTrack(), historyRepository) as T
+            modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(authRepository) as T
             modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel() as T
             modelClass.isAssignableFrom(UserProfileViewModel::class.java) -> UserProfileViewModel(userProfileRepository) as T
             modelClass.isAssignableFrom(HistoryViewModel::class.java) -> HistoryViewModel(historyRepository) as T

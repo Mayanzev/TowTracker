@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import com.mayantsev_vs.towtracker.databinding.FragmentUserProfileBinding
 import com.mayantsev_vs.towtracker.auth.presentation.AuthFragment
 import com.mayantsev_vs.towtracker.auth.presentation.AuthViewModel
+import com.mayantsev_vs.towtracker.databinding.FragmentServiceBinding
 import com.mayantsev_vs.towtracker.main.utils.openFragment
 import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.sl.ViewModelFactory
@@ -18,7 +19,8 @@ import kotlin.getValue
 
 
 class UserProfileFragment : Fragment() {
-    private lateinit var binding: FragmentUserProfileBinding
+    private var _binding: FragmentUserProfileBinding? = null
+    private val binding get() = _binding!!
     private val userProfileViewModel: UserProfileViewModel by activityViewModels {
         ViewModelFactory(requireContext().applicationContext)
     }
@@ -30,7 +32,7 @@ class UserProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentUserProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -130,5 +132,10 @@ class UserProfileFragment : Fragment() {
         userProfileViewModel.progressLiveData.observe(viewLifecycleOwner) {
             binding.profileProgress.visibility = it
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
