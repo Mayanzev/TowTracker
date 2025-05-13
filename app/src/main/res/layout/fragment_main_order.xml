@@ -64,7 +64,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:scaleType="centerCrop"
-                android:background="@null"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_save_file"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

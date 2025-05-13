@@ -22,6 +22,7 @@ import com.mayantsev_vs.towtracker.history.data.HistoryRepository
 import com.mayantsev_vs.towtracker.main.presentation.MainFragment.CurrentScreen
 import com.mayantsev_vs.towtracker.main.presentation.MainViewModel
 import com.mayantsev_vs.towtracker.main.utils.TimeUtils
+import com.mayantsev_vs.towtracker.main.utils.showToast
 import com.mayantsev_vs.towtracker.map.presentation.MapFragment
 import com.mayantsev_vs.towtracker.map.presentation.MapViewModel
 import com.mayantsev_vs.towtracker.service.presentation.ServiceViewModel
@@ -76,7 +77,13 @@ class MainOrderFragment : Fragment() {
 
         binding.ivSavePdf.setOnClickListener {
             val fileName = TimeUtils.getDate()
-            orderViewModel.savePdf(true, requireContext(), fileName)
+            orderViewModel.savePdf(requireContext(), fileName)
+        }
+
+        orderViewModel.savePdfLiveData.observe(viewLifecycleOwner) {
+            if (it) {
+             showToast("Файл сохранен!")
+            }
         }
     }
 

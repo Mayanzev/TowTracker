@@ -13,8 +13,8 @@ import com.mayantsev_vs.towtracker.main.utils.generateAndSavePdf
 import com.mayantsev_vs.towtracker.service.data.cache.ServiceDao
 import com.mayantsev_vs.towtracker.track.data.cache.TrackDao
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class OrderViewModel(
     private val preferencesHelper: PreferencesHelper,
@@ -26,7 +26,7 @@ class OrderViewModel(
     val isOrderStarted = MutableLiveData<Boolean>()
     val isOrderFinished = MutableLiveData<Boolean>()
 
-    val _savePdfLiveData = MutableLiveData<Boolean>()
+    private val _savePdfLiveData = MutableLiveData<Boolean>()
     val savePdfLiveData: LiveData<Boolean> = _savePdfLiveData
 
     init {
@@ -56,9 +56,13 @@ class OrderViewModel(
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    fun savePdf(value: Boolean, context: Context, fileName: String) {
-        _savePdfLiveData.value = value
-        generateAndSavePdf(context, fileName, serviceDao, trackDao, viewModelScope)
+    fun savePdf(context: Context, fileName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            generateAndSavePdf(context, fileName, serviceDao, trackDao)
+            _savePdfLiveData.postValue(true)
+            delay(1000)
+            _savePdfLiveData.postValue(false)
+        }
     }
 
     fun postHistory() {
